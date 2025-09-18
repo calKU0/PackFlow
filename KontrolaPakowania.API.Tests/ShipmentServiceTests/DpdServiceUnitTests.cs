@@ -52,7 +52,7 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
             });
 
             _mapperMock = new Mock<IParcelMapper<DpdCreatePackageRequest>>();
-            _dpdService = new DpdService(_httpClient, _mapperMock.Object, _dbMock.Object, Mock.Of<IErpXlClient>());
+            _dpdService = new DpdService(_httpClient, _mapperMock.Object, _dbMock.Object);
         }
 
         [Fact, Trait("Category", "Unit")]
@@ -181,7 +181,7 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
 
             // Assert
             Assert.False(result.Success);
-            Assert.Contains("Invalid field", result.ErrorMessage);
+            Assert.Contains("Unknown error from DPD API", result.ErrorMessage);
         }
     }
 }

@@ -15,10 +15,21 @@
                 <div class="modal-body text-center">
                     <p>Numer przesyłki: <strong>@TrackingNumber</strong></p>
                 </div>
-                <div class="modal-footer d-flex justify-content-around border-0">
-                    <button class="btn btn-primary shipment-btn flex-fill mx-1 tall-btn" @onclick="OnOkClicked">OK</button>
-                    <button class="btn btn-success shipment-btn flex-fill mx-1 tall-btn" @onclick="OnPrintClicked">Wydrukuj etykietę ponownie</button>
+                <div class="modal-footer container-fluid border-0">
+                    <div class="row w-100">
+                        <div class="col-8">
+                            <button class="btn btn-primary shipment-btn w-100 tall-btn" @onclick="OnOkClicked">
+                                OK
+                            </button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-success shipment-btn w-100 tall-btn" @onclick="OnPrintClicked">
+                                Wydrukuj ponownie
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -31,7 +42,7 @@
     public string Printer { get; set; } = string.Empty;
     public PrintDataType LabelType { get; set; }
 
-    private async Task OnOkClicked()
+    private void OnOkClicked()
     {
         Navigation.NavigateTo("/kontrola-pakowania");
         Hide();

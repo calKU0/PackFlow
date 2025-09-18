@@ -21,14 +21,12 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
         private readonly HttpClient _httpClient;
         private readonly IParcelMapper<DpdCreatePackageRequest> _mapper;
         private readonly IDbExecutor _db;
-        private readonly IErpXlClient _erpXlClient;
 
-        public DpdService(HttpClient httpClient, IParcelMapper<DpdCreatePackageRequest> mapper, IDbExecutor db, IErpXlClient erpXlClient)
+        public DpdService(HttpClient httpClient, IParcelMapper<DpdCreatePackageRequest> mapper, IDbExecutor db)
         {
             _httpClient = httpClient;
             _mapper = mapper;
             _db = db;
-            _erpXlClient = erpXlClient;
         }
 
         public async Task<ShipmentResponse> SendPackageAsync(ShipmentRequest request)
@@ -62,23 +60,14 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
             if (labelResponse.Status != "OK")
                 return ShipmentResponse.CreateFailure(BuildErrorMessage(labelResponse));
 
-            var erpShipmentId = _erpXlClient.CreateErpShipment(new CreateErpShipmentRequest
-            {
-                PackageId = request.PackageId,
-                TrackingNumber = waybill,
-                TrackingLink = $"https://tracktrace.dpd.com.pl/parcelDetails?typ=1&p1={waybill}",
-                CODAmout = (float)package.Services.CODAmount,
-                Insurance = 1,
-                PackageCount = 1
-            });
-
             return ShipmentResponse.CreateSuccess(
                 courier: Courier.DPD,
                 packageId: request.PackageId,
-                erpShipmentId: erpShipmentId,
                 trackingNumber: waybill,
+                trackingLink: $"https://tracktrace.dpd.com.pl/parcelDetails?typ=1&p1={waybill}",
                 labelBase64: labelResponse.DocumentData,
-                labelType: PrintDataType.PDF
+                labelType: PrintDataType.ZPL,
+                packageInfo: package
             );
         }
 
@@ -100,8 +89,7 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
         {
             var json = JsonSerializer.Serialize(dpdRequest, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("/public/shipment/v1/generatePackagesNumbers", content);
-
+            var response = await _httpClient.PostAsync("public/shipment/v1/generatePackagesNumbers", content);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             // If response is XML, wrap it in an error response
@@ -163,7 +151,7 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
 
             var json = JsonSerializer.Serialize(labelRequest, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("/public/shipment/v1/generateSpedLabels", content);
+            var response = await _httpClient.PostAsync("public/shipment/v1/generateSpedLabels", content);
 
             var responseJson = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)

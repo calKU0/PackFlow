@@ -24,7 +24,6 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
     public class DpdServiceIntegrationTests
     {
         private readonly DpdService _dpdService;
-        private readonly IErpXlClient _erpXlClient;
 
         public DpdServiceIntegrationTests()
         {
@@ -35,11 +34,6 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
 
             var courierSettings = new CourierSettings();
             config.GetSection("CourierApis:DPD").Bind(courierSettings.DPD = new DpdSettings());
-
-            var services = new ServiceCollection();
-            services.Configure<XlApiSettings>(config.GetSection("XlApiSettings"));
-            services.AddSingleton<IErpXlClient, ErpXlClient>();
-            services.AddSingleton<IConfiguration>(config);
 
             var byteArray = Encoding.ASCII.GetBytes($"{courierSettings.DPD.Username}:{courierSettings.DPD.Password}");
 
@@ -52,12 +46,8 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
 
             var mapper = new DpdPackageMapper();
             var dbExecutor = new DapperDbExecutor(config);
-            var provider = services.BuildServiceProvider();
-            _erpXlClient = provider.GetRequiredService<IErpXlClient>();
 
-            _erpXlClient.Login();
-
-            _dpdService = new DpdService(httpClient, mapper, dbExecutor, _erpXlClient);
+            _dpdService = new DpdService(httpClient, mapper, dbExecutor);
         }
 
         [Fact, Trait("Category", "Integration")]

@@ -12,9 +12,9 @@ namespace KontrolaPakowania.Server.Shared.Base
         {
             await UserSession.InitializeAsync();
 
-            if (!UserSession.IsLoggedIn)
+            if (string.IsNullOrEmpty(UserSession.Username))
             {
-                Navigation.NavigateTo("/login", true); // redirect to login if not logged in
+                Navigation.NavigateTo("/login", true);
             }
         }
     }

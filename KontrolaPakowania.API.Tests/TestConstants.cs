@@ -20,6 +20,9 @@ namespace KontrolaPakowania.API.Tests
         public const int SourceDocumentType = 2033;
 
         // Packages
-        public const int PackageId = 10608;
+        public const int PackageId = 10621;
+
+        // Shipments
+        public const int ShipmentId = 10792;
     }
 }

@@ -23,15 +23,13 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
         private static float _maxCod;
         private Task _loginTask;
         private readonly IDbExecutor _db;
-        private readonly IErpXlClient _erpXlClient;
 
-        public GlsService(IOptions<CourierSettings> courierSettings, IGlsClientWrapper client, IDbExecutor db, IParcelMapper<cConsign> mapper, IErpXlClient erpXlClient)
+        public GlsService(IOptions<CourierSettings> courierSettings, IGlsClientWrapper client, IDbExecutor db, IParcelMapper<cConsign> mapper)
         {
             _settings = courierSettings.Value.GLS;
             _client = client;
             _db = db;
             _mapper = mapper;
-            _erpXlClient = erpXlClient;
         }
 
         private Task EnsureLoggedInAsync()
@@ -55,39 +53,52 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
         {
             await EnsureLoggedInAsync();
 
-            // Map
-            var parcelData = await MapToGlsConsign(request);
+            var package = await GetPackageFromErp(request.PackageId);
+            if (package == null)
+                return ShipmentResponse.CreateFailure($"Package with ID {request.PackageId} not found.");
+
+            var parcelData = _mapper.Map(package);
 
             // Insert parcel
-            var inserted = await _client.InsertParcelAsync(_sessionId, parcelData);
+            cID? inserted;
+            try
+            {
+                inserted = await _client.InsertParcelAsync(_sessionId, parcelData);
+            }
+            catch (Exception ex)
+            {
+                return ShipmentResponse.CreateFailure($"Error inserting parcel in GLS: {ex.Message}");
+            }
+
+            if (inserted == null || inserted.id == 0)
+                return ShipmentResponse.CreateFailure("Failed to insert parcel in GLS.");
+
             var parcelId = inserted.id;
 
             // Get label
-            var labels = await _client.GetLabelsAsync(_sessionId, parcelId, "roll_160x100_zebra");
-
-            var label = labels.@return.FirstOrDefault();
-            if (label == null)
-                throw new InvalidOperationException("No label returned from GLS.");
-
-            int erpShipmentId = _erpXlClient.CreateErpShipment(new CreateErpShipmentRequest
+            adePreparingBox_GetConsignLabelsExtResponse? labels;
+            try
             {
-                PackageId = request.PackageId,
-                TrackingNumber = label.number,
-                TrackingLink = $"https://gls-group.eu/PL/pl/pobierz-numer-przesylki?match={label.number}",
-                CODAmout = parcelData.srv_bool.cod_amount,
-                Insurance = 1,
-                PackageCount = 1
-            });
-
-            return new ShipmentResponse
+                labels = await _client.GetLabelsAsync(_sessionId, parcelId, "roll_160x100_zebra");
+            }
+            catch (Exception ex)
             {
-                PackageId = parcelId,
-                ErpShipmentId = erpShipmentId,
-                Courier = Courier.GLS,
-                TrackingNumber = label.number,
-                LabelBase64 = label.file,
-                LabelType = PrintDataType.EPL
-            };
+                return ShipmentResponse.CreateFailure($"Error retrieving label from GLS: {ex.Message}");
+            }
+
+            var label = labels?.@return?.FirstOrDefault();
+            if (label == null || string.IsNullOrWhiteSpace(label.number))
+                return ShipmentResponse.CreateFailure("No label returned from GLS API.");
+
+            return ShipmentResponse.CreateSuccess(
+                courier: Courier.GLS,
+                packageId: parcelId,
+                trackingLink: $"https://gls-group.eu/PL/pl/pobierz-numer-przesylki?match={label.number}",
+                trackingNumber: label.number,
+                labelBase64: label.file,
+                labelType: PrintDataType.ZPL,
+                packageInfo: package
+            );
         }
 
         public async Task<int> DeleteParcelAsync(int parcelId)
@@ -113,27 +124,18 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
             await _client.LogoutAsync(_sessionId);
         }
 
-        private async Task<cConsign> MapToGlsConsign(ShipmentRequest request)
+        private async Task<PackageInfo?> GetPackageFromErp(int packageId)
         {
             const string procedure = "kp.GetPackageInfo";
 
-            var package = await _db.QuerySingleOrDefaultAsync<PackageInfo, ShipmentServices>(
+            return await _db.QuerySingleOrDefaultAsync<PackageInfo, ShipmentServices>(
                 procedure,
-                (pkg, services) =>
-                {
-                    pkg.Services = services;
-                    return pkg;
-                },
+                (pkg, services) => { pkg.Services = services; return pkg; },
                 "POD",
-                new { request.PackageId },
+                new { PackageId = packageId },
                 CommandType.StoredProcedure,
                 Connection.ERPConnection
             );
-
-            if (package == null)
-                throw new InvalidOperationException($"Package with Id {request.PackageId} not found.");
-
-            return _mapper.Map(package);
         }
     }
 }

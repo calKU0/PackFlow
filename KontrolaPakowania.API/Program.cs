@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Text;
 using KontrolaPakowania.API.Services.Shipment.DPD.Reference;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +33,6 @@ builder.Services.AddHttpClient<DpdService>((sp, client) =>
     var settings = sp.GetRequiredService<IOptions<CourierSettings>>().Value.DPD;
 
     client.BaseAddress = new Uri(settings.BaseUrl);
-
     // Set Basic Authentication header
     var byteArray = Encoding.ASCII.GetBytes($"{settings.Username}:{settings.Password}");
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
@@ -41,7 +41,7 @@ builder.Services.AddHttpClient<DpdService>((sp, client) =>
     client.DefaultRequestHeaders.Add("x-dpd-fid", settings.MasterFID);
 });
 
-builder.Services.AddHttpClient<FedexSettings>((sp, client) =>
+builder.Services.AddHttpClient<FedexService>((sp, client) =>
 {
     var settings = sp.GetRequiredService<IOptions<CourierSettings>>().Value.Fedex;
     client.BaseAddress = new Uri(settings.BaseUrl);
@@ -59,9 +59,8 @@ builder.Services.AddScoped<IParcelMapper<cConsign>, GlsParcelMapper>();
 builder.Services.AddScoped<IParcelMapper<DpdCreatePackageRequest>, DpdPackageMapper>();
 builder.Services.AddScoped<IGlsClientWrapper, GlsClientWrapper>();
 builder.Services.AddScoped<GlsService>();
-builder.Services.AddScoped<DpdService>();
-builder.Services.AddScoped<FedexService>();
 builder.Services.AddScoped<CourierFactory>();
+builder.Services.AddScoped<IShipmentService, ShipmentService>();
 builder.Services.AddSingleton<IErpXlClient, ErpXlClient>();
 builder.Services.AddHostedService<ErpXlHostedService>();
 
