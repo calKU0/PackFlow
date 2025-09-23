@@ -65,14 +65,14 @@
                    OnCancelClicked="HideConfirm"
                    OnConfirmClicked="ConfirmClose" />
 }
-<Toast @ref="ToastError" Title="Error" Color="danger" />
+<Toast @ref="Toast"/>
 
 @code {
     private bool Show { get; set; }
     private ConfirmDialog confirmDialog = new();
     private List<LoginDto> Users { get; set; } = new();
     private LoginDto? SelectedUser { get; set; }
-    private Toast ToastError = new();
+    private Toast Toast = new();
     private bool IsLoading { get; set; }
 
     public async Task ShowModal()
@@ -91,8 +91,7 @@
         }
         catch (Exception ex)
         {
-            await ToastError.Show($"Błąd przy próbie pobrania listy operatorów: {ex.Message}");
-            await Task.Delay(7000).ContinueWith(_ => InvokeAsync(() => ToastError.Hide()));
+            Toast.Show("Błąd!", $"Błąd przy próbie pobrania listy operatorów: {ex.Message}");
         }
         finally
         {
@@ -130,8 +129,7 @@
             }
             catch (Exception ex)
             {
-                await ToastError.Show($"Błąd przy próbie usuwania operatora: {ex.Message}");
-                await Task.Delay(7000).ContinueWith(_ => InvokeAsync(() => ToastError.Hide()));
+                Toast.Show("Błąd!", $"Błąd przy próbie usuwania operatora: {ex.Message}");
             }
             finally
             {

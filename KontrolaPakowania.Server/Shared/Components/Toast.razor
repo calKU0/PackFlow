@@ -1,52 +1,53 @@
-﻿@using Microsoft.AspNetCore.Components.Web
+﻿@using KontrolaPakowania.Shared.Enums
 
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055; min-width: 250px;">
-    <div class="toast border-0 fade" style="display:@(Visible ? "flex" : "none"); flex-direction: column;">
-        <!-- Title block -->
-        <div class="toast-header bg-light border-bottom">
-            <strong class="me-auto">@Title</strong>
-            <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
+<div class="toast-backdrop @( _isVisible ? "show" : "" )" @onclick="Hide">
+    <div class="toast-container @ToastClass" @onclick:stopPropagation="true">
+        <div class="toast-header-wrapper">
+            <strong class="toast-title">@Title</strong>
+            <button type="button" class="btn-close btn-close-white toast-close" @onclick="Hide" aria-label="Close"></button>
         </div>
-
-        <!-- Message block -->
-        <div class="toast-body text-white bg-@Color border-0">
-            @Message
-        </div>
+        <div class="toast-body">@Message</div>
     </div>
 </div>
 
 
 
 @code {
-    [Parameter] public string Title { get; set; } = "Info";
-    [Parameter] public string Message { get; set; } = "";
-    [Parameter] public string Color { get; set; } = "success"; // success, warning, danger, info
-    [Parameter] public bool Visible { get; set; } = false;
-    [Parameter] public EventCallback OnClose { get; set; }
+    private bool _isVisible;
+    private System.Timers.Timer? _timer;
 
-    public async Task Show()
-    {
-        Visible = true;
-        await InvokeAsync(StateHasChanged);
-    }
+    public string Title { get; private set; } = string.Empty;
+    public string Message { get; private set; } = string.Empty;
+    public ToastType Type { get; private set; } = ToastType.Info;
 
-    public async Task Show(string message)
+    private string ToastClass => Type switch
     {
+        ToastType.Success => "toast-success",
+        ToastType.Error => "toast-error",
+        ToastType.Info => "toast-info",
+        _ => "toast-info"
+    };
+
+    public void Show(string title, string message, ToastType type = ToastType.Error, int autoHideMs = 6000)
+    {
+        Title = title;
         Message = message;
-        Visible = true;
-        await InvokeAsync(StateHasChanged);
+        Type = type;
+        _isVisible = true;
+
+        StateHasChanged();
+
+        _timer?.Stop();
+        _timer = new System.Timers.Timer(autoHideMs);
+        _timer.Elapsed += (s, e) => InvokeAsync(Hide);
+        _timer.AutoReset = false;
+        _timer.Start();
     }
 
-    public async Task Hide()
+    public void Hide()
     {
-        Visible = false;
-        await InvokeAsync(StateHasChanged);
-        if (OnClose.HasDelegate)
-            await OnClose.InvokeAsync();
-    }
-
-    private async Task Close()
-    {
-        await Hide();
+        _timer?.Stop();
+        _isVisible = false;
+        StateHasChanged();
     }
 }

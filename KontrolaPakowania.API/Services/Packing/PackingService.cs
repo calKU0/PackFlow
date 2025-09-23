@@ -115,11 +115,19 @@ public class PackingService : IPackingService
         return result > 0;
     }
 
+    public async Task<CourierConfiguration> GetCourierConfiguration(string courierName, PackingLevel level, string country)
+    {
+        const string procedure = "kp.GetCourierConfiguration";
+        string levelString = level.ToString();
+        var result = await _db.QuerySingleOrDefaultAsync<CourierConfiguration>(procedure, new { courierName, level = levelString, country }, CommandType.StoredProcedure, Connection.ERPConnection);
+        return result;
+    }
+
     public async Task<int> CreatePackage(CreatePackageRequest request)
     {
         const string procedure = "kp.CreatePackageDocument";
         string courier = request.Courier.ToString();
-        return await _db.QuerySingleOrDefaultAsync<int>(procedure, new { request.Username, courier, request.ClientId, request.ClientAddressId }, CommandType.StoredProcedure, Connection.ERPConnection);
+        return await _db.QuerySingleOrDefaultAsync<int>(procedure, new { request.Username, courier, request.ClientId, request.ClientAddressId, request.ClientAddressType }, CommandType.StoredProcedure, Connection.ERPConnection);
     }
 
     public async Task<bool> AddPackedPosition(AddPackedPositionRequest request)
@@ -140,7 +148,7 @@ public class PackingService : IPackingService
     {
         int status = (int)request.Status;
         const string procedure = "kp.ClosePackageDocument";
-        var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { request.InternalBarcode, request.DocumentId, status }, CommandType.StoredProcedure, Connection.ERPConnection);
+        var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { request.InternalBarcode, request.DocumentId, request.Height, request.Width, request.Length, status }, CommandType.StoredProcedure, Connection.ERPConnection);
         return result > 0;
     }
 

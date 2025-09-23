@@ -13,6 +13,7 @@ namespace KontrolaPakowania.Shared.DTOs.Requests
         public Courier Courier { get; set; }
         public int ClientId { get; set; }
         public int ClientAddressId { get; set; }
+        public int ClientAddressType { get; set; }
         public PackingWarehouse PackageWarehouse { get; set; }
         public PackingLevel PackingLevel { get; set; }
 

@@ -12,6 +12,7 @@ namespace KontrolaPakowania.API.Tests
         public const int RouteId = 22;
 
         public const int ClientAddressId = 515921;
+        public const int ClientAddressType = 864;
         public const int ClientId = 7237;
         public const string Username = "KURKRZ";
 

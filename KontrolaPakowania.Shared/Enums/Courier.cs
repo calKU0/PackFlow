@@ -11,18 +11,25 @@ namespace KontrolaPakowania.Shared.Enums
     {
         [Description("DPD")]
         DPD,
+
         [Description("GLS")]
         GLS,
+
         [Description("Fedex")]
         Fedex,
-        [Description("DPD Romania")]
+
+        [Description("DPD-Romania")]
         DPD_Romania,
+
         [Description("Shenker")]
         Schenker,
+
         [Description("Hellmann")]
         Hellmann,
+
         [Description("Odbiór własny")]
         Personal_Collection,
+
         [Description("Nieznany")]
         Unknown,
     }

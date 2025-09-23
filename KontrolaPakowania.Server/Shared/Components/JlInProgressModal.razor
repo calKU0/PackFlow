@@ -69,7 +69,7 @@
                    OnCancelClicked="HideConfirm"
                    OnConfirmClicked="ConfirmClose" />
 }
-<Toast @ref="ToastError" Title="Error" Color="danger" />
+<Toast @ref="Toast"/>
 
 @code {
     [Parameter] public bool Show { get; set; }
@@ -78,7 +78,7 @@
     private List<JlInProgressDto> JlList;
     private ConfirmDialog confirmDialog = new();
     private JlInProgressDto? SelectedJl { get; set; }
-    private Toast ToastError = new();
+    private Toast Toast = new();
     private bool IsLoading { get; set; }
 
     public async Task ShowModal()
@@ -97,8 +97,7 @@
         }
         catch (Exception ex)
         {
-            await ToastError.Show($"Błąd przy próbie pobrania listy kuwet: {ex.Message}");
-            await Task.Delay(7000).ContinueWith(_ => InvokeAsync(() => ToastError.Hide()));
+            Toast.Show("Błąd!", $"Błąd przy próbie pobrania listy kuwet: {ex.Message}");
         }
         finally
         {
@@ -136,8 +135,7 @@
             }
             catch (Exception ex)
             {
-                await ToastError.Show($"Błąd przy próbie usuwania JL z realizacji: {ex.Message}");
-                await Task.Delay(7000).ContinueWith(_ => InvokeAsync(() => ToastError.Hide()));
+                Toast.Show("Błąd!", $"Błąd przy próbie usuwania JL z realizacji: {ex.Message}");
             }
             finally
             {

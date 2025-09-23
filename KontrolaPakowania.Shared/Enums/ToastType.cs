@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace KontrolaPakowania.Shared.Enums
 {
-    public enum PrintDataType
+    public enum ToastType
     {
-        PDF,
-        ZPL,
-        EPL,
-        CRYSTAL
+        Success,
+        Error,
+        Info
     }
 }

@@ -56,7 +56,7 @@
     </div>
 </div>
 
-<Toast @ref="ToastError" Title="Error" Color="danger" />
+<Toast @ref="Toast"/>
 
 @code {
     [Parameter] public JlItemDto Product { get; set; } = default!;
@@ -65,7 +65,7 @@
 
     private ElementReference quantityInputRef;
     private string InputQuantity = string.Empty;
-    private Toast ToastError;
+    private Toast Toast = new();
 
     protected override void OnParametersSet()
     {
@@ -94,10 +94,7 @@
         {
             if (qty > Product.JlQuantity)
             {
-                ToastError.Message = $"Nie możesz spakować ilości większej niż jest w kuwecie! Zmień ilość i spróbuj ponownie.";
-                await ToastError.Show();
-                await Task.Delay(4000);
-                await ToastError.Hide();
+                Toast.Show("Błąd!", $"Nie możesz spakować ilości większej niż jest w kuwecie! Zmień ilość i spróbuj ponownie.");
             }
             else
             {
@@ -106,10 +103,7 @@
         }
         else
         {
-            ToastError.Message = $"Podano błędną wartość w polu ilość. Spróbuj wprowadzić ilość ponownie.";
-            await ToastError.Show();
-            await Task.Delay(4000);
-            await ToastError.Hide();
+            Toast.Show("Błąd!", $"Podano błędną wartość w polu ilość. Spróbuj wprowadzić ilość ponownie.");
         }
     }
 

@@ -24,11 +24,11 @@
             <EditForm Model="loginDto" OnValidSubmit="HandleLogin">
                 <div class="mb-3">
                     <label class="form-label">Nazwa użytkownika</label>
-<input @ref="UsernameInput"
-       class="form-control form-control-lg"
-       @bind="loginDto.Username"
-       @onkeydown="HandleUsernameKeyDown"
-       placeholder="Wprowadź nazwę użytkownika" />
+                    <input @ref="UsernameInput"
+                           class="form-control form-control-lg"
+                           @bind="loginDto.Username"
+                           @onkeydown="HandleUsernameKeyDown"
+                           placeholder="Wprowadź nazwę użytkownika" />
 
                 </div>
 
@@ -37,6 +37,7 @@
                     <input @ref="PasswordInput"
                            class="form-control form-control-lg"
                            @bind="loginDto.Password"
+                           type="password"
                            placeholder="Wprowadź hasło" />
                 </div>
 
@@ -50,11 +51,11 @@
     </div>
 </div>
 
-<Toast @ref="ToastError" Title="Error" Color="danger" />
+<Toast @ref="Toast"/>
 
 @code {
     private LoginDto loginDto = new();
-    private Toast ToastError = new ();
+    private Toast Toast = new ();
     private WorkstationSettings Settings = new();
     private ElementReference UsernameInput;
     private ElementReference PasswordInput;
@@ -105,14 +106,12 @@
 
             else
             {
-                await ToastError.Show("Nieprawidłowa nazwa użytkownika lub hasło.");
-                await Task.Delay(4000).ContinueWith(_ => InvokeAsync(() => ToastError.Hide()));
+                Toast.Show("Błąd!", "Nieprawidłowa nazwa użytkownika lub hasło.");
             }
         }
         catch (Exception ex)
         {
-            await ToastError.Show($"Błąd przy próbie zalogowania {ex.Message}");
-            await Task.Delay(4000).ContinueWith(_ => InvokeAsync(() => ToastError.Hide()));
+            Toast.Show("Błąd!", $"Błąd przy próbie zalogowania {ex.Message}");
         }
     }
 

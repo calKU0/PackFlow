@@ -41,10 +41,14 @@
     public string LabelBase64 { get; set; } = string.Empty;
     public string Printer { get; set; } = string.Empty;
     public PrintDataType LabelType { get; set; }
+    [Parameter] public EventCallback OnOk { get; set; }
 
-    private void OnOkClicked()
+    private async Task OnOkClicked()
     {
-        Navigation.NavigateTo("/kontrola-pakowania");
+        if (OnOk.HasDelegate)
+        {
+            await OnOk.InvokeAsync(null);
+        }
         Hide();
     }
     private async Task OnPrintClicked()

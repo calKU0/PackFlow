@@ -9,9 +9,9 @@
                 <div class="modal-body">
                     <p>@Message</p>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" @onclick="OnCancel">Anuluj</button>
-                    <button class="btn btn-danger" @onclick="OnConfirm">Potwierdź</button>
+                <div class="modal-footer d-flex gap-2 w-100">
+                    <button class="btn btn-danger btn-lg tall-btn" style="flex: 7;" @onclick="OnConfirm">Potwierdź</button>
+                    <button class="btn btn-secondary btn-lg tall-btn" style="flex: 3;" @onclick="OnCancel">Anuluj</button>
                 </div>
             </div>
         </div>

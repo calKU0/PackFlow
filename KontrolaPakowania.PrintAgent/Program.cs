@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using SharpZebra.Printing;
 using PrinterSettings = SharpZebra.Printing.PrinterSettings;
+using CrystalDecisions.CrystalReports.Engine;
 
 internal class Program
 {
@@ -144,6 +145,10 @@ internal class Program
             var bytes = Convert.FromBase64String(job.Content);
             PrintPdf(bytes, job.PrinterName);
         }
+        else if (job.DataType == "CRYSTAL")
+        {
+            PrintCrystalReport(job);
+        }
         else
         {
             Console.Error.WriteLine($"[ERROR] Unsupported label type: {job.DataType}");
@@ -228,6 +233,61 @@ internal class Program
         }
     }
 
+    private static void PrintCrystalReport(PrintJob job)
+    {
+        try
+        {
+            var report = new ReportDocument();
+
+            // "Content" = UNC path to the RPT file
+            report.Load(job.Content);
+
+            // --- Database login from parameters ---
+            if (job.Parameters != null &&
+                job.Parameters.TryGetValue("DbUser", out var dbUser) &&
+                job.Parameters.TryGetValue("DbPassword", out var dbPassword) &&
+                job.Parameters.TryGetValue("DbServer", out var dbServer) &&
+                job.Parameters.TryGetValue("DbName", out var dbName))
+            {
+                report.SetDatabaseLogon(dbUser, dbPassword, dbServer, dbName);
+            }
+
+            // --- Other parameters (SelectionFormula, report params, etc.) ---
+            if (job.Parameters != null)
+            {
+                foreach (var kv in job.Parameters)
+                {
+                    if (kv.Key is "DbUser" or "DbPassword" or "DbServer" or "DbName")
+                        continue; // skip DB params
+
+                    if (kv.Key == "SelectionFormula")
+                    {
+                        report.DataDefinition.RecordSelectionFormula = kv.Value;
+                    }
+                    else
+                    {
+                        report.SetParameterValue(kv.Key, kv.Value);
+                    }
+                }
+            }
+
+            // Printer setup
+            report.PrintOptions.PrinterName = job.PrinterName;
+
+            // Print 1 copy, collated, all pages
+            report.PrintToPrinter(1, true, 0, 0);
+
+            Console.WriteLine($"[INFO] Printed Crystal Report {job.Content} to {job.PrinterName}");
+
+            report.Close();
+            report.Dispose();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"[ERROR] Crystal Report printing failed: {ex}");
+        }
+    }
+
     private static void LoadPdfiumNative()
     {
         string architecture = Environment.Is64BitProcess ? "x64" : "x86";
@@ -259,6 +319,7 @@ internal class Program
 public class PrintJob
 {
     public string PrinterName { get; set; }
-    public string DataType { get; set; } // "ZPL", "EPL", "PDF"
+    public string DataType { get; set; } // "ZPL", "EPL", "PDF", "CRYSTAL"
     public string Content { get; set; }
+    public Dictionary<string, string>? Parameters { get; set; }
 }

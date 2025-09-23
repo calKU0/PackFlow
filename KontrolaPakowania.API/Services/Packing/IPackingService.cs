@@ -22,6 +22,8 @@ namespace KontrolaPakowania.API.Services.Packing
 
         Task<bool> ReleaseJl(string jl);
 
+        Task<CourierConfiguration> GetCourierConfiguration(string courierName, PackingLevel level, string country);
+
         Task<int> CreatePackage(CreatePackageRequest request);
 
         Task<bool> AddPackageAttributes(int packageId, PackingWarehouse warehouse, PackingLevel level, string stationNumber);

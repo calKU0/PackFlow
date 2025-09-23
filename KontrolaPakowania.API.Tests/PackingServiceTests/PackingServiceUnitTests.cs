@@ -379,7 +379,10 @@ public class PackingServiceUnitTests
         {
             DocumentId = 999,
             InternalBarcode = "1111111111111",
-            Status = DocumentStatus.InProgress
+            Status = DocumentStatus.InProgress,
+            Height = 2,
+            Width = 2,
+            Length = 2
         };
 
         _dbExecutorMock
@@ -560,6 +563,30 @@ public class PackingServiceUnitTests
 
         // Assert
         Assert.True(result);
+    }
+
+    [Fact, Trait("Category", "Unit")]
+    public async Task GetCourierConfiguration_ReturnsData()
+    {
+        // Arrange
+        string courier = "DPD";
+        PackingLevel level = PackingLevel.Góra;
+        string country = "PL";
+
+        var fakeData = new CourierConfiguration { CloseRouteTime = TimeSpan.MinValue, MaxPackageWeight = 10 };
+
+        _dbExecutorMock.Setup(d => d.QuerySingleOrDefaultAsync<CourierConfiguration>(
+                It.IsAny<string>(),
+                It.IsAny<object>(),
+                CommandType.StoredProcedure,
+                Connection.ERPConnection))
+            .ReturnsAsync(fakeData);
+
+        // Act
+        var result = await _service.GetCourierConfiguration(courier, level, country);
+
+        // Assert
+        Assert.Equal(result, fakeData);
     }
 
     #endregion Packing Tests

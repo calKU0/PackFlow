@@ -1,4 +1,6 @@
-﻿@inherits ComponentBase
+﻿@using KontrolaPakowania.Shared.Enums
+@using KontrolaPakowania.Shared.Helpers
+@inherits ComponentBase
 
 @if (IsVisible)
 {
@@ -11,9 +13,12 @@
                 </div>
                 <div class="modal-body text-center">Wybierz jedną z opcji:</div>
                 <div class="modal-footer d-flex justify-content-around border-0">
-                    <button class="btn btn-primary btn-lg flex-fill mx-1 tall-btn" @onclick="OnCourierLabel">
-                        Nadaj etykietę kurierską
-                    </button>
+                    @if (CourierHelper.AllowedCouriersForLabel.Contains(Courier))
+                    {
+                        <button class="btn btn-primary btn-lg flex-fill mx-1 tall-btn" @onclick="OnCourierLabel">
+                            Nadaj etykietę kurierską
+                        </button>
+                    }
                     <button class="btn btn-success btn-lg flex-fill mx-1 tall-btn" @onclick="OnInternalBarcode">
                         Nadaj kod kreskowy wewnętrzny
                     </button>
@@ -28,6 +33,7 @@
 
 
 @code {
+    [Parameter] public Courier Courier { get; set; }
     [Parameter] public string CourierSrc { get; set; } = string.Empty;
     [Parameter] public EventCallback OnCourierLabel { get; set; }
     [Parameter] public EventCallback OnInternalBarcode { get; set; }

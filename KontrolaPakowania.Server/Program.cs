@@ -21,6 +21,7 @@ builder.Services.AddBlazoredLocalStorage();
 
 // Settings
 builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("Apis"));
+builder.Services.Configure<CrystalReportsOptions>(builder.Configuration.GetSection("CrystalReports"));
 
 // Database client
 builder.Services.AddHttpClient("Database", (serviceProvider, client) =>
@@ -38,7 +39,6 @@ builder.Services.AddScoped<PackingService>();
 builder.Services.AddScoped<UserSessionService>();
 builder.Services.AddScoped<ShipmentService>();
 builder.Services.AddScoped<ClientPrinterService>();
-//builder.Services.AddSingleton<CircuitHandler, UserCircuitHandler>();
 
 var app = builder.Build();
 

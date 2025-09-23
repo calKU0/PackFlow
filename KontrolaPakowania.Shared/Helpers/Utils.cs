@@ -22,9 +22,6 @@ namespace KontrolaPakowania.Shared.Helpers
             if (string.IsNullOrWhiteSpace(courier))
                 return string.Empty;
 
-            if (courier == "Odbiór własny")
-                return "images/couriers/personal-collection.jpg";
-
             // Remove invalid characters
             courier = courier.Replace(":", "").Trim();
 

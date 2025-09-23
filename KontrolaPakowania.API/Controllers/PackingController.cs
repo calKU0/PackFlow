@@ -162,6 +162,24 @@ namespace KontrolaPakowania.API.Controllers
             }
         }
 
+        [HttpGet("courier-configuration")]
+        public async Task<IActionResult> GetCourierSettings([FromQuery] string courier, [FromQuery] PackingLevel level, [FromQuery] string country)
+        {
+            try
+            {
+                var settings = await _packingService.GetCourierConfiguration(courier, level, country);
+                return Ok(settings);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpPost("create-package")]
         public async Task<IActionResult> CreatePackage([FromBody] CreatePackageRequest request)
         {

@@ -53,11 +53,11 @@
     </div>
 </div>
 
-<Toast @ref="SaveToast" Title="Sukces!" Message="Ustawienia zapisane!" Color="success" OnClose="OnToastClosed" />
+<Toast @ref="Toast"/>
 
 @code {
     private WorkstationSettings WorkStationSettings = new();
-    private Toast SaveToast;
+    private Toast Toast = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,15 +66,14 @@
 
     private async Task Save()
     {
-        await WorkstationService.SaveSettingsAsync(WorkStationSettings);
-
-        await SaveToast.Show();
-        await Task.Delay(2000);
-        await SaveToast.Hide();
-    }
-
-    private void OnToastClosed()
-    {
-        NavigationManager.NavigateTo("/");
+        try
+        {
+            await WorkstationService.SaveSettingsAsync(WorkStationSettings);
+            Toast.Show("Sukces!", "Ustawienia zapisane!", ToastType.Success, 2000);
+        }
+        catch (Exception ex)
+        {
+            Toast.Show("Błąd!", $"Nie udało się zapisać ustawień. {ex.Message}");
+        }
     }
 }

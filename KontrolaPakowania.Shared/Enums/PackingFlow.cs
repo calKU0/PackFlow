@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace KontrolaPakowania.Shared.Enums
 {
-    public enum PrintDataType
+    public enum PackingFlow
     {
-        PDF,
-        ZPL,
-        EPL,
-        CRYSTAL
+        FinishPacking,
+        NextPackage
     }
 }

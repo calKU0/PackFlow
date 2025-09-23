@@ -184,6 +184,9 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
                 DocumentId = packageId,
                 Status = status,
                 InternalBarcode = await _service.GenerateInternalBarcode("9999"),
+                Height = 1,
+                Width = 2,
+                Length = 3
             };
 
             var result = await _service.ClosePackage(closeRequest);
@@ -202,6 +205,7 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
                 Username = TestConstants.Username,
                 ClientAddressId = TestConstants.ClientAddressId,
                 ClientId = TestConstants.ClientId,
+                ClientAddressType = TestConstants.ClientAddressType,
                 PackageWarehouse = PackingWarehouse.Magazyn_A,
                 PackingLevel = PackingLevel.Góra,
                 StationNumber = "9999"
@@ -248,6 +252,9 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
                 DocumentId = packageId,
                 InternalBarcode = await _service.GenerateInternalBarcode("9999"),
                 Status = DocumentStatus.Ready,
+                Height = 1,
+                Width = 2,
+                Length = 3
             };
 
             var closeResult = await _service.ClosePackage(closeRequest);
@@ -263,6 +270,7 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
                 Courier = Courier.DPD,
                 Username = TestConstants.Username,
                 ClientAddressId = TestConstants.ClientAddressId,
+                ClientAddressType = TestConstants.ClientAddressType,
                 ClientId = TestConstants.ClientId,
             };
             int packageId = await _service.CreatePackage(openRequest);
@@ -303,6 +311,9 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
                 DocumentId = packageId,
                 InternalBarcode = await _service.GenerateInternalBarcode("9999"),
                 Status = DocumentStatus.Delete,
+                Height = 1,
+                Width = 2,
+                Length = 3
             };
             var closeResult = await _service.ClosePackage(closeRequest);
             Assert.True(closeResult);
@@ -365,6 +376,22 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
 
             // Assert
             Assert.True(result);
+        }
+
+        [Fact, Trait("Category", "Integration")]
+        public async Task GetCourierConfiguration_ReturnsData()
+        {
+            // Arrange
+            string courier = "DPD";
+            PackingLevel level = PackingLevel.Góra;
+            string country = "PL";
+
+            // Act
+            var result = await _service.GetCourierConfiguration(courier, level, country);
+
+            // Assert
+            Assert.True(result.MaxPackageWeight > 0);
+            Assert.True(result.CloseRouteTime > TimeSpan.MinValue);
         }
 
         #endregion Packing Tests

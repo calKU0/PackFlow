@@ -10,6 +10,10 @@
             signal: controller.signal
         });
 
+        if (parameters) {
+            body.Parameters = parameters;
+        }
+
         clearTimeout(timeout);
 
         console.log(`[INFO] Agent response status: ${response.status}`);

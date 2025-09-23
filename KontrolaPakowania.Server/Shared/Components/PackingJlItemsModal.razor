@@ -57,13 +57,13 @@
     </div>
 }
 
-<Toast @ref="ToastError" Title="Error" Color="danger" />
+<Toast @ref="Toast"/>
 
 @code {
     private bool Show { get; set; }
     private List<JlItemDto> JlItems = new();
     private bool IsLoading;
-    private Toast ToastError = new();
+    private Toast Toast = new();
     private string Barcode = string.Empty;
 
     public async Task ShowModal(string barcode)
@@ -83,8 +83,7 @@
         }
         catch (Exception ex)
         {
-            await ToastError.Show($"Błąd pobrania zawartości JL: {ex.Message}");
-            await Task.Delay(7000).ContinueWith(_ => InvokeAsync(() => ToastError.Hide()));
+            Toast.Show("Błąd!", $"Błąd pobrania zawartości JL: {ex.Message}");
         }
         finally
         {

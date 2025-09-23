@@ -4,7 +4,7 @@
 @if (IsVisible)
 {
     <div class="modal-backdrop fade show" @onclick="Close"></div>
-    <div class="modal d-block" tabindex="-1">
+    <div class="modal d-block">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -13,11 +13,11 @@
                 </div>
                 <div class="modal-body">
                     <p>@Message</p>
-                    <input class="form-control" @bind="InputValue" @ref=inputRef placeholder ="@InputPlaceholder" />
+                    <input class="form-control" tabindex="-1" @bind="InputValue" @ref=inputRef placeholder="@InputPlaceholder" />
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" @onclick="Confirm">Potwierdź</button>
-                    <button class="btn btn-secondary" @onclick="Close">Anuluj</button>
+                <div class="modal-footer d-flex gap-2 w-100">
+                    <button class="btn btn-primary btn-lg tall-btn" style="flex: 7;" @onclick="Confirm">Potwierdź</button>
+                    <button class="btn btn-secondary btn-lg tall-btn" style="flex: 3;" @onclick="Close">Anuluj</button>
                 </div>
             </div>
         </div>
@@ -34,6 +34,7 @@
     public string InputValue { get; set; } = string.Empty;
     private ElementReference inputRef;
     private TaskCompletionSource<string> _tcs;
+    private bool _shouldFocus;
 
     public Task<string> Show(string title = null, string message = null, string placeholder = null)
     {
@@ -43,11 +44,20 @@
 
         InputValue = string.Empty;
         IsVisible = true;
-        _ = JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", inputRef);
+        _shouldFocus = true;
         StateHasChanged();
 
         _tcs = new TaskCompletionSource<string>();
         return _tcs.Task;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_shouldFocus)
+        {
+            _shouldFocus = false;
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", inputRef);
+        }
     }
 
     private void Cancel()

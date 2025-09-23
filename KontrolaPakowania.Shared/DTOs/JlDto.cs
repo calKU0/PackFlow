@@ -1,4 +1,5 @@
 ﻿using KontrolaPakowania.Shared.Enums;
+using KontrolaPakowania.Shared.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,10 @@ namespace KontrolaPakowania.Shared.DTOs
         public CourierServices CourierServices { get; set; } = new();
         public int Priority { get; set; }
         public int Sorting { get; set; }
+        public string Country { get; set; } = string.Empty;
         public bool OutsideEU { get; set; } = false;
         public int ClientId { get; set; }
+        public int ClientAddressType { get; set; }
         public int ClientAddressId { get; set; }
         public string ClientName { get; set; } = string.Empty;
         public bool PackageClosed { get; set; }
@@ -54,8 +57,8 @@ namespace KontrolaPakowania.Shared.DTOs
             if (CourierServices.Dropshipping) suffixes.Add("Dropshipping");
 
             LogoCourier = suffixes.Any()
-                ? $"{Courier}-{string.Join(", ", suffixes)}"
-                : Courier.ToString();
+                ? $"{Courier.GetDescription()}-{string.Join(", ", suffixes)}"
+                : Courier.GetDescription().ToString();
         }
     }
 

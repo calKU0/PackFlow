@@ -86,6 +86,15 @@ namespace KontrolaPakowania.Server.Services
             return success;
         }
 
+        public async Task<CourierConfiguration> GetCourierConfiguration(string courier, PackingLevel level, string country)
+        {
+            var response = await _dbClient.GetAsync($"api/packing/courier-configuration?courier={courier}&level={level}&country={country}");
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadFromJsonAsync<CourierConfiguration>();
+            return result!;
+        }
+
         public async Task<int> CreatePackage(CreatePackageRequest request)
         {
             var response = await _dbClient.PostAsJsonAsync($"api/packing/create-package", request);

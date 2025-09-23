@@ -50,23 +50,33 @@
         </div>
     </div>
 }
-<Toast @ref="ToastError" Title="Error" Color="danger" />
+<Toast @ref="Toast" />
 
 @code {
     private bool IsVisible { get; set; }
     private string InputText { get; set; } = string.Empty;
     private bool ShowSelect { get; set; }
     private PackingWarehouse SelectedWarehouse { get; set; }
-    private Toast ToastError = new();
+    private Toast Toast = new();
     private ElementReference InputRef;
+    private bool _shouldFocus;
 
     public async Task Show()
     {
         IsVisible = true;
         ShowSelect = false;
         InputText = string.Empty;
+        _shouldFocus = true;
         await InvokeAsync(StateHasChanged);
-        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_shouldFocus)
+        {
+            _shouldFocus = false;
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+        }
     }
 
     private async Task OnEnterKey(KeyboardEventArgs e)
@@ -84,8 +94,7 @@
         }
         catch (Exception ex)
         {
-            await ToastError.Show($"Błąd przy pobieraniu magazynu składowania dla podanego kodu kreskowego: {ex.Message}");
-            await Task.Delay(7000).ContinueWith(_ => InvokeAsync(() => ToastError.Hide()));
+            Toast.Show("Błąd!", $"Błąd przy pobieraniu magazynu składowania dla podanego kodu kreskowego: {ex.Message}");
         }
     }
 
@@ -98,8 +107,7 @@
         }
         catch (Exception ex)
         {
-            await ToastError.Show($"Błąd przy aktualizacji magazynu składowania dla podanego kodu kreskowego: {ex.Message}");
-            await Task.Delay(7000).ContinueWith(_ => InvokeAsync(() => ToastError.Hide()));
+            Toast.Show("Błąd!", $"Błąd przy aktualizacji magazynu składowania dla podanego kodu kreskowego: {ex.Message}");
         }
     }
 
