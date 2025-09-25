@@ -8,6 +8,7 @@ using KontrolaPakowania.Shared.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Data;
+using System.ServiceModel;
 
 namespace KontrolaPakowania.API.Services.Shipment.GLS
 {
@@ -54,7 +55,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
 
             var package = await GetPackageFromErp(request.PackageId);
             if (package == null)
-                return ShipmentResponse.CreateFailure($"Package with ID {request.PackageId} not found.");
+                return ShipmentResponse.CreateFailure($"Paczka z ID {request.PackageId} nie znaleziona.");
 
             var parcelData = _mapper.Map(package);
 
@@ -64,13 +65,34 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
             {
                 inserted = await _client.InsertParcelAsync(_sessionId, parcelData);
             }
+            catch (FaultException faultEx)
+            {
+                // Generic SOAP fault
+                var msg = $"Błąd danych paczki GLS: {faultEx.Message}";
+
+                if (faultEx.Code != null)
+                    msg += $" | Kod: {faultEx.Code.Name}";
+
+                if (faultEx.Reason != null && faultEx.Reason.GetMatchingTranslation().Text != faultEx.Message)
+                    msg += $" | Powód: {faultEx.Reason.GetMatchingTranslation().Text}";
+
+                // Sometimes the detail is just in the InnerXml
+                if (faultEx.CreateMessageFault().HasDetail)
+                {
+                    var detail = faultEx.CreateMessageFault().GetDetail<string>();
+                    msg += $" | Szczegóły: {detail}";
+                }
+
+                return ShipmentResponse.CreateFailure(msg);
+            }
             catch (Exception ex)
             {
-                return ShipmentResponse.CreateFailure($"Error inserting parcel in GLS: {ex.Message}");
+                // Real network/serialization errors
+                return ShipmentResponse.CreateFailure($"Błąd systemowy: {ex.Message}");
             }
 
             if (inserted == null || inserted.id == 0)
-                return ShipmentResponse.CreateFailure("Failed to insert parcel in GLS.");
+                return ShipmentResponse.CreateFailure("Błąd przy próbie wygenerowania paczki GLS.");
 
             var parcelId = inserted.id;
 
@@ -82,12 +104,12 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
             }
             catch (Exception ex)
             {
-                return ShipmentResponse.CreateFailure($"Error retrieving label from GLS: {ex.Message}");
+                return ShipmentResponse.CreateFailure($"Błąd przy próbie pobrania etykiety paczki GLS: {ex.Message}");
             }
 
             var label = labels?.@return?.FirstOrDefault();
             if (label == null || string.IsNullOrWhiteSpace(label.number))
-                return ShipmentResponse.CreateFailure("No label returned from GLS API.");
+                return ShipmentResponse.CreateFailure("Nie zwrócono etykiety do paczki GLS API.");
 
             return ShipmentResponse.CreateSuccess(
                 courier: Courier.GLS,

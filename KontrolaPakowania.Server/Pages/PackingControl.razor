@@ -256,9 +256,9 @@
         {
             await UserSession.InitializeAsync();
             await LoadSettings();
-            await LoadCourierConfiguration();
             await LoadMergeJlsFromQuery();
             await LoadJlData();
+            await LoadCourierConfiguration();
             await AddJlRealizations();
             await CreatePackage();
             await ShowPackingRequirements();
@@ -763,9 +763,9 @@
                             Toast.Show("Błąd!", "Nie udało się zmienić kuriera. Spróbuj ponownie.");
                             return;
                         }
-
                         CurrentJl.Courier = selectedCourier.Value;
                         CurrentJl.InitCourierLogo();
+                        await LoadCourierConfiguration();
                         await InvokeAsync(StateHasChanged);
                     }
                 }
@@ -901,12 +901,20 @@
                 }
                 else
                 {
-                    Toast.Show("Błąd!", "Nie udało się wygenerować etykiety kurierskiej!");
+                    var msg = string.IsNullOrWhiteSpace(response.ErrorMessage)
+                        ? "Nie udało się wygenerować etykiety kurierskiej!"
+                        : response.ErrorMessage;
+
+                    Toast.Show("Błąd!", msg);
                 }
             }
             else
             {
-                Toast.Show("Błąd!", "Nie udało się wygenerować przesyłki!");
+                var msg = string.IsNullOrWhiteSpace(response?.ErrorMessage)
+                    ? "Nie udało się wygenerować przesyłki!"
+                    : response.ErrorMessage;
+
+                Toast.Show("Błąd!", msg);
             }
         }
         catch (Exception ex)
@@ -926,10 +934,10 @@
         if (Settings.PackingLevel == PackingLevel.Dół && !CourierHelper.AllowedCouriersForLabel.Contains(CurrentJl.Courier))
         {
             dimensions = await DimensionsModal.Show();
-            await ClientPrinterService.PrintCrystalAsync(Settings.PrinterLabel, internalBarcode);
         }
 
         await ClosePackage(internalBarcode, dimensions);
+        await ClientPrinterService.PrintCrystalAsync(Settings.PrinterLabel, internalBarcode);
 
         switch (_currentPackingFlow)
         {

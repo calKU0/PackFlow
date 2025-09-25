@@ -11,6 +11,7 @@ namespace KontrolaPakowania.Shared.DTOs
     {
         public int Id { get; set; }
         public Courier Courier { get; set; }
+        public PackageType PackageType { get; set; }
         public string RecipientName { get; set; } = string.Empty;
         public string RecipientCity { get; set; } = string.Empty;
         public string RecipientStreet { get; set; } = string.Empty;

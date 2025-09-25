@@ -1,16 +1,20 @@
-﻿using KontrolaPakowania.PrintAgent;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
 using Microsoft.Win32;
+using SharpZebra.Printing;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using SharpZebra.Printing;
+using System.Text.Json;
+using System.Windows.Forms;
 using PrinterSettings = SharpZebra.Printing.PrinterSettings;
-using CrystalDecisions.CrystalReports.Engine;
 
 internal class Program
 {
@@ -29,7 +33,7 @@ internal class Program
             string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string appName = "PrintingAgent";
 
-            using RegistryKey key = Registry.CurrentUser.OpenSubKey(
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(
                 @"Software\Microsoft\Windows\CurrentVersion\Run", writable: true);
 
             if (key.GetValue(appName) == null)
@@ -85,13 +89,11 @@ internal class Program
 
                 if (request.HttpMethod == "POST")
                 {
-                    using var reader = new StreamReader(request.InputStream, request.ContentEncoding);
+                    var reader = new StreamReader(request.InputStream, request.ContentEncoding);
                     var body = reader.ReadToEnd();
                     Console.WriteLine($"[INFO] Received print request");
 
-                    var printJob = System.Text.Json.JsonSerializer.Deserialize(
-                        body,
-                        PrintAgentJsonContext.Default.PrintJob);
+                    var printJob = JsonSerializer.Deserialize<PrintJob>(body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                     if (printJob != null)
                     {
@@ -198,12 +200,12 @@ internal class Program
         string tempFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".pdf");
         File.WriteAllBytes(tempFile, pdfBytes);
 
-        PdfiumViewer.PdfDocument? doc = null;
+        PdfiumViewer.PdfDocument doc = null;
 
         try
         {
             doc = PdfiumViewer.PdfDocument.Load(tempFile);
-            using var printDoc = new System.Drawing.Printing.PrintDocument();
+            var printDoc = new System.Drawing.Printing.PrintDocument();
             printDoc.PrinterSettings.PrinterName = printerName;
 
             int pageIndex = 0;
@@ -211,7 +213,7 @@ internal class Program
             {
                 if (pageIndex < doc.PageCount)
                 {
-                    using var image = doc.Render(pageIndex, e.MarginBounds.Width, e.MarginBounds.Height, true);
+                    var image = doc.Render(pageIndex, e.MarginBounds.Width, e.MarginBounds.Height, true);
                     e.Graphics.DrawImage(image, 0, 0);
                     pageIndex++;
                     e.HasMorePages = pageIndex < doc.PageCount;
@@ -235,14 +237,15 @@ internal class Program
 
     private static void PrintCrystalReport(PrintJob job)
     {
+        if (job == null) throw new ArgumentNullException(nameof(job));
+
+        var report = new ReportDocument();
         try
         {
-            var report = new ReportDocument();
-
-            // "Content" = UNC path to the RPT file
+            // Load the report
             report.Load(job.Content);
 
-            // --- Database login from parameters ---
+            // Apply database logon for each table
             if (job.Parameters != null &&
                 job.Parameters.TryGetValue("DbUser", out var dbUser) &&
                 job.Parameters.TryGetValue("DbPassword", out var dbPassword) &&
@@ -252,39 +255,34 @@ internal class Program
                 report.SetDatabaseLogon(dbUser, dbPassword, dbServer, dbName);
             }
 
-            // --- Other parameters (SelectionFormula, report params, etc.) ---
+            // Apply parameters and selection formula
             if (job.Parameters != null)
             {
                 foreach (var kv in job.Parameters)
                 {
-                    if (kv.Key is "DbUser" or "DbPassword" or "DbServer" or "DbName")
-                        continue; // skip DB params
+                    if (kv.Key.Equals("DbUser", StringComparison.OrdinalIgnoreCase) ||
+                        kv.Key.Equals("DbPassword", StringComparison.OrdinalIgnoreCase) ||
+                        kv.Key.Equals("DbServer", StringComparison.OrdinalIgnoreCase) ||
+                        kv.Key.Equals("DbName", StringComparison.OrdinalIgnoreCase))
+                        continue;
 
-                    if (kv.Key == "SelectionFormula")
-                    {
-                        report.DataDefinition.RecordSelectionFormula = kv.Value;
-                    }
-                    else
-                    {
-                        report.SetParameterValue(kv.Key, kv.Value);
-                    }
+                    report.SetParameterValue(kv.Key, kv.Value);
                 }
             }
-
-            // Printer setup
-            report.PrintOptions.PrinterName = job.PrinterName;
-
-            // Print 1 copy, collated, all pages
+            // Set printer and print
+            report.PrintOptions.PrinterName = string.IsNullOrEmpty(job.PrinterName) ? string.Empty : job.PrinterName;
+            //report.ExportToDisk(ExportFormatType.PortableDocFormat, @"D:\a\Test.pdf");
             report.PrintToPrinter(1, true, 0, 0);
-
-            Console.WriteLine($"[INFO] Printed Crystal Report {job.Content} to {job.PrinterName}");
-
-            report.Close();
-            report.Dispose();
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[ERROR] Crystal Report printing failed: {ex}");
+            Console.WriteLine("Error printing report: " + ex);
+        }
+        finally
+        {
+            // Safe cleanup
+            try { report.Close(); } catch { }
+            try { report.Dispose(); } catch { }
         }
     }
 
@@ -295,24 +293,36 @@ internal class Program
 
         // Temporary path to extract the DLL
         string tempPath = Path.Combine(Path.GetTempPath(), "pdfium.dll");
+
         foreach (var res in Assembly.GetExecutingAssembly().GetManifestResourceNames())
         {
             Console.WriteLine(res);
         }
+
         if (!File.Exists(tempPath))
         {
-            using Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
-            if (stream == null)
-                throw new Exception($"Cannot find embedded resource: {resourceName}");
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                    throw new Exception($"Cannot find embedded resource: {resourceName}");
 
-            using var file = File.Create(tempPath);
-            stream.CopyTo(file);
+                using (var file = File.Create(tempPath))
+                {
+                    stream.CopyTo(file);
+                }
+            }
         }
 
         // Load the DLL manually
-        IntPtr handle = NativeLibrary.Load(tempPath);
+        IntPtr handle = NativeMethods.LoadLibrary(tempPath);
         if (handle == IntPtr.Zero)
             throw new Exception("Failed to load pdfium.dll");
+    }
+
+    private static class NativeMethods
+    {
+        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern IntPtr LoadLibrary(string lpFileName);
     }
 }
 
@@ -321,5 +331,5 @@ public class PrintJob
     public string PrinterName { get; set; }
     public string DataType { get; set; } // "ZPL", "EPL", "PDF", "CRYSTAL"
     public string Content { get; set; }
-    public Dictionary<string, string>? Parameters { get; set; }
+    public Dictionary<string, string> Parameters { get; set; }
 }

@@ -20,7 +20,7 @@ namespace KontrolaPakowania.Server.Services
         {
             try
             {
-                return await _js.InvokeAsync<bool>("sendZplToAgent", printer, dataType, content);
+                return await _js.InvokeAsync<bool>("sendZplToAgent", printer, dataType, content, null);
             }
             catch (JSException ex)
             {
@@ -37,7 +37,7 @@ namespace KontrolaPakowania.Server.Services
                 { "DbPassword", _crystalOptions.Database.Password },
                 { "DbServer", _crystalOptions.Database.Server },
                 { "DbName", _crystalOptions.Database.Name },
-                { "SelectionFormula", $"{{KontrolaPakowania.KP_KodKreskowyWewnetrzny}} = '{internalBarcode}'" }
+                { "Kod kreskowy", $"{internalBarcode}" }
             };
 
             return await _js.InvokeAsync<bool>(

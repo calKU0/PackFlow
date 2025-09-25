@@ -1,9 +1,224 @@
 ﻿@page "/wysylka-paczek"
+@using KontrolaPakowania.Shared.Enums
+@using KontrolaPakowania.Shared.Helpers
 @inject UserSessionService UserSession
 @inherits ProtectedPageBase
 
-<h3>PackageSend</h3>
+<div class="container-fluid package-send position-relative">
+    <h3 class="mb-4">📦 Wysyłka paczek</h3>
+
+    <!-- Barcode Input Full Width -->
+    <div class="mb-3 row">
+        <div class="col-12">
+            <InputText @bind-Value="Barcode"
+                       placeholder="Zeskanuj kod kreskowy..."
+                       class="form-control"
+                       onkeydown="@HandleKeyDown" />
+        </div>
+    </div>
+
+    <!-- Courier Image Top Right -->
+    <div class="position-absolute top-0 end-0 me-3 mt-3">
+        <img src="images/courier-placeholder.png" alt="Courier Logo" class="img-fluid courier-image" style="max-width:120px;" />
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="row mt-5">
+        <!-- Left Column: Shipment Data -->
+        <div class="col-md-9">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Akronim</label>
+                    <InputText @bind-Value="Package.RecipientName" class="form-control" disabled="@(!ManualEdit)" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nazwa</label>
+                    <InputText @bind-Value="Package.RecipientName" class="form-control" disabled="@(!ManualEdit)" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Ulica</label>
+                    <InputText @bind-Value="Package.RecipientStreet" class="form-control" disabled="@(!ManualEdit)" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Kod Pocztowy</label>
+                    <InputText @bind-Value="Package.RecipientPostalCode" class="form-control" disabled="@(!ManualEdit)" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Miasto</label>
+                    <InputText @bind-Value="Package.RecipientCity" class="form-control" disabled="@(!ManualEdit)" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Kraj</label>
+                    <InputText @bind-Value="Package.RecipientCountry" class="form-control" disabled="@(!ManualEdit)" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Telefon</label>
+                    <InputText @bind-Value="Package.RecipientPhone" class="form-control" disabled="@(!ManualEdit)" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Mail</label>
+                    <InputText @bind-Value="Package.RecipientEmail" type="email" class="form-control" disabled="@(!ManualEdit)" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Pobranie</label>
+                    <InputNumber @bind-Value="Package.Services.CODAmount" class="form-control" disabled="@(!ManualEdit)" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Waga (kg)</label>
+                    <InputNumber @bind-Value="Package.Weight" step="0.01" class="form-control" disabled="@(!ManualEdit)" />
+                </div>
+            </div>
+
+            <!-- Courier & Type -->
+            <div class="row g-3 mt-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Kurier</label>
+                    <InputSelect @bind-Value="Package.Courier" class="form-select" disabled="@(!ManualEdit)">
+                        @foreach (var courier in Enum.GetValues<Courier>())
+                        {
+                            <option value="@courier">@courier.GetDescription()</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Typ paczki</label>
+                    <InputSelect @bind-Value="Package.PackageType" class="form-select" disabled="@(!ManualEdit)">
+                        @foreach (var type in Enum.GetValues<PackageType>())
+                        {
+                            <option value="@type">@type.GetDescription()</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+
+            <!-- Buttons Full Width Row -->
+            <div class="row g-2 mb-4">
+                <div class="col-md-4 d-grid">
+                    <button class="btn btn-success tall-btn" @onclick="SendPackage">Wyślij paczkę</button>
+                </div>
+                <div class="col-md-4 d-grid">
+                    <button class="btn btn-secondary tall-btn" @onclick="ClearData">Wyczyść</button>
+                </div>
+                <div class="col-md-4 d-grid">
+                    <button class="btn btn-danger tall-btn" @onclick="DeleteShipment">Usuń wysyłkę</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Services + Additional Options -->
+        <div class="col-md-3">
+            <!-- Services Card -->
+            <div class="card shadow-sm p-3 mb-4">
+                <h5 class="card-title">Usługi dodatkowe</h5>
+                <div class="row row-cols-2 row-cols-md-2 g-2">
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="Package.Services.POD"
+                                       class="form-check-input"
+                                       disabled="@( !ManualEdit )" />
+                        <label class="form-check-label">Potwierdzenie dostawy</label>
+                    </div>
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="Package.Services.EXW"
+                                       class="form-check-input"
+                                       disabled="@( !ManualEdit )" />
+                        <label class="form-check-label">Na koszt odbiorcy</label>
+                    </div>
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="Package.Services.ROD"
+                                       class="form-check-input"
+                                       disabled="@( !ManualEdit )" />
+                        <label class="form-check-label">Zwrot dokumentów</label>
+                    </div>
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="Package.Services.S10"
+                                       class="form-check-input"
+                                       disabled="@( !ManualEdit )" />
+                        <label class="form-check-label">Dostawa do 10</label>
+                    </div>
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="Package.Services.S12"
+                                       class="form-check-input"
+                                       disabled="@( !ManualEdit )" />
+                        <label class="form-check-label">Dostawa do 12</label>
+                    </div>
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="Package.Services.Saturday"
+                                       class="form-check-input"
+                                       disabled="@( !ManualEdit )" />
+                        <label class="form-check-label">Sobota</label>
+                    </div>
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="Package.Services.COD"
+                                       class="form-check-input"
+                                       disabled="@( !ManualEdit )" />
+                        <label class="form-check-label">Pobranie</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Options Card -->
+            <div class="card shadow-sm p-3 mb-4">
+                <h5 class="card-title">Opcje dodatkowe</h5>
+                <div class="form-check mb-2">
+                    <InputCheckbox @bind-Value="PrintMW" class="form-check-input" />
+                    <label class="form-check-label">Drukuj MW</label>
+                </div>
+                <div class="form-check mb-2">
+                    <InputCheckbox @bind-Value="PrintFV" class="form-check-input" />
+                    <label class="form-check-label">Drukuj FV</label>
+                </div>
+                <div class="form-check mb-3">
+                    <InputCheckbox @bind-Value="ManualEdit" class="form-check-input" />
+                    <label class="form-check-label text-danger fw-bold">Modyfikuj dane ręcznie</label>
+                </div>
+
+                <div class="d-flex flex-column gap-2">
+                    <button class="btn btn-outline-primary">Zamknij Trase DPD</button>
+                    <button class="btn btn-outline-success">Zamknij Trase GLS</button>
+                    <button class="btn btn-outline-danger">Zamknij Trase Fedex</button>
+                    <button class="btn btn-info">Wyślij mail do opiekuna</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @code {
+    private string Barcode { get; set; }
+    private PackageInfo Package { get; set; } = new();
+    private bool ManualEdit { get; set; }
+    private bool PrintMW { get; set; }
+    private bool PrintFV { get; set; }
 
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await LoadData();
+        }
+    }
+
+    private async Task LoadData()
+    {
+        // Load from _shipmentService by Barcode
+        // Shipment = await _shipmentService.GetShipmentByBarcodeAsync(Barcode);
+    }
+
+    private void SendPackage()
+    {
+        // Logic to send package
+    }
+
+    private void ClearData()
+    {
+        Package = new();
+        Barcode = string.Empty;
+        PrintMW = PrintFV = false;
+    }
+
+    private void DeleteShipment()
+    {
+        // Delete shipment logic
+    }
 }

@@ -163,7 +163,7 @@ namespace KontrolaPakowania.API.Controllers
         }
 
         [HttpGet("courier-configuration")]
-        public async Task<IActionResult> GetCourierSettings([FromQuery] string courier, [FromQuery] PackingLevel level, [FromQuery] string country)
+        public async Task<IActionResult> GetCourierConfiguration([FromQuery] string courier, [FromQuery] PackingLevel level, [FromQuery] string country)
         {
             try
             {

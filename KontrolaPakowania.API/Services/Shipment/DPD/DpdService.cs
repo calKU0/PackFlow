@@ -32,13 +32,13 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
         {
             var package = await GetPackageFromErp(request.PackageId);
             if (package == null)
-                return ShipmentResponse.CreateFailure($"Package with ID {request.PackageId} not found.");
-
+                return ShipmentResponse.CreateFailure($"Paczka z ID {request.PackageId} nie znaleziona.");
+            package.RecipientCountry = "ss";
             var dpdRequest = _mapper.Map(package);
 
             var createDpdResponse = await CreateDpdPackage(dpdRequest);
             if (createDpdResponse == null)
-                return ShipmentResponse.CreateFailure("Empty response from DPD package creation API.");
+                return ShipmentResponse.CreateFailure("Pusta odpowiedź z tworzenia paczki DPD przez API.");
             if (createDpdResponse.Status != "OK")
             {
                 if (!string.IsNullOrEmpty(createDpdResponse.ErrorsXml))
@@ -51,11 +51,11 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
                    .FirstOrDefault()?.Parcels?.FirstOrDefault()?.Waybill ?? string.Empty;
 
             if (string.IsNullOrWhiteSpace(waybill))
-                return ShipmentResponse.CreateFailure("Waybill not returned by DPD API.");
+                return ShipmentResponse.CreateFailure("Nie zwrócono etykiety przez DPD API.");
 
-            var labelResponse = await CreateDpdLabel(createDpdResponse.SessionId, waybill, createDpdResponse.Packages);
+            var labelResponse = await CreateDpdLabel(createDpdResponse.SessionId, waybill, package.RecipientCountry, createDpdResponse.Packages);
             if (labelResponse == null)
-                return ShipmentResponse.CreateFailure("Empty response from DPD label API.");
+                return ShipmentResponse.CreateFailure("Pusta odpowiedź z tworzenia etykiety DPD przez API.");
             if (labelResponse.Status != "OK")
                 return ShipmentResponse.CreateFailure(BuildErrorMessage(labelResponse));
 
@@ -118,7 +118,7 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
             }
         }
 
-        private async Task<DpdCreateLabelResponse?> CreateDpdLabel(long? sessionId, string waybill, List<DpdPackageResponse>? packages)
+        private async Task<DpdCreateLabelResponse?> CreateDpdLabel(long? sessionId, string waybill, string country, List<DpdPackageResponse>? packages)
         {
             var labelRequest = new DpdCreateLabelRequest
             {
@@ -133,7 +133,7 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
                     Session = new DpdCreateLabelRequest.Session
                     {
                         SessionId = sessionId,
-                        Type = "DOMESTIC",
+                        Type = country == "PL" ? "DOMESTIC" : "INTERNATIONAL",
                         Packages = new List<DpdCreateLabelRequest.Package>
                         {
                             new DpdCreateLabelRequest.Package
@@ -168,7 +168,7 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
 
         private string BuildErrorMessage(DpdCreatePackageResponse? response)
         {
-            if (response == null) return "Unknown error from DPD API";
+            if (response == null) return "Nieznany błąd DPD";
 
             var messages = new List<string>();
 
@@ -181,7 +181,7 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
                     if (pkg.ValidationInfo != null && pkg.ValidationInfo.Any())
                     {
                         messages.AddRange(pkg.ValidationInfo.Select(v =>
-                            $"{v.Info} (Code: {v.ErrorCode}, Package: {pkg.Reference})"));
+                            $"{v.Info} (Kod: {v.ErrorCode}"));
                     }
 
                     // Parcel-level validation errors
@@ -192,7 +192,7 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
                             if (parcel.ValidationInfo != null && parcel.ValidationInfo.Any())
                             {
                                 messages.AddRange(parcel.ValidationInfo.Select(v =>
-                                    $"{v.Info} (Code: {v.ErrorCode}, Parcel: {parcel.Reference})"));
+                                    $"{v.Info} (Kod: {v.ErrorCode}"));
                             }
                         }
                     }
@@ -205,12 +205,12 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
                 messages.Add(BuildErrorMessageFromXml(response.ErrorsXml));
             }
 
-            return messages.Any() ? string.Join("; ", messages) : "Unknown error from DPD API";
+            return messages.Any() ? string.Join("; ", messages) : "Nieznany błąd z DPD API";
         }
 
         private string BuildErrorMessage(DpdCreateLabelResponse? response)
         {
-            return "Unknown error while generating label from DPD API";
+            return "Nieznany błąd podczas tworzenia etykykiety z DPD API";
         }
 
         private string BuildErrorMessageFromXml(string xml)
@@ -220,7 +220,7 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
                 var doc = XDocument.Parse(xml);
                 var messages = doc.Descendants("errors")
                                   .Descendants("errors")
-                                  .Select(e => $"{e.Element("userMessage")?.Value} (Field: {e.Element("field")?.Value})")
+                                  .Select(e => $"{e.Element("userMessage")?.Value} (Pole: {e.Element("field")?.Value})")
                                   .ToList();
                 return string.Join("; ", messages);
             }
