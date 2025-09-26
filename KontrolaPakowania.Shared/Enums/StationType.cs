@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace KontrolaPakowania.Shared.Enums
 {
-    public enum PackingLevel
+    public enum StationType
     {
-        [Description("Góra")]
-        Góra,
-
-        [Description("Dół")]
-        Dół
+        [Description("Pakowanie")]
+        Packing,
+        [Description("Wysyłka Paczek")]
+        Shipping,
+        [Description("Monitorowanie")]
+        Monitoring
     }
 }

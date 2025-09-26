@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@using KontrolaPakowania.Shared.Enums
 @inject UserSessionService UserSession
 @inject NavigationManager Navigation
 @inject AuthService AuthService
@@ -89,7 +90,6 @@
             await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", PasswordInput);
         }
     }
-
     private async Task HandleLogin()
     {
         try
@@ -97,21 +97,18 @@
             loginDto.StationNumber = Settings.StationNumber;
             loginDto.LoginDate = DateTime.Now;
 
-            bool validCredentials = await AuthService.Login(loginDto);
-            if (validCredentials)
-            {
-                await UserSession.LoginAsync(loginDto.Username);
-                Navigation.NavigateTo("/");
-            }
-
-            else
+            if (!await AuthService.Login(loginDto))
             {
                 Toast.Show("Błąd!", "Nieprawidłowa nazwa użytkownika lub hasło.");
+                return;
             }
+
+            await UserSession.LoginAsync(loginDto.Username);
+            NavigateAfterLogin();
         }
         catch (Exception ex)
         {
-            Toast.Show("Błąd!", $"Błąd przy próbie zalogowania {ex.Message}");
+            Toast.Show("Błąd!", $"Błąd przy próbie zalogowania: {ex.Message}");
         }
     }
 
@@ -120,5 +117,24 @@
         await AuthService.Logout(UserSession.Username);
         await UserSession.LogoutAsync();
         Navigation.NavigateTo("/login");
+    }
+
+    private void NavigateAfterLogin()
+    {
+        if (string.IsNullOrEmpty(Settings.StationNumber))
+        {
+            Navigation.NavigateTo("/settings");
+            return;
+        }
+
+        var route = Settings.StationType switch
+        {
+            StationType.Packing => "/kontrola-pakowania",
+            StationType.Shipping => "/wysylka-paczek",
+            StationType.Monitoring => "/monitor",
+            _ => "/"
+        };
+
+        Navigation.NavigateTo(route);
     }
 }

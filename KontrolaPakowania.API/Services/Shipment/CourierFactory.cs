@@ -2,6 +2,7 @@
 using KontrolaPakowania.API.Services.Shipment.Fedex;
 using KontrolaPakowania.API.Services.Shipment.GLS;
 using KontrolaPakowania.Shared.Enums;
+using KontrolaPakowania.Shared.Helpers;
 
 namespace KontrolaPakowania.API.Services.Shipment
 {
@@ -20,7 +21,7 @@ namespace KontrolaPakowania.API.Services.Shipment
                 Courier.DPD => _serviceProvider.GetRequiredService<DpdService>(),
                 Courier.GLS => _serviceProvider.GetRequiredService<GlsService>(),
                 Courier.Fedex => _serviceProvider.GetRequiredService<FedexService>(),
-                _ => throw new NotSupportedException($"Courier {courier} not supported")
+                _ => throw new NotSupportedException($"Kurier {courier.GetDescription()} nie jest wspierany")
             };
     }
 }

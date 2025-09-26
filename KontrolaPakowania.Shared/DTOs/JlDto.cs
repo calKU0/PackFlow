@@ -16,9 +16,23 @@ namespace KontrolaPakowania.Shared.DTOs
         public int Status { get; set; }
         public decimal Weight { get; set; }
         public string CourierName { get; set; } = string.Empty;
-        public Courier Courier { get; set; } = Courier.Unknown;
+        private Courier courier;
+
+        public Courier Courier
+        {
+            get => courier;
+            set
+            {
+                if (courier != value)
+                {
+                    courier = value;
+                    InitCourierLogo();
+                }
+            }
+        }
+
         public string LogoCourier { get; set; } = string.Empty;
-        public CourierServices CourierServices { get; set; } = new();
+        public ShipmentServices ShipmentServices { get; set; } = new();
         public int Priority { get; set; }
         public int Sorting { get; set; }
         public string Country { get; set; } = string.Empty;
@@ -30,43 +44,21 @@ namespace KontrolaPakowania.Shared.DTOs
         public bool PackageClosed { get; set; }
         public string PackingRequirements { get; set; } = string.Empty;
 
-        public void InitCourierFromName()
+        private void InitCourierLogo()
         {
-            // Map string to enum
-            var courierLower = CourierName.ToLower();
-            Courier = courierLower switch
-            {
-                var c when c.Contains("fedex") => Courier.Fedex,
-                var c when c.Contains("dpd-romania") => Courier.DPD_Romania,
-                var c when c.Contains("dpd") => Courier.DPD,
-                var c when c.Contains("gls") => Courier.GLS,
-                var c when c.Contains("odbiór własny") => Courier.Personal_Collection,
-                var c when c.Contains("hellmann") => Courier.Hellmann,
-                var c when c.Contains("shenker") => Courier.Schenker,
-                _ => Courier.Unknown
-            };
-        }
-
-        public void InitCourierLogo()
-        {
-            // Build LogoCourier string based on CourierServices
             var suffixes = new List<string>();
-            if (CourierServices.Saturday) suffixes.Add("Sobota");
-            if (CourierServices.Return) suffixes.Add("zwrotna");
-            if (CourierServices._12) suffixes.Add("1200");
-            if (CourierServices.Dropshipping) suffixes.Add("Dropshipping");
+
+            foreach (var prop in typeof(ShipmentServices).GetProperties())
+            {
+                if (prop.PropertyType == typeof(bool) && (bool)prop.GetValue(ShipmentServices))
+                {
+                    suffixes.Add(prop.Name); // Or map to user-friendly names
+                }
+            }
 
             LogoCourier = suffixes.Any()
                 ? $"{Courier.GetDescription()}-{string.Join(", ", suffixes)}"
-                : Courier.GetDescription().ToString();
+                : Courier.GetDescription();
         }
-    }
-
-    public class CourierServices
-    {
-        public bool Return { get; set; }
-        public bool _12 { get; set; }
-        public bool Saturday { get; set; }
-        public bool Dropshipping { get; set; }
     }
 }

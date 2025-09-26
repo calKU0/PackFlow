@@ -191,18 +191,13 @@
 
 <PasswordModal @ref=PackingRequirementsModal OnConfirm ="HandlePasswordConfirm" OnCancel="HandlePasswordCancel" />
 <PasswordModal @ref=ManagerPasswordModal OnConfirm="HandlePasswordConfirm" />
+<ConfirmDialog @ref="ConfirmDialog" OnCancelClicked="HideConfirm" OnConfirmClicked="ConfirmClose" />
 <CourierModal @ref="CourierModal" />
 <LoggedOperatorsModal @ref="LoggedOperatorsModal" />
 <JlInProgressModal @ref="JlInProgressModal" />
 <PackingJlItemsModal @ref="PackingJlItemsModal" />
 <ChangePackingWarehouseModal @ref="ChangePackingWarehouseModal" />
 <TextBoxModal @ref="TextBoxModal" />
-
-<ConfirmDialog @ref="confirmDialog"
-              Title="Zamknij"
-              Message="Czy na pewno chcesz zamknąć?"
-              OnCancelClicked="HideConfirm"
-              OnConfirmClicked="ConfirmClose" />
 
 <FinishPackingModal @ref="FinishPackingModal"
             Courier="CurrentJl.Courier"
@@ -231,7 +226,7 @@
     private Toast Toast = new();
     private PasswordModal ManagerPasswordModal = new();
     private PasswordModal PackingRequirementsModal = new();
-    private ConfirmDialog confirmDialog = new();
+    private ConfirmDialog ConfirmDialog = new();
     private ManagerControlModal ManagerModal = new();
     private TextBoxModal TextBoxModal = new();
     private CourierModal CourierModal = new();
@@ -654,20 +649,19 @@
 
     private void Close()
     {
-        confirmDialog.Show = true;
-        StateHasChanged();
+        ConfirmDialog.Show("Wyjście z kuwety", "Czy napewno chcesz wyjść z kuwety?");
     }
 
     private void HideConfirm()
     {
-        confirmDialog.Show = false;
+        ConfirmDialog.Hide();
     }
 
     private async void ConfirmClose()
     {
         try
         {
-            confirmDialog.Show = false;
+            ConfirmDialog.Hide();
             await PackingService.RemoveJlRealization(CurrentJl.Name);
             ClosePackageRequest closePackageRequest = new()
             {
@@ -742,7 +736,7 @@
                         return;
                     }
 
-                    if (CurrentJl.CourierServices.Saturday || CurrentJl.CourierServices._12 || CurrentJl.CourierServices.Return || CurrentJl.CourierServices.Dropshipping)
+                    if (CurrentJl.ShipmentServices.HasAnyService())
                     {
                         Toast.Show("Błąd!", $"Przesyłka z dodatkową usługą (Sobota, Zwrotna, 12:00 lub Dropshipping). Nie możesz zmienić kuriera. Nadaj numer wewnętrzny lub wyślij bieżącym kurierem");
                         return;
@@ -764,7 +758,6 @@
                             return;
                         }
                         CurrentJl.Courier = selectedCourier.Value;
-                        CurrentJl.InitCourierLogo();
                         await LoadCourierConfiguration();
                         await InvokeAsync(StateHasChanged);
                     }
@@ -883,13 +876,8 @@
             await ClosePackage(internalBarcode, new Dimensions());
 
             // Shipment
-            ShipmentRequest shipmentRequest = new ShipmentRequest
-            {
-                PackageId = PackageId,
-                Courier = CurrentJl.Courier,
-            };
-
-            var response = await ShipmentService.SendPackage(shipmentRequest);
+            var package = await ShipmentService.GetShipmentDataByBarcode(internalBarcode);
+            var response = await ShipmentService.SendPackage(package);
 
             if (response?.PackageId > 0)
             {

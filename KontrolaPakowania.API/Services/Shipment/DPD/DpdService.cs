@@ -19,21 +19,18 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
     {
         private readonly HttpClient _httpClient;
         private readonly IParcelMapper<DpdCreatePackageRequest> _mapper;
-        private readonly IDbExecutor _db;
 
-        public DpdService(HttpClient httpClient, IParcelMapper<DpdCreatePackageRequest> mapper, IDbExecutor db)
+        public DpdService(HttpClient httpClient, IParcelMapper<DpdCreatePackageRequest> mapper)
         {
             _httpClient = httpClient;
             _mapper = mapper;
-            _db = db;
         }
 
-        public async Task<ShipmentResponse> SendPackageAsync(ShipmentRequest request)
+        public async Task<ShipmentResponse> SendPackageAsync(PackageData package)
         {
-            var package = await GetPackageFromErp(request.PackageId);
             if (package == null)
-                return ShipmentResponse.CreateFailure($"Paczka z ID {request.PackageId} nie znaleziona.");
-            package.RecipientCountry = "ss";
+                return ShipmentResponse.CreateFailure("Błąd: Nie znaleziono paczki");
+
             var dpdRequest = _mapper.Map(package);
 
             var createDpdResponse = await CreateDpdPackage(dpdRequest);
@@ -61,26 +58,12 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
 
             return ShipmentResponse.CreateSuccess(
                 courier: Courier.DPD,
-                packageId: request.PackageId,
+                packageId: package.Id,
                 trackingNumber: waybill,
                 trackingLink: $"https://tracktrace.dpd.com.pl/parcelDetails?typ=1&p1={waybill}",
                 labelBase64: labelResponse.DocumentData,
                 labelType: PrintDataType.ZPL,
                 packageInfo: package
-            );
-        }
-
-        private async Task<PackageInfo?> GetPackageFromErp(int packageId)
-        {
-            const string procedure = "kp.GetPackageInfo";
-
-            return await _db.QuerySingleOrDefaultAsync<PackageInfo, ShipmentServices>(
-                procedure,
-                (pkg, services) => { pkg.Services = services; return pkg; },
-                "POD",
-                new { PackageId = packageId },
-                CommandType.StoredProcedure,
-                Connection.ERPConnection
             );
         }
 
@@ -228,6 +211,12 @@ namespace KontrolaPakowania.API.Services.Shipment.DPD
             {
                 return xml; // fallback: raw XML
             }
+        }
+
+        public Task<int> DeletePackageAsync(int packageId)
+        {
+            // No need to delete package in DPD
+            return Task.FromResult(1);
         }
     }
 }

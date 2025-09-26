@@ -3,6 +3,7 @@ using KontrolaPakowania.API.Data.Enums;
 using KontrolaPakowania.API.Services.Shipment.GLS;
 using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
+using KontrolaPakowania.Shared.Helpers;
 using System.Data;
 using System.Reflection.Metadata;
 
@@ -20,23 +21,52 @@ namespace KontrolaPakowania.API.Services.Shipment
         public async Task<int> CreateErpShipmentDocument(ShipmentResponse shipment)
         {
             const string procedure = "kp.CreateShipmentDocument";
-            return await _db.QuerySingleOrDefaultAsync<int>(procedure, new { shipment.PackageId, shipment.TrackingNumber, shipment.TrackingLink, shipment.PackageInfo.Services.CODAmount, shipment.PackageInfo.Insurance }, CommandType.StoredProcedure, Connection.ERPConnection);
+            return await _db.QuerySingleOrDefaultAsync<int>(procedure, new { shipment.PackageId, shipment.TrackingNumber, shipment.TrackingLink, shipment.PackageInfo.ShipmentServices.CODAmount, shipment.PackageInfo.Insurance }, CommandType.StoredProcedure, Connection.ERPConnection);
         }
 
-        public async Task<bool> AddErpAttributes(int documentId, PackageInfo packageInfo)
+        public async Task<bool> DeleteErpShipmentDocument(int wysNumber, int wysType)
+        {
+            const string procedure = "kp.DeleteShipmentDocument";
+            var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { wysNumber, wysType }, CommandType.StoredProcedure, Connection.ERPConnection);
+            return result >= 1;
+        }
+
+        public async Task<bool> AddErpAttributes(int documentId, PackageData packageInfo)
         {
             const string procedure = "kp.AddShipmentAttributes";
 
-            string ROD = packageInfo.Services.ROD ? "TAK" : "NIE";
-            string POD = packageInfo.Services.POD ? "TAK" : "NIE";
-            string EXW = packageInfo.Services.EXW ? "TAK" : "NIE";
-            string S10 = packageInfo.Services.S10 ? "TAK" : "NIE";
-            string S12 = packageInfo.Services.S12 ? "TAK" : "NIE";
-            string Saturday = packageInfo.Services.Saturday ? "TAK" : "NIE";
-            string COD = packageInfo.Services.COD ? "TAK" : "NIE";
+            string ROD = packageInfo.ShipmentServices.ROD ? "TAK" : "NIE";
+            string POD = packageInfo.ShipmentServices.POD ? "TAK" : "NIE";
+            string EXW = packageInfo.ShipmentServices.EXW ? "TAK" : "NIE";
+            string S10 = packageInfo.ShipmentServices.D10 ? "TAK" : "NIE";
+            string S12 = packageInfo.ShipmentServices.D12 ? "TAK" : "NIE";
+            string Saturday = packageInfo.ShipmentServices.Saturday ? "TAK" : "NIE";
+            string COD = packageInfo.ShipmentServices.COD ? "TAK" : "NIE";
 
             var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { POD, ROD, EXW, S10, S12, Saturday, COD, documentId }, CommandType.StoredProcedure, Connection.ERPConnection);
             return result == 7;
+        }
+
+        public async Task<PackageData?> GetShipmentDataByBarcode(string barcode)
+        {
+            const string procedure = "kp.GetPackageInfo";
+
+            var result = await _db.QuerySingleOrDefaultAsync<PackageData, ShipmentServices>(
+                procedure,
+                (pkg, services) => { pkg.ShipmentServices = services; return pkg; },
+                "POD",
+                new { barcode },
+                CommandType.StoredProcedure,
+                Connection.ERPConnection
+            );
+
+            if (result is not null)
+            {
+                result.Courier = CourierHelper.GetCourierFromName(result.CourierName);
+                result.ShipmentServices = ShipmentServices.FromString(result.CourierName);
+            }
+
+            return result;
         }
     }
 }

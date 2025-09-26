@@ -4,6 +4,7 @@ using KontrolaPakowania.API.Data;
 using KontrolaPakowania.API.Data.Enums;
 using KontrolaPakowania.API.Services;
 using KontrolaPakowania.API.Services.Packing;
+using KontrolaPakowania.Shared;
 using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
 using KontrolaPakowania.Shared.Enums;
@@ -35,8 +36,7 @@ public class PackingService : IPackingService
         var jlList = await _db.QueryAsync<JlDto>(procedure, commandType: CommandType.StoredProcedure, connection: Connection.WMSConnection);
         foreach (var jl in jlList)
         {
-            jl.InitCourierFromName();
-            jl.InitCourierLogo();
+            jl.Courier = CourierHelper.GetCourierFromName(jl.CourierName);
         }
 
         return jlList;
@@ -54,18 +54,17 @@ public class PackingService : IPackingService
         var jlDto = await _db.QuerySingleOrDefaultAsync<JlDto>(procedure, new { jl }, CommandType.StoredProcedure, Connection.WMSConnection);
 
         var courierLower = jlDto.CourierName.ToLower();
-        var services = new CourierServices
+        var services = new ShipmentServices
         {
-            _12 = courierLower.Contains("12"),
+            D12 = courierLower.Contains("12"),
+            D10 = courierLower.Contains("10"),
             Saturday = courierLower.Contains("sobota"),
-            Return = courierLower.Contains("zwrotna"),
+            PZ = courierLower.Contains("zwrotna"),
             Dropshipping = courierLower.Contains("dropshipping")
         };
 
-        jlDto.CourierServices = services;
-
-        jlDto.InitCourierFromName();
-        jlDto.InitCourierLogo();
+        jlDto.ShipmentServices = ShipmentServices.FromString(jlDto.CourierName);
+        jlDto.Courier = CourierHelper.GetCourierFromName(jlDto.CourierName);
 
         return jlDto;
     }
@@ -126,7 +125,7 @@ public class PackingService : IPackingService
     public async Task<int> CreatePackage(CreatePackageRequest request)
     {
         const string procedure = "kp.CreatePackageDocument";
-        string courier = request.Courier.ToString();
+        string courier = request.Courier.GetDescription();
         return await _db.QuerySingleOrDefaultAsync<int>(procedure, new { request.Username, courier, request.ClientId, request.ClientAddressId, request.ClientAddressType }, CommandType.StoredProcedure, Connection.ERPConnection);
     }
 
@@ -154,7 +153,7 @@ public class PackingService : IPackingService
 
     public async Task<bool> UpdatePackageCourier(UpdatePackageCourierRequest request)
     {
-        string courier = request.Courier.ToString();
+        string courier = request.Courier.GetDescription();
         const string updateProcedure = "kp.UpdatePackageCourier";
         var result = await _db.QuerySingleOrDefaultAsync<int>(updateProcedure, new { request.PackageId, courier }, CommandType.StoredProcedure, Connection.ERPConnection);
         return result > 0;

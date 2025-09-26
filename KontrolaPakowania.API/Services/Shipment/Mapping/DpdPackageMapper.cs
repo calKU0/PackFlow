@@ -7,7 +7,7 @@ namespace KontrolaPakowania.API.Services.Shipment.Mapping
 {
     public class DpdPackageMapper : IParcelMapper<DpdCreatePackageRequest>
     {
-        public DpdCreatePackageRequest Map(PackageInfo packageInfo)
+        public DpdCreatePackageRequest Map(PackageData packageInfo)
         {
             List<DpdCreatePackageRequest.Package> packages = new();
             List<DpdCreatePackageRequest.Parcel> parcels = new();
@@ -24,21 +24,21 @@ namespace KontrolaPakowania.API.Services.Shipment.Mapping
             parcels.Add(parcel);
 
             // COD (Cash on Delivery)
-            if (packageInfo.Services.COD)
+            if (packageInfo.ShipmentServices.COD)
             {
                 services.Add(new DpdCreatePackageRequest.Service
                 {
                     Code = "COD",
                     Attributes = new List<DpdCreatePackageRequest.Attribute>
                     {
-                        new() { Code = "AMOUNT", Value = packageInfo.Services.CODAmount.ToString("F2", System.Globalization.CultureInfo.InvariantCulture) },
+                        new() { Code = "AMOUNT", Value = packageInfo.ShipmentServices.CODAmount.ToString("F2", System.Globalization.CultureInfo.InvariantCulture) },
                         new() { Code = "CURRENCY", Value = "PLN" }
                     }
                 });
             }
 
             // ROD (Return of Document)
-            if (packageInfo.Services.ROD)
+            if (packageInfo.ShipmentServices.ROD)
             {
                 services.Add(new DpdCreatePackageRequest.Service
                 {
@@ -48,7 +48,7 @@ namespace KontrolaPakowania.API.Services.Shipment.Mapping
             }
 
             // POD (Proof of Delivery / Hand delivery)
-            if (packageInfo.Services.POD)
+            if (packageInfo.ShipmentServices.POD)
             {
                 services.Add(new DpdCreatePackageRequest.Service
                 {
@@ -58,7 +58,7 @@ namespace KontrolaPakowania.API.Services.Shipment.Mapping
             }
 
             // S10 -> Time fixed (10:00)
-            if (packageInfo.Services.S10)
+            if (packageInfo.ShipmentServices.D10)
             {
                 services.Add(new DpdCreatePackageRequest.Service
                 {
@@ -71,7 +71,7 @@ namespace KontrolaPakowania.API.Services.Shipment.Mapping
             }
 
             // S12 -> Delivery before 12:00
-            if (packageInfo.Services.S12)
+            if (packageInfo.ShipmentServices.D12)
             {
                 services.Add(new DpdCreatePackageRequest.Service
                 {
@@ -81,7 +81,7 @@ namespace KontrolaPakowania.API.Services.Shipment.Mapping
             }
 
             // Saturday delivery
-            if (packageInfo.Services.Saturday)
+            if (packageInfo.ShipmentServices.Saturday)
             {
                 services.Add(new DpdCreatePackageRequest.Service
                 {
@@ -90,8 +90,8 @@ namespace KontrolaPakowania.API.Services.Shipment.Mapping
                 });
             }
 
-            // EXW (ex works – return shipment / CUD)
-            if (packageInfo.Services.EXW)
+            // PZ (Return shipment / CUD)
+            if (packageInfo.ShipmentServices.PZ)
             {
                 services.Add(new DpdCreatePackageRequest.Service
                 {

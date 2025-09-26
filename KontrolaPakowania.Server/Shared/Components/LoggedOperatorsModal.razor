@@ -59,17 +59,13 @@
         </div>
     </div>
 
-    <ConfirmDialog @ref="confirmDialog"
-                   Title="Zamknij"
-                   Message="Czy na pewno chcesz usunąć operatora?"
-                   OnCancelClicked="HideConfirm"
-                   OnConfirmClicked="ConfirmClose" />
+    <ConfirmDialog @ref="ConfirmDialog" OnCancelClicked="HideConfirm" OnConfirmClicked="ConfirmClose" />
 }
 <Toast @ref="Toast"/>
 
 @code {
     private bool Show { get; set; }
-    private ConfirmDialog confirmDialog = new();
+    private ConfirmDialog ConfirmDialog = new();
     private List<LoginDto> Users { get; set; } = new();
     private LoginDto? SelectedUser { get; set; }
     private Toast Toast = new();
@@ -103,7 +99,7 @@
     private void ConfirmRemove(LoginDto op)
     {
         SelectedUser = op;
-        confirmDialog.Show = true;
+        ConfirmDialog.Show("Usuń operatora", "Czy na pewno chcesz usunąć operatora?");
     }
 
     private void Close()
@@ -115,12 +111,12 @@
 
     private void HideConfirm()
     {
-        confirmDialog.Show = false;
+        ConfirmDialog.Hide();
     }
 
     private async void ConfirmClose()
     {
-        confirmDialog.Show = false;
+        ConfirmDialog.Hide();
         if (SelectedUser != null)
         {
             try

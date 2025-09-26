@@ -1,25 +1,26 @@
 ﻿@page "/wysylka-paczek"
+@using KontrolaPakowania.Shared.DTOs.Requests
 @using KontrolaPakowania.Shared.Enums
 @using KontrolaPakowania.Shared.Helpers
 @inject UserSessionService UserSession
+@inject ShipmentService ShipmentService
+@inject WorkstationService WorkstationService
+@inject ClientPrinterService ClientPrinterService
+@inject IJSRuntime JSRuntime
 @inherits ProtectedPageBase
 
 <div class="container-fluid package-send position-relative">
-    <h3 class="mb-4">📦 Wysyłka paczek</h3>
-
     <!-- Barcode Input Full Width -->
     <div class="mb-3 row">
         <div class="col-12">
-            <InputText @bind-Value="Barcode"
-                       placeholder="Zeskanuj kod kreskowy..."
-                       class="form-control"
-                       onkeydown="@HandleKeyDown" />
+            <label class="form-label">Kod kreskowy</label>
+            <input @bind="Barcode"
+                   @bind:event="oninput"
+                   @ref="InputRef"
+                   placeholder="Zeskanuj kod kreskowy..."
+                   class="form-control"
+                   @onkeydown="HandleKeyDown" />
         </div>
-    </div>
-
-    <!-- Courier Image Top Right -->
-    <div class="position-absolute top-0 end-0 me-3 mt-3">
-        <img src="images/courier-placeholder.png" alt="Courier Logo" class="img-fluid courier-image" style="max-width:120px;" />
     </div>
 
     <!-- Two Column Layout -->
@@ -61,7 +62,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Pobranie</label>
-                    <InputNumber @bind-Value="Package.Services.CODAmount" class="form-control" disabled="@(!ManualEdit)" />
+                    <InputNumber @bind-Value="Package.ShipmentServices.CODAmount" class="form-control" disabled="@(!ManualEdit)" />
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Waga (kg)</label>
@@ -70,8 +71,8 @@
             </div>
 
             <!-- Courier & Type -->
-            <div class="row g-3 mt-3 mb-4">
-                <div class="col-md-6">
+            <div class="row g-3 mt-3 mb-4 align-items-center">
+                <div class="col-md-3">
                     <label class="form-label fw-bold">Kurier</label>
                     <InputSelect @bind-Value="Package.Courier" class="form-select" disabled="@(!ManualEdit)">
                         @foreach (var courier in Enum.GetValues<Courier>())
@@ -80,6 +81,17 @@
                         }
                     </InputSelect>
                 </div>
+
+                <div class="col-md-3 d-flex justify-content-center align-items-center">
+                    @if (!string.IsNullOrEmpty(Package.CourierLogo))
+                    {
+                        <img src="@Utils.GetCourierSrc(Package.CourierLogo)"
+                             alt="Courier Logo"
+                             class="img-fluid"
+                             style="max-height:120px;" />
+                    }
+                </div>
+
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Typ paczki</label>
                     <InputSelect @bind-Value="Package.PackageType" class="form-select" disabled="@(!ManualEdit)">
@@ -91,16 +103,15 @@
                 </div>
             </div>
 
+
+
             <!-- Buttons Full Width Row -->
             <div class="row g-2 mb-4">
-                <div class="col-md-4 d-grid">
+                <div class="col-md-6 d-grid">
                     <button class="btn btn-success tall-btn" @onclick="SendPackage">Wyślij paczkę</button>
                 </div>
-                <div class="col-md-4 d-grid">
+                <div class="col-md-6 d-grid">
                     <button class="btn btn-secondary tall-btn" @onclick="ClearData">Wyczyść</button>
-                </div>
-                <div class="col-md-4 d-grid">
-                    <button class="btn btn-danger tall-btn" @onclick="DeleteShipment">Usuń wysyłkę</button>
                 </div>
             </div>
         </div>
@@ -112,43 +123,43 @@
                 <h5 class="card-title">Usługi dodatkowe</h5>
                 <div class="row row-cols-2 row-cols-md-2 g-2">
                     <div class="form-check">
-                        <InputCheckbox @bind-Value="Package.Services.POD"
+                        <InputCheckbox @bind-Value="Package.ShipmentServices.POD"
                                        class="form-check-input"
                                        disabled="@( !ManualEdit )" />
                         <label class="form-check-label">Potwierdzenie dostawy</label>
                     </div>
                     <div class="form-check">
-                        <InputCheckbox @bind-Value="Package.Services.EXW"
+                        <InputCheckbox @bind-Value="Package.ShipmentServices.EXW"
                                        class="form-check-input"
                                        disabled="@( !ManualEdit )" />
                         <label class="form-check-label">Na koszt odbiorcy</label>
                     </div>
                     <div class="form-check">
-                        <InputCheckbox @bind-Value="Package.Services.ROD"
+                        <InputCheckbox @bind-Value="Package.ShipmentServices.ROD"
                                        class="form-check-input"
                                        disabled="@( !ManualEdit )" />
                         <label class="form-check-label">Zwrot dokumentów</label>
                     </div>
                     <div class="form-check">
-                        <InputCheckbox @bind-Value="Package.Services.S10"
+                        <InputCheckbox @bind-Value="Package.ShipmentServices.D10"
                                        class="form-check-input"
                                        disabled="@( !ManualEdit )" />
                         <label class="form-check-label">Dostawa do 10</label>
                     </div>
                     <div class="form-check">
-                        <InputCheckbox @bind-Value="Package.Services.S12"
+                        <InputCheckbox @bind-Value="Package.ShipmentServices.D12"
                                        class="form-check-input"
                                        disabled="@( !ManualEdit )" />
                         <label class="form-check-label">Dostawa do 12</label>
                     </div>
                     <div class="form-check">
-                        <InputCheckbox @bind-Value="Package.Services.Saturday"
+                        <InputCheckbox @bind-Value="Package.ShipmentServices.Saturday"
                                        class="form-check-input"
                                        disabled="@( !ManualEdit )" />
                         <label class="form-check-label">Sobota</label>
                     </div>
                     <div class="form-check">
-                        <InputCheckbox @bind-Value="Package.Services.COD"
+                        <InputCheckbox @bind-Value="Package.ShipmentServices.COD"
                                        class="form-check-input"
                                        disabled="@( !ManualEdit )" />
                         <label class="form-check-label">Pobranie</label>
@@ -159,14 +170,6 @@
             <!-- Additional Options Card -->
             <div class="card shadow-sm p-3 mb-4">
                 <h5 class="card-title">Opcje dodatkowe</h5>
-                <div class="form-check mb-2">
-                    <InputCheckbox @bind-Value="PrintMW" class="form-check-input" />
-                    <label class="form-check-label">Drukuj MW</label>
-                </div>
-                <div class="form-check mb-2">
-                    <InputCheckbox @bind-Value="PrintFV" class="form-check-input" />
-                    <label class="form-check-label">Drukuj FV</label>
-                </div>
                 <div class="form-check mb-3">
                     <InputCheckbox @bind-Value="ManualEdit" class="form-check-input" />
                     <label class="form-check-label text-danger fw-bold">Modyfikuj dane ręcznie</label>
@@ -175,7 +178,7 @@
                 <div class="d-flex flex-column gap-2">
                     <button class="btn btn-outline-primary">Zamknij Trase DPD</button>
                     <button class="btn btn-outline-success">Zamknij Trase GLS</button>
-                    <button class="btn btn-outline-danger">Zamknij Trase Fedex</button>
+                    <button class="btn btn-outline-danger mb-3">Zamknij Trase Fedex</button>
                     <button class="btn btn-info">Wyślij mail do opiekuna</button>
                 </div>
             </div>
@@ -183,13 +186,40 @@
     </div>
 </div>
 
+<Toast @ref="Toast" />
+<ShipmentModal @ref="ShipmentModal" />
+<ConfirmDialog @ref="ConfirmDialog" OnCancelClicked="HideConfirm" OnConfirmClicked="ConfirmDelete" />
 
 @code {
     private string Barcode { get; set; }
-    private PackageInfo Package { get; set; } = new();
+    private PackageData Package { get; set; } = new();
+    private WorkstationSettings Settings = new();
     private bool ManualEdit { get; set; }
-    private bool PrintMW { get; set; }
-    private bool PrintFV { get; set; }
+    private ElementReference InputRef;
+
+    private ShipmentModal ShipmentModal = new();
+    private ConfirmDialog ConfirmDialog = new();
+    private Toast Toast = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Settings = await WorkstationService.GetSettingsAsync();
+        }
+        catch (Exception ex)
+        {
+            Toast.Show("Błąd!", $"Błąd przy próbie pobrania ustawień stanowiska: {ex.Message}");
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+        }
+    }
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
@@ -201,24 +231,101 @@
 
     private async Task LoadData()
     {
-        // Load from _shipmentService by Barcode
-        // Shipment = await _shipmentService.GetShipmentByBarcodeAsync(Barcode);
+        try
+        {
+            Package = await ShipmentService.GetShipmentDataByBarcode(Barcode);
+            if (Package == null)
+            {
+                Toast.Show("Brak paczki!", $"Nie znalaziono paczki o podanym kodzie kreskowym w systmie");
+                return;
+            }
+
+            if (Package.WysNumber != 0)
+            {
+                ConfirmDialog.Show("Usuń przesyłke", "Przesyłka do tej paczki została wygenerowana. Czy chcesz ją usunąć?");
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Show("Błąd!", $"Błąd przy próbie pobrania danych paczki: {ex.Message}");
+            Barcode = string.Empty;
+        }
+        finally
+        {
+            await InvokeAsync(StateHasChanged);
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+        }
     }
 
-    private void SendPackage()
+
+    private async Task SendPackage()
     {
-        // Logic to send package
+        try
+        {
+            var response = await ShipmentService.SendPackage(Package);
+            if (response?.PackageId > 0)
+            {
+                if (!string.IsNullOrEmpty(response.LabelBase64))
+                {
+                    var labelContent = response.LabelBase64;
+                    await ClientPrinterService.PrintAsync(Settings.PrinterLabel, response.LabelType.ToString(), labelContent);
+                    ShipmentModal.Show(response.TrackingNumber, response.LabelBase64, response.LabelType, Settings.PrinterLabel);
+                }
+                else
+                {
+                    var msg = string.IsNullOrWhiteSpace(response.ErrorMessage) ? "Nie udało się wygenerować etykiety kurierskiej!" : response.ErrorMessage;
+                    Toast.Show("Błąd!", msg);
+                }
+            }
+            else
+            {
+                var msg = string.IsNullOrWhiteSpace(response?.ErrorMessage) ? "Nie udało się wygenerować przesyłki!" : response.ErrorMessage;
+
+                Toast.Show("Błąd!", msg);
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Show("Błąd!", $"Błąd przy próbie wysłania paczki: {ex.Message}");
+        }
+        finally
+        {
+            await ClearData();
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+        }
     }
 
-    private void ClearData()
+    private async Task ClearData()
     {
         Package = new();
+        ManualEdit = false;
         Barcode = string.Empty;
-        PrintMW = PrintFV = false;
+        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+        await InvokeAsync(StateHasChanged);
     }
 
-    private void DeleteShipment()
+    private async Task HideConfirm()
     {
-        // Delete shipment logic
+        ConfirmDialog.Hide();
+        await ClearData();
+        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+    }
+
+    private async Task ConfirmDelete()
+    {
+        try
+        {
+            ConfirmDialog.Hide();
+            await ShipmentService.DeleteShipment(Package.Courier, Package.WysNumber, Package.WysType);
+        }
+        catch (Exception ex)
+        {
+            Toast.Show("Błąd!", $"Błąd przy próbie usuwania paczki: {ex.Message}");
+        }
+        finally
+        {
+            await ClearData();
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+        }
     }
 }

@@ -44,16 +44,16 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
                 PackageId = TestConstants.PackageId,
                 TrackingNumber = "2",
                 TrackingLink = "test",
-                PackageInfo = new PackageInfo
+                PackageInfo = new PackageData
                 {
                     Insurance = 100.00m,
-                    Services = new ShipmentServices
+                    ShipmentServices = new ShipmentServices
                     {
                         POD = true,
                         ROD = false,
                         EXW = true,
-                        S10 = false,
-                        S12 = true,
+                        D10 = false,
+                        D12 = true,
                         Saturday = false,
                         COD = true,
                         CODAmount = 100.00m

@@ -1,68 +1,83 @@
 ﻿using KontrolaPakowania.API.Data;
-using KontrolaPakowania.API.Services.Packing;
+using KontrolaPakowania.API.Services.Shipment;
 using KontrolaPakowania.API.Services.Shipment.DPD;
 using KontrolaPakowania.API.Services.Shipment.DPD.Reference;
-using KontrolaPakowania.API.Services.Shipment.GLS;
 using KontrolaPakowania.API.Services.Shipment.Mapping;
 using KontrolaPakowania.API.Settings;
 using KontrolaPakowania.Shared.DTOs.Requests;
-using KontrolaPakowania.Shared.Enums;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
 {
     public class DpdServiceIntegrationTests
     {
-        private readonly DpdService _dpdService;
+        private DpdService _dpdService;
+        private IShipmentService _shipmentService;
 
         public DpdServiceIntegrationTests()
         {
+            SetupServices();
+        }
+
+        private void SetupServices()
+        {
+            // Load configuration
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false)
                 .Build();
 
+            // Bind courier settings
             var courierSettings = new CourierSettings();
             config.GetSection("CourierApis:DPD").Bind(courierSettings.DPD = new DpdSettings());
 
-            var byteArray = Encoding.ASCII.GetBytes($"{courierSettings.DPD.Username}:{courierSettings.DPD.Password}");
+            var options = Options.Create(courierSettings);
 
-            var httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(courierSettings.DPD.BaseUrl)
-            };
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-            httpClient.DefaultRequestHeaders.Add("x-dpd-fid", courierSettings.DPD.MasterFID);
+            // HTTP client with basic auth + custom headers
+            var httpClient = BuildHttpClient(courierSettings.DPD);
 
+            // Services
             var mapper = new DpdPackageMapper();
             var dbExecutor = new DapperDbExecutor(config);
+            _shipmentService = new ShipmentService(dbExecutor);
 
-            _dpdService = new DpdService(httpClient, mapper, dbExecutor);
+            _dpdService = new DpdService(httpClient, mapper);
+        }
+
+        private HttpClient BuildHttpClient(DpdSettings dpdSettings)
+        {
+            var byteArray = Encoding.ASCII.GetBytes($"{dpdSettings.Username}:{dpdSettings.Password}");
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri(dpdSettings.BaseUrl)
+            };
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+            client.DefaultRequestHeaders.Add("x-dpd-fid", dpdSettings.MasterFID);
+            return client;
         }
 
         [Fact, Trait("Category", "Integration")]
         public async Task SendPackageAsync_ShouldReturnTrackingNumber_WhenValidPackage()
         {
-            var request = new ShipmentRequest
-            {
-                PackageId = TestConstants.PackageId,
-                Courier = Courier.DPD
-            };
+            // Arrange
+            var package = await _shipmentService.GetShipmentDataByBarcode(TestConstants.PackageBarcode);
 
-            var response = await _dpdService.SendPackageAsync(request);
+            Assert.NotNull(package); // Fail fast if package not found
+            Assert.False(string.IsNullOrWhiteSpace(package.CourierName), "CourierName must be set");
 
+            // Act
+            var response = await _dpdService.SendPackageAsync(package);
+
+            // Assert
             Assert.NotNull(response);
-            Assert.True(response.Success);
-            Assert.False(string.IsNullOrWhiteSpace(response.TrackingNumber));
+            Assert.True(response.Success, "DPD API did not return success");
+            Assert.False(string.IsNullOrWhiteSpace(response.TrackingNumber), "Tracking number is empty");
             Assert.NotEmpty(response.LabelBase64);
         }
     }

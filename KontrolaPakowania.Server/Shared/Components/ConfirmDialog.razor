@@ -1,4 +1,4 @@
-﻿@if (Show)
+﻿@if (IsVisible)
 {
     <div class="modal show d-block" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -20,12 +20,26 @@
 }
 
 @code {
-    [Parameter] public string Title { get; set; } = "Potwierdzenie";
-    [Parameter] public string Message { get; set; } = "Czy jesteś pewny?";
     [Parameter] public EventCallback OnCancelClicked { get; set; }
     [Parameter] public EventCallback OnConfirmClicked { get; set; }
+    private string Title { get; set; } = string.Empty;
+    private string Message { get; set; } = string.Empty;
 
-    public bool Show { get; set; }
+    protected bool IsVisible { get; set; }
+
+    public void Show(string title = "Potwierdzenie", string message = "Czy jesteś pewny?")
+    {
+        Title = title;
+        Message = message;
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    public void Hide()
+    {
+        IsVisible = false;
+        StateHasChanged();
+    }
 
     private async Task OnCancel() => await OnCancelClicked.InvokeAsync();
     private async Task OnConfirm() => await OnConfirmClicked.InvokeAsync();

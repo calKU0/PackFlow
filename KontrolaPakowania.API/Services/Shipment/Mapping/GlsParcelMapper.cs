@@ -5,7 +5,7 @@ namespace KontrolaPakowania.API.Services.Shipment.Mapping
 {
     public class GlsParcelMapper : IParcelMapper<cConsign>
     {
-        public cConsign Map(PackageInfo package)
+        public cConsign Map(PackageData package)
         {
             return new cConsign
             {
@@ -24,14 +24,14 @@ namespace KontrolaPakowania.API.Services.Shipment.Mapping
                 weightSpecified = true,
                 srv_bool = new cServicesBool
                 {
-                    pod = package.Services.POD,
-                    podSpecified = package.Services.POD,
-                    exw = package.Services.EXW,
-                    exwSpecified = package.Services.EXW,
-                    cod = package.Services.COD,
-                    codSpecified = package.Services.COD,
-                    cod_amount = (float)package.Services.CODAmount,
-                    cod_amountSpecified = package.Services.COD
+                    pod = package.ShipmentServices.POD,
+                    podSpecified = package.ShipmentServices.POD,
+                    exw = package.ShipmentServices.EXW,
+                    exwSpecified = package.ShipmentServices.EXW,
+                    cod = package.ShipmentServices.COD,
+                    codSpecified = package.ShipmentServices.COD,
+                    cod_amount = (float)package.ShipmentServices.CODAmount,
+                    cod_amountSpecified = package.ShipmentServices.COD
                 }
             };
         }

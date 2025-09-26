@@ -16,7 +16,7 @@ namespace KontrolaPakowania.API.Tests.MappingTests
         public void Map_Should_Map_All_Fields_Correctly()
         {
             // Arrange
-            var package = new PackageInfo
+            var package = new PackageData
             {
                 Id = 1,
                 RecipientName = "John Doe",
@@ -30,7 +30,7 @@ namespace KontrolaPakowania.API.Tests.MappingTests
                 References = "REF123",
                 PackageQuantity = 2,
                 Weight = 5.5m,
-                Services = new ShipmentServices
+                ShipmentServices = new ShipmentServices
                 {
                     POD = true,
                     EXW = false,

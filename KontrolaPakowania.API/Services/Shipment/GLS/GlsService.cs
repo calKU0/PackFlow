@@ -22,13 +22,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
         private static cParcelWeightsMax _maxWeights;
         private static float _maxCod;
         private Task _loginTask;
-        private readonly IDbExecutor _db;
 
-        public GlsService(IOptions<CourierSettings> courierSettings, IGlsClientWrapper client, IDbExecutor db, IParcelMapper<cConsign> mapper)
+        public GlsService(IOptions<CourierSettings> courierSettings, IGlsClientWrapper client, IParcelMapper<cConsign> mapper)
         {
             _settings = courierSettings.Value.GLS;
             _client = client;
-            _db = db;
             _mapper = mapper;
         }
 
@@ -49,13 +47,12 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
             //_maxCod = (await _client.adeServices_GetMaxCODAsync(_sessionId)).max_cod;
         }
 
-        public async Task<ShipmentResponse> SendPackageAsync(ShipmentRequest request)
+        public async Task<ShipmentResponse> SendPackageAsync(PackageData package)
         {
-            await EnsureLoggedInAsync();
-
-            var package = await GetPackageFromErp(request.PackageId);
             if (package == null)
-                return ShipmentResponse.CreateFailure($"Paczka z ID {request.PackageId} nie znaleziona.");
+                return ShipmentResponse.CreateFailure("Błąd: Nie znaleziono paczki");
+
+            await EnsureLoggedInAsync();
 
             var parcelData = _mapper.Map(package);
 
@@ -79,8 +76,9 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
                 // Sometimes the detail is just in the InnerXml
                 if (faultEx.CreateMessageFault().HasDetail)
                 {
-                    var detail = faultEx.CreateMessageFault().GetDetail<string>();
-                    msg += $" | Szczegóły: {detail}";
+                    using var reader = faultEx.CreateMessageFault().GetReaderAtDetailContents();
+                    string detailText = reader.ReadContentAsString();
+                    msg += $" | Szczegóły: {detailText}";
                 }
 
                 return ShipmentResponse.CreateFailure(msg);
@@ -113,7 +111,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
 
             return ShipmentResponse.CreateSuccess(
                 courier: Courier.GLS,
-                packageId: request.PackageId,
+                packageId: package.Id,
                 trackingLink: $"https://gls-group.eu/PL/pl/sledzenie-paczek/?match=={label.number}",
                 trackingNumber: label.number,
                 labelBase64: label.file,
@@ -122,7 +120,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
             );
         }
 
-        public async Task<int> DeleteParcelAsync(int parcelId)
+        public async Task<int> DeletePackageAsync(int parcelId)
         {
             await EnsureLoggedInAsync();
 
@@ -143,20 +141,6 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
                 await EnsureLoggedInAsync();
 
             await _client.LogoutAsync(_sessionId);
-        }
-
-        private async Task<PackageInfo?> GetPackageFromErp(int packageId)
-        {
-            const string procedure = "kp.GetPackageInfo";
-
-            return await _db.QuerySingleOrDefaultAsync<PackageInfo, ShipmentServices>(
-                procedure,
-                (pkg, services) => { pkg.Services = services; return pkg; },
-                "POD",
-                new { PackageId = packageId },
-                CommandType.StoredProcedure,
-                Connection.ERPConnection
-            );
         }
     }
 }

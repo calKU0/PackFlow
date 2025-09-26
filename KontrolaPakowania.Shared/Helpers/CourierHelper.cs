@@ -1,4 +1,5 @@
-﻿using KontrolaPakowania.Shared.Enums;
+﻿using KontrolaPakowania.Shared.DTOs;
+using KontrolaPakowania.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,27 @@ namespace KontrolaPakowania.Shared.Helpers
             Courier.DPD_Romania,
             Courier.Fedex
         };
+
+        private static readonly Dictionary<string, Courier> CourierMapping = new()
+        {
+            ["fedex"] = Courier.Fedex,
+            ["dpd-romania"] = Courier.DPD_Romania,
+            ["dpd"] = Courier.DPD,
+            ["gls"] = Courier.GLS,
+            ["odbiór własny"] = Courier.Personal_Collection,
+            ["hellmann"] = Courier.Hellmann,
+            ["shenker"] = Courier.Schenker
+        };
+
+        public static Courier GetCourierFromName(string name)
+        {
+            var lower = name.ToLower();
+            foreach (var kvp in CourierMapping)
+            {
+                if (lower.Contains(kvp.Key))
+                    return kvp.Value;
+            }
+            return Courier.Unknown;
+        }
     }
 }

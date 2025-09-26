@@ -4,6 +4,6 @@ namespace KontrolaPakowania.API.Services.Shipment.Mapping
 {
     public interface IParcelMapper<TParcel>
     {
-        TParcel Map(PackageInfo package);
+        TParcel Map(PackageData package);
     }
 }

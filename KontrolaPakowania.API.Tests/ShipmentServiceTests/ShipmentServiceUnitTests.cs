@@ -29,15 +29,15 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
         public async Task AddErpAttributes_ReturnsTrue()
         {
             // Arrange
-            var fakeData = new PackageInfo
+            var fakeData = new PackageData
             {
-                Services = new ShipmentServices
+                ShipmentServices = new ShipmentServices
                 {
                     ROD = true,
                     POD = false,
                     EXW = true,
-                    S10 = false,
-                    S12 = true,
+                    D10 = false,
+                    D12 = true,
                     Saturday = false,
                     COD = true
                 }
@@ -62,15 +62,15 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
         public async Task AddErpAttributes_ReturnsFalse()
         {
             // Arrange
-            var fakeData = new PackageInfo
+            var fakeData = new PackageData
             {
-                Services = new ShipmentServices
+                ShipmentServices = new ShipmentServices
                 {
                     ROD = true,
                     POD = false,
                     EXW = true,
-                    S10 = false,
-                    S12 = true,
+                    D10 = false,
+                    D12 = true,
                     Saturday = false,
                     COD = true
                 }
@@ -101,10 +101,10 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
                 PackageId = 1,
                 TrackingNumber = "2",
                 TrackingLink = "test",
-                PackageInfo = new PackageInfo
+                PackageInfo = new PackageData
                 {
                     Insurance = 100.00m,
-                    Services = new ShipmentServices
+                    ShipmentServices = new ShipmentServices
                     {
                         COD = true,
                         CODAmount = 100.00m

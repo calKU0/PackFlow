@@ -3,66 +3,110 @@
 @using KontrolaPakowania.Shared.Helpers
 @inject WorkstationService WorkstationService
 @inject NavigationManager NavigationManager
+@layout EmptyLayout
 
-<div class="container settings-container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h3 class="card-title mb-4">Ustawienia stanowiska</h3>
-
-            <div class="mb-3">
-                <label class="form-label">Drukarka etykiet:</label>
-                <input class="form-control" @bind="WorkStationSettings.PrinterLabel" placeholder="Wprowadź drukarkę etykiet" />
+@if (IsFirstSave)
+{
+    <DynamicLayout TLayout="NoNavLayout">
+        <div class="container mt-5">
+            <div class="alert alert-warning">
+                Brak ustawień stanowiska. Uzupełnij dane aby kontynuować.
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">Drukarka faktur:</label>
-                <input class="form-control" @bind="WorkStationSettings.PrinterInvoice" placeholder="Wprowadź drukarkę faktur" />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Miejsce pakowania:</label>
-                <select class="form-select" @bind="WorkStationSettings.PackingWarehouse">
-                    @foreach (var warehouse in Enum.GetValues(typeof(PackingWarehouse)).Cast<PackingWarehouse>())
-                    {
-                        <option value="@warehouse">@warehouse.GetDescription()</option>
-                    }
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Miejsce pakowania:</label>
-                <select class="form-select" @bind="WorkStationSettings.PackingLevel">
-                    @foreach (var location in Enum.GetValues(typeof(PackingLevel)).Cast<PackingLevel>())
-                    {
-                        <option value="@location">@location</option>
-                    }
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Numer stanowiska:</label>
-                <input class="form-control" @bind="WorkStationSettings.StationNumber" placeholder="Wprowadź numer stanowiska" />
-            </div>
-
-            <div class="d-grid">
-                <button class="btn btn-primary btn-lg" @onclick="Save">
-                    <i class="bi bi-save me-2"></i> Zapisz ustawienia
-                </button>
-            </div>
+            @SettingsForm
         </div>
-    </div>
-</div>
+    </DynamicLayout>
+}
+else
+{
+    <DynamicLayout TLayout="MainLayout">
+        @SettingsForm
+    </DynamicLayout>
+}
 
-<Toast @ref="Toast"/>
+<Toast @ref="Toast" />
 
 @code {
-    private WorkstationSettings WorkStationSettings = new();
+    private WorkstationSettings WorkStationSettings = new(); // always initialized to avoid null
     private Toast Toast = new();
+    private bool IsFirstSave = false;
 
     protected override async Task OnInitializedAsync()
     {
-        WorkStationSettings = await WorkstationService.GetSettingsAsync();
+        var settings = await WorkstationService.GetSettingsAsync();
+
+        if (!string.IsNullOrEmpty(settings.StationNumber))
+        {
+            WorkStationSettings = settings;
+            IsFirstSave = false;
+        }
+        else
+        {
+            // first-time setup
+            IsFirstSave = true;
+        }
     }
+
+    private RenderFragment SettingsForm => __builder =>
+    {
+        <div class="container settings-container mt-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Ustawienia stanowiska</h3>
+
+                    <div class="mb-3">
+                        <label class="form-label">Drukarka etykiet:</label>
+                        <input class="form-control" @bind="WorkStationSettings.PrinterLabel" placeholder="Wprowadź drukarkę etykiet" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Drukarka faktur:</label>
+                        <input class="form-control" @bind="WorkStationSettings.PrinterInvoice" placeholder="Wprowadź drukarkę faktur" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Magazyn pakowania:</label>
+                        <select class="form-select" @bind="WorkStationSettings.PackingWarehouse">
+                            @foreach (var warehouse in Enum.GetValues(typeof(PackingWarehouse)).Cast<PackingWarehouse>())
+                            {
+                                <option value="@warehouse">@warehouse.GetDescription()</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Poziom pakowania:</label>
+                        <select class="form-select" @bind="WorkStationSettings.PackingLevel">
+                            @foreach (var level in Enum.GetValues(typeof(PackingLevel)).Cast<PackingLevel>())
+                            {
+                                <option value="@level">@level.GetDescription()</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Typ stanowiska:</label>
+                        <select class="form-select" @bind="WorkStationSettings.StationType">
+                            @foreach (var type in Enum.GetValues(typeof(StationType)).Cast<StationType>())
+                            {
+                                <option value="@type">@type.GetDescription()</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Numer stanowiska:</label>
+                        <input class="form-control" required @bind="WorkStationSettings.StationNumber" placeholder="Wprowadź numer stanowiska" />
+                    </div>
+
+                    <div class="d-grid">
+                        <button class="btn btn-primary btn-lg" @onclick="Save">
+                            <i class="bi bi-save me-2"></i> Zapisz ustawienia
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    };
 
     private async Task Save()
     {
@@ -70,6 +114,11 @@
         {
             await WorkstationService.SaveSettingsAsync(WorkStationSettings);
             Toast.Show("Sukces!", "Ustawienia zapisane!", ToastType.Success, 2000);
+
+            if (IsFirstSave)
+            {
+                NavigationManager.NavigateTo("/login", forceLoad: true);
+            }
         }
         catch (Exception ex)
         {

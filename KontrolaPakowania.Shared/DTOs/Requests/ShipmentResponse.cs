@@ -18,7 +18,7 @@ namespace KontrolaPakowania.Shared.DTOs.Requests
         public int PackageId { get; set; }
         public int ErpShipmentId { get; set; }
         public Courier Courier { get; set; }
-        public PackageInfo PackageInfo { get; set; } = new();
+        public PackageData PackageInfo { get; set; } = new();
 
         public static ShipmentResponse CreateFailure(string error) => new()
         {
@@ -32,7 +32,7 @@ namespace KontrolaPakowania.Shared.DTOs.Requests
             string trackingNumber,
             string trackingLink,
             string labelBase64,
-            PackageInfo packageInfo,
+            PackageData packageInfo,
             PrintDataType labelType) => new()
             {
                 Success = true,

@@ -63,11 +63,7 @@
         </div>
     </div>
 
-    <ConfirmDialog @ref="confirmDialog"
-                   Title="Zamknij"
-                   Message="Czy na pewno chcesz usunąć kuwete z realizacji?"
-                   OnCancelClicked="HideConfirm"
-                   OnConfirmClicked="ConfirmClose" />
+    <ConfirmDialog @ref="ConfirmDialog" OnCancelClicked="HideConfirm" OnConfirmClicked="ConfirmClose" />
 }
 <Toast @ref="Toast"/>
 
@@ -76,7 +72,7 @@
     [Parameter] public EventCallback<bool> ShowChanged { get; set; }
 
     private List<JlInProgressDto> JlList;
-    private ConfirmDialog confirmDialog = new();
+    private ConfirmDialog ConfirmDialog = new();
     private JlInProgressDto? SelectedJl { get; set; }
     private Toast Toast = new();
     private bool IsLoading { get; set; }
@@ -109,7 +105,7 @@
     private void ConfirmRemove(JlInProgressDto jl)
     {
         SelectedJl = jl;
-        confirmDialog.Show = true;
+        ConfirmDialog.Show("Usuń kuwete", "Czy na pewno chcesz usunąć kuwete z realizacji?");
     }
 
     private void Close()
@@ -121,12 +117,12 @@
 
     private void HideConfirm()
     {
-        confirmDialog.Show = false;
+        ConfirmDialog.Hide();
     }
 
     private async void ConfirmClose()
     {
-        confirmDialog.Show = false;
+        ConfirmDialog.Hide();
         if (SelectedJl != null)
         {
             try

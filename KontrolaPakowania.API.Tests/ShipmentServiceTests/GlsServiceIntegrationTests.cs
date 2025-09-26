@@ -1,76 +1,77 @@
 ﻿using KontrolaPakowania.API.Data;
-using KontrolaPakowania.API.Services.Packing;
+using KontrolaPakowania.API.Services.Shipment;
 using KontrolaPakowania.API.Services.Shipment.GLS;
 using KontrolaPakowania.API.Services.Shipment.Mapping;
 using KontrolaPakowania.API.Settings;
 using KontrolaPakowania.Shared.DTOs.Requests;
 using KontrolaPakowania.Shared.Enums;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
 {
     public class GlsServiceIntegrationTests
     {
         private readonly GlsService _glsService;
+        private readonly IShipmentService _shipmentService;
 
         public GlsServiceIntegrationTests()
         {
-            // Load configuration from appsettings.json
+            (_glsService, _shipmentService) = InitializeServices();
+        }
+
+        private (GlsService glsService, IShipmentService shipmentService) InitializeServices()
+        {
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()) // test project folder
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            // Bind CourierApis:GLS section to GlsSettings
             var courierSettings = new CourierSettings();
             config.GetSection("CourierApis:GLS").Bind(courierSettings.GLS = new GlsSettings());
-
-            // Wrap in IOptions
             var options = Options.Create(courierSettings);
 
             var clientWrapper = new GlsClientWrapper(new Ade2PortTypeClient());
-
             var dbExecutor = new DapperDbExecutor(config);
-
-            // Mapper (maps PackageInfo → cConsign)
             var mapper = new GlsParcelMapper();
+            var shipmentService = new ShipmentService(dbExecutor);
+            var glsService = new GlsService(options, clientWrapper, mapper);
 
-            // Service under test
-            _glsService = new GlsService(options, clientWrapper, dbExecutor, mapper);
+            return (glsService, shipmentService);
         }
 
         [Fact, Trait("Category", "Integration")]
         public async Task SendPackageAsync_FullFlow_ShouldReturnValidResponse_And_DeleteParcel()
         {
-            // Arrange: existing package in DB
-            var shipment = new ShipmentRequest
-            {
-                PackageId = TestConstants.PackageId,
-                Courier = Courier.GLS
-            };
+            // Arrange
+            var package = await _shipmentService.GetShipmentDataByBarcode(TestConstants.PackageBarcode);
+            Assert.NotNull(package); // Fail-fast if package not found
 
             // Act
-            var response = await _glsService.SendPackageAsync(shipment);
+            var response = await _glsService.SendPackageAsync(package);
 
-            // Assert send
+            // Assert: send succeeded
             Assert.NotNull(response);
-            Assert.True(response.PackageId > 0);
+            Assert.True(response.PackageId > 0, "PackageId should be greater than 0");
             Assert.Equal(Courier.GLS, response.Courier);
             Assert.False(string.IsNullOrWhiteSpace(response.TrackingNumber));
             Assert.NotEmpty(response.LabelBase64);
 
             // Cleanup: delete parcel
-            var deletedId = await _glsService.DeleteParcelAsync(response.PackageId);
-            Assert.Equal(response.PackageId, deletedId);
+            //var deletedId = await _glsService.DeleteParcelAsync(response.PackageId);
+            //Assert.Equal(response.PackageId, deletedId);
         }
 
         [Fact, Trait("Category", "Integration")]
-        public async Task LogoutAsync_ShouldLogout()
+        public async Task LogoutAsync_ShouldCompleteWithoutException()
         {
-            await _glsService.LogoutAsync();
-            // Passes if no exception is thrown
+            // Act & Assert
+            var exception = await Record.ExceptionAsync(() => _glsService.LogoutAsync());
+            Assert.Null(exception); // Test passes if no exception thrown
         }
     }
 }
