@@ -25,6 +25,7 @@ namespace KontrolaPakowania.API.Tests
         public const int PackageId = 10630;
 
         public const string PackageBarcode = "3002209000023";
+        public const string NonPLPackageBarcode = "999999999999999999";
 
         // Shipments
         public const int ShipmentId = 10792;

@@ -36,6 +36,8 @@ namespace KontrolaPakowania.Shared.DTOs
         public string RecipientCountry { get; set; } = string.Empty;
         public string RecipientPhone { get; set; } = string.Empty;
         public string RecipientEmail { get; set; } = string.Empty;
+        public int RecipentType { get; set; }
+        public string SenderBankAccount { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string References { get; set; } = string.Empty;
         public int PackageQuantity { get; set; } = 1;

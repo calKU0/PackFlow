@@ -1,12 +1,21 @@
-﻿using KontrolaPakowania.API.Services.Shipment.DPD.Reference;
+﻿using KontrolaPakowania.API.Services.Shipment.DPD.DTOs;
 using KontrolaPakowania.API.Services.Shipment.GLS;
+using KontrolaPakowania.API.Settings;
 using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
+using Microsoft.Extensions.Options;
 
 namespace KontrolaPakowania.API.Services.Shipment.Mapping
 {
     public class DpdPackageMapper : IParcelMapper<DpdCreatePackageRequest>
     {
+        private readonly DpdSettings _settings;
+
+        public DpdPackageMapper(IOptions<CourierSettings> options)
+        {
+            _settings = options?.Value?.DPD ?? throw new ArgumentNullException(nameof(options));
+        }
+
         public DpdCreatePackageRequest Map(PackageData packageInfo)
         {
             List<DpdCreatePackageRequest.Package> packages = new();
@@ -115,14 +124,14 @@ namespace KontrolaPakowania.API.Services.Shipment.Mapping
                 },
                 Sender = new()
                 {
-                    Company = "GĄSKA sp. z o.o.",
-                    Name = "GĄSKA sp. z o.o.",
-                    Address = "Gotkowice 85",
-                    City = "Jerzmanowice",
-                    CountryCode = "PL",
-                    PostalCode = "32048",
-                    Phone = "123890941",
-                    Email = "kontakt@gaska.com.pl"
+                    Company = _settings.Sender.Company,
+                    Name = _settings.Sender.PersonName,
+                    Address = _settings.Sender.Street,
+                    City = _settings.Sender.City,
+                    CountryCode = _settings.Sender.Country,
+                    PostalCode = _settings.Sender.PostalCode.Replace("-", ""),
+                    Phone = _settings.Sender.Phone,
+                    Email = _settings.Sender.Email
                 },
                 PayerFID = 1495,
                 Ref1 = packageInfo.References ?? null,

@@ -99,10 +99,13 @@ else
                     </div>
 
                     <div class="d-grid">
-                        <button class="btn btn-primary btn-lg" @onclick="Save">
+                        <button class="btn btn-primary btn-lg"
+                                @onclick="Save"
+                                disabled="@string.IsNullOrWhiteSpace(WorkStationSettings.StationNumber)">
                             <i class="bi bi-save me-2"></i> Zapisz ustawienia
                         </button>
                     </div>
+
                 </div>
             </div>
         </div>

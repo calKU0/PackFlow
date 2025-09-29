@@ -1,18 +1,43 @@
-﻿using KontrolaPakowania.Shared.DTOs;
+﻿using FedexServiceReference;
+using KontrolaPakowania.API.Data.Enums;
+using KontrolaPakowania.API.Services.Shipment.Fedex.Strategies;
+using KontrolaPakowania.API.Services.Shipment.Mapping;
+using KontrolaPakowania.API.Settings;
+using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
+using KontrolaPakowania.Shared.Enums;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KontrolaPakowania.API.Services.Shipment.Fedex
 {
     public class FedexService : ICourierService
     {
-        public Task<ShipmentResponse> SendPackageAsync(PackageData package)
+        private readonly IFedexApiStrategy _soapStrategy;
+        private readonly IFedexApiStrategy _restStrategy;
+
+        public FedexService(FedexSoapStrategy soapStrategy, FedexRestStrategy restStrategy)
         {
-            throw new NotImplementedException();
+            _soapStrategy = soapStrategy;
+            _restStrategy = restStrategy;
         }
 
-        public Task<int> DeletePackageAsync(int packageId)
+        private IFedexApiStrategy GetStrategy(PackageData package)
         {
-            // No need to delete package in Fedex
+            return package.RecipientCountry == "PL" ? _soapStrategy : _restStrategy;
+        }
+
+        public Task<ShipmentResponse> SendPackageAsync(PackageData package)
+        {
+            return GetStrategy(package).SendPackageAsync(package);
+        }
+
+        public Task<int> DeletePackageAsync(int parcelId)
+        {
+            // No need to delete Fedex package
             return Task.FromResult(1);
         }
     }

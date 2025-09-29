@@ -6,5 +6,6 @@
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string MasterFID { get; set; } = string.Empty;
+        public SenderSettings Sender { get; set; } = new SenderSettings();
     }
 }

@@ -1,0 +1,168 @@
+﻿using FedexServiceReference;
+using KontrolaPakowania.API.Services.Shipment.Fedex.DTOs;
+using KontrolaPakowania.API.Settings;
+using KontrolaPakowania.Shared.DTOs;
+using Microsoft.Extensions.Options;
+
+namespace KontrolaPakowania.API.Services.Shipment.Mapping
+{
+    public class FedexRestParcelMapper : IParcelMapper<FedexShipmentRequest>
+    {
+        private readonly FedexSettings _settings;
+
+        public FedexRestParcelMapper(IOptions<CourierSettings> options)
+        {
+            _settings = options?.Value?.Fedex ?? throw new ArgumentNullException(nameof(options));
+        }
+
+        public FedexShipmentRequest Map(PackageData package)
+        {
+            if (package == null)
+                throw new ArgumentNullException(nameof(package));
+
+            var shipment = new FedexShipmentRequest
+            {
+                LabelResponseOptions = "LABEL",
+                AccountNumber = new AccountNumber { Value = _settings.Rest.Account },
+                RequestedShipment = MapRequestedShipment(package)
+            };
+
+            return shipment;
+        }
+
+        private RequestedShipment MapRequestedShipment(PackageData package)
+        {
+            RequestedShipment shipment = new()
+            {
+                ShipDatestamp = DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                PickupType = "CONTACT_FEDEX_TO_SCHEDULE",
+                ServiceType = "INTERNATIONAL_ECONOMY",
+                PackagingType = "YOUR_PACKAGING",
+                TotalWeight = (double)package.Weight,
+                ShippingChargesPayment = new ShippingChargesPayment { PaymentType = "SENDER" },
+                LabelSpecification = new LabelSpecification { ImageType = "ZPLII", LabelStockType = "STOCK_4X6" },
+                RequestedPackageLineItems = new List<RequestedPackageLineItem>
+                {
+                    new RequestedPackageLineItem
+                    {
+                        Weight = new Weight
+                        {
+                            Units = "KG",
+                            Value = (int)package.Weight,
+                        }
+                    }
+                },
+                PreferredCurrency = "PLN",
+                TotalPackageCount = 1,
+                CustomsClearanceDetail = MapCustomsClearanceDetail(package),
+                Shipper = MapShipper(),
+                Recipients = MapRecipents(package),
+            };
+            return shipment;
+        }
+
+        private Shipper MapShipper()
+        {
+            Shipper shipper = new()
+            {
+                Address = new Address
+                {
+                    City = _settings.Sender.City,
+                    PostalCode = _settings.Sender.PostalCode,
+                    CountryCode = _settings.Sender.Country,
+                    StreetLines = new List<string> { _settings.Sender.Street }
+                },
+                Contact = new Contact
+                {
+                    PersonName = _settings.Sender.PersonName,
+                    EmailAddress = _settings.Sender.Email,
+                    PhoneExtension = "48",
+                    PhoneNumber = _settings.Sender.Phone.Replace("+48", ""),
+                    CompanyName = _settings.Sender.Company,
+                }
+            };
+
+            return shipper;
+        }
+
+        private List<Recipient> MapRecipents(PackageData package)
+        {
+            List<Recipient> recipents = new()
+            {
+                new Recipient
+                {
+                    Address = new Address
+                    {
+                        City = package.RecipientCity,
+                        PostalCode = package.RecipientPostalCode,
+                        CountryCode = package.RecipientCountry,
+                        StreetLines = new List<string> { package.RecipientStreet }
+                    },
+                    Contact = new Contact
+                    {
+                        EmailAddress = package.RecipientEmail,
+                        PhoneNumber = package.RecipientPhone,
+                        CompanyName = package.RecipientName,
+                    }
+                }
+            };
+            return recipents;
+        }
+
+        private CustomsClearanceDetail MapCustomsClearanceDetail(PackageData package)
+        {
+            CustomsClearanceDetail customs = new()
+            {
+                DutiesPayment = new()
+                {
+                    PaymentType = "SENDER",
+                    Payor = new()
+                    {
+                        ResponsibleParty = new()
+                        {
+                            AccountNumber = new()
+                            {
+                                Value = _settings.Rest.Account
+                            }
+                        }
+                    }
+                },
+                IsDocumentOnly = false,
+                TotalCustomsValue = new TotalCustomsValue
+                {
+                    Amount = (double)package.Insurance,
+                    Currency = "PLN"
+                },
+                Commodities = new()
+                {
+                    new Commodity
+                    {
+                        Description = "SPARE PARTS FOR AGRICULTURAL MACHINES",
+                        CountryOfManufacture = "PL",
+                        HarmonizedCode = "1234567890",
+                        Weight = new()
+                        {
+                            Units = "KG",
+                            Value = (int)package.Weight
+                        },
+                        Quantity = 1,
+                        QuantityUnits = "PCS",
+                        UnitPrice = new()
+                        {
+                            Amount = 0,
+                            Currency = "PLN"
+                        },
+                        CustomsValue = new()
+                        {
+                            Amount = "",
+                            Currency = "PLN"
+                        },
+                        ExportLicenseExpirationDate = DateTime.Now.AddDays(999)
+                    }
+                }
+            };
+
+            return customs;
+        }
+    }
+}
