@@ -1,4 +1,4 @@
-﻿using KontrolaPakowania.API.Services.Shipment.Mapping;
+﻿using KontrolaPakowania.API.Integrations.Couriers.Mapping;
 using KontrolaPakowania.Shared.DTOs;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,5 @@
 ﻿window.blazorFocus = {
-    focusElementRef: function (element) {
+    focusElement: function (element) {
         if (element) element.focus();
     },
     getValue: function (element) {

@@ -59,7 +59,7 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
             Assert.NotNull(jlList);
             Assert.NotEmpty(jlList);
 
-            var firstJlName = jlList.First().Name;
+            var firstJlName = jlList.First().JlCode;
 
             // 2. Fetch JL info using the real JL name
             var jlInfo = await _service.GetJlInfoByCodeAsync(firstJlName, location);
@@ -67,9 +67,9 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
             // Assert
             Assert.NotNull(jlInfo);
 
-            Assert.True(jlInfo.Id > 0, "Id should be greater than 0");
+            Assert.True(jlInfo.JlId > 0, "Id should be greater than 0");
             Assert.False(string.IsNullOrEmpty(jlInfo.Barcode), "Barcode should not be null or empty");
-            Assert.False(string.IsNullOrEmpty(jlInfo.Name), "Name should not be null or empty");
+            Assert.False(string.IsNullOrEmpty(jlInfo.JlCode), "Name should not be null or empty");
             Assert.True(jlInfo.Status >= 0, "Status should be non-negative");
             Assert.True(jlInfo.Weight > 0, "Weight should be greater than 0");
             Assert.True(jlInfo.Priority >= 0, "Priority should be non-negative");
@@ -91,7 +91,7 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
             Assert.NotNull(jlList);
             Assert.NotEmpty(jlList);
 
-            var firstJlName = jlList.First().Name;
+            var firstJlName = jlList.First().JlCode;
 
             // 2. Fetch JL items using the real JL name
             var items = await _service.GetJlItemsAsync(firstJlName, location);
@@ -102,18 +102,18 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
 
             foreach (var item in items)
             {
-                Assert.False(string.IsNullOrEmpty(item.Code), "Code should not be null or empty");
-                Assert.False(string.IsNullOrEmpty(item.Name), "Name should not be null or empty");
-                Assert.True(item.PositionNumber > 0, "PositionNumber should be greater than 0");
+                Assert.False(string.IsNullOrEmpty(item.ItemCode), "Code should not be null or empty");
+                Assert.False(string.IsNullOrEmpty(item.ItemName), "Name should not be null or empty");
+                Assert.True(item.ErpPositionNumber > 0, "PositionNumber should be greater than 0");
                 Assert.True(item.DocumentId > 0, "DocumentId should be greater than 0");
                 Assert.True(item.DocumentType > 0, "DocumentType should be greater than 0");
                 Assert.True(item.DocumentQuantity > 0, "DocumentQuantity should be greater than 0");
                 Assert.True(item.JlQuantity > 0, "JlQuantity should be > 0");
-                Assert.False(string.IsNullOrEmpty(item.Unit), "Unit should not be null or empty");
-                Assert.True(item.Weight > 0, "Weight should be greater than 0");
-                Assert.False(string.IsNullOrEmpty(item.Country), "Country should not be null or empty");
+                Assert.False(string.IsNullOrEmpty(item.ItemUnit), "Unit should not be null or empty");
+                Assert.True(item.ItemWeight > 0, "Weight should be greater than 0");
+                Assert.False(string.IsNullOrEmpty(item.DestinationCountry), "Country should not be null or empty");
                 Assert.False(string.IsNullOrEmpty(item.JlCode), "JlCode should not be null or empty");
-                Assert.False(string.IsNullOrEmpty(item.ProductType), "ProductType should not be null or empty");
+                Assert.False(string.IsNullOrEmpty(item.ItemType), "ProductType should not be null or empty");
             }
         }
 
@@ -192,7 +192,7 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
             var result = await _service.ClosePackage(closeRequest);
 
             // Assert
-            Assert.True(result);
+            Assert.True(result > 0);
         }
 
         [Fact, Trait("Category", "Integration")]
@@ -258,7 +258,7 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
             };
 
             var closeResult = await _service.ClosePackage(closeRequest);
-            Assert.True(closeResult);
+            Assert.True(closeResult > 0);
         }
 
         [Fact, Trait("Category", "Integration")]
@@ -316,7 +316,7 @@ namespace KontrolaPakowania.API.Tests.PackingServiceTests
                 Length = 3
             };
             var closeResult = await _service.ClosePackage(closeRequest);
-            Assert.True(closeResult);
+            Assert.True(closeResult > 0);
         }
 
         [Fact, Trait("Category", "Integration")]

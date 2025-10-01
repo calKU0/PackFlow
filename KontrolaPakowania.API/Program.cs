@@ -1,16 +1,19 @@
 using FedexServiceReference;
 using KontrolaPakowania.API.Data;
-using KontrolaPakowania.API.Services;
+using KontrolaPakowania.API.Integrations.Couriers;
+using KontrolaPakowania.API.Integrations.Couriers.DPD;
+using KontrolaPakowania.API.Integrations.Couriers.DPD.DTOs;
+using KontrolaPakowania.API.Integrations.Couriers.Fedex;
+using KontrolaPakowania.API.Integrations.Couriers.Fedex.DTOs;
+using KontrolaPakowania.API.Integrations.Couriers.Fedex.Strategies;
+using KontrolaPakowania.API.Integrations.Couriers.GLS;
+using KontrolaPakowania.API.Integrations.Couriers.Mapping;
+using KontrolaPakowania.API.Integrations.Email;
+using KontrolaPakowania.API.Integrations.Wms;
 using KontrolaPakowania.API.Services.Auth;
 using KontrolaPakowania.API.Services.Packing;
 using KontrolaPakowania.API.Services.Shipment;
-using KontrolaPakowania.API.Services.Shipment.DPD;
-using KontrolaPakowania.API.Services.Shipment.DPD.DTOs;
-using KontrolaPakowania.API.Services.Shipment.Fedex;
-using KontrolaPakowania.API.Services.Shipment.Fedex.DTOs;
-using KontrolaPakowania.API.Services.Shipment.Fedex.Strategies;
 using KontrolaPakowania.API.Services.Shipment.GLS;
-using KontrolaPakowania.API.Services.Shipment.Mapping;
 using KontrolaPakowania.API.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -27,7 +30,7 @@ builder.Services.AddSwaggerGen();
 // =====================
 // Settings
 // =====================
-builder.Services.Configure<XlApiSettings>(builder.Configuration.GetSection("XlApiSettings"));
+builder.Services.Configure<WmsApiSettings>(builder.Configuration.GetSection("WMSApi"));
 builder.Services.Configure<CourierSettings>(builder.Configuration.GetSection("CourierApis"));
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
 
@@ -54,6 +57,15 @@ builder.Services.AddHttpClient<FedexRestStrategy>((sp, client) =>
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
+// WMS REST client
+builder.Services.AddHttpClient<IWmsApiClient, WmsApiClient>((sp, client) =>
+{
+    var settings = sp.GetRequiredService<IOptions<WmsApiSettings>>().Value;
+    client.BaseAddress = new Uri(settings.BaseUrl);
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    client.DefaultRequestHeaders.TryAddWithoutValidation("token-mer", settings.Token);
+});
+
 // =====================
 // Mappers
 // =====================
@@ -68,17 +80,20 @@ builder.Services.AddSingleton<IParcelMapper<DpdCreatePackageRequest>, DpdPackage
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDbExecutor, DapperDbExecutor>();
 builder.Services.AddScoped<IPackingService, PackingService>();
+builder.Services.AddScoped<IShipmentService, ShipmentService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<CourierFactory>();
+
+// GLS
 builder.Services.AddScoped<Ade2PortTypeClient>();
 builder.Services.AddScoped<IGlsClientWrapper, GlsClientWrapper>();
 builder.Services.AddScoped<GlsService>();
-builder.Services.AddScoped<CourierFactory>();
-builder.Services.AddScoped<IShipmentService, ShipmentService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
+
+// FedEx
+builder.Services.AddScoped<FedexService>();
 builder.Services.AddScoped<IFedexTokenService, FedexTokenService>();
 builder.Services.AddScoped<IklServiceClient>();
 builder.Services.AddScoped<IFedexClientWrapper, FedexClientWrapper>();
-builder.Services.AddScoped<FedexService>();
-builder.Services.AddScoped<ICourierService>(sp => sp.GetRequiredService<FedexService>());
 builder.Services.AddScoped<FedexSoapStrategy>();
 
 // =====================

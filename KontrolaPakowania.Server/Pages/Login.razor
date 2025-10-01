@@ -1,4 +1,6 @@
 ﻿@page "/login"
+@using KontrolaPakowania.Server.Services
+@using KontrolaPakowania.Server.Services
 @using KontrolaPakowania.Shared.Enums
 @inject UserSessionService UserSession
 @inject NavigationManager Navigation
@@ -75,7 +77,7 @@
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", UsernameInput);
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", UsernameInput);
         }
     }
 
@@ -89,7 +91,7 @@
         if (e.Key == "Enter")
         {
             // Move focus to password when Enter is pressed
-            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", PasswordInput);
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", PasswordInput);
         }
     }
     private async Task HandleLogin()

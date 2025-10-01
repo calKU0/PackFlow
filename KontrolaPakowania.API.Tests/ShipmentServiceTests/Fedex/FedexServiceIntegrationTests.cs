@@ -14,6 +14,7 @@ using System.ServiceModel;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
+using KontrolaPakowania.API.Integrations.Couriers.Fedex;
 
 namespace KontrolaPakowania.API.Tests.ShipmentServiceTests.Fedex
 {
@@ -55,7 +56,7 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests.Fedex
             };
             var tokenService = new FedexTokenService(httpClient, options);
             var restMapper = new FedexRestParcelMapper(options);
-            var restStrategy = new FedexRestStrategy(httpClient, tokenService, restMapper, options);
+            var restStrategy = new FedexRestStrategy(httpClient, tokenService, restMapper);
 
             // ----- FedexService with both strategies -----
             _fedexService = new FedexService(soapStrategy, restStrategy);

@@ -1,8 +1,8 @@
 ﻿using KontrolaPakowania.API.Data;
+using KontrolaPakowania.API.Integrations.Couriers.DPD;
+using KontrolaPakowania.API.Integrations.Couriers.DPD.DTOs;
+using KontrolaPakowania.API.Integrations.Couriers.Mapping;
 using KontrolaPakowania.API.Services.Shipment;
-using KontrolaPakowania.API.Services.Shipment.DPD;
-using KontrolaPakowania.API.Services.Shipment.DPD.DTOs;
-using KontrolaPakowania.API.Services.Shipment.Mapping;
 using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
 using Moq;

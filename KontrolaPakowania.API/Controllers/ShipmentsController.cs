@@ -1,4 +1,5 @@
-﻿using KontrolaPakowania.API.Services;
+﻿using KontrolaPakowania.API.Integrations.Couriers;
+using KontrolaPakowania.API.Integrations.Email;
 using KontrolaPakowania.API.Services.Shipment;
 using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;

@@ -15,11 +15,6 @@
     <ProjectReference Include="..\KontrolaPakowania.Shared\KontrolaPakowania.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="cdn_api20241_core">
-      <HintPath>cdn_api20241_core.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="System.ServiceModel.Http" Version="8.*" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="8.*" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="8.*" />

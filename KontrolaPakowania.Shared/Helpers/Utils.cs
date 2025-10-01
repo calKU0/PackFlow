@@ -8,15 +8,6 @@ namespace KontrolaPakowania.Shared.Helpers
 {
     public static class Utils
     {
-        public static string GetImageSrc(byte[]? imageBytes)
-        {
-            if (imageBytes == null || imageBytes.Length == 0)
-                return "images/no-image.jpeg";
-
-            var base64 = Convert.ToBase64String(imageBytes);
-            return $"data:image/png;base64,{base64}";
-        }
-
         public static string GetCourierSrc(string courier)
         {
             if (string.IsNullOrWhiteSpace(courier))

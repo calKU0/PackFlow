@@ -1,8 +1,8 @@
 ﻿using FedexServiceReference;
-using KontrolaPakowania.API.Services.Shipment.Fedex;
-using KontrolaPakowania.API.Services.Shipment.Fedex.DTOs;
-using KontrolaPakowania.API.Services.Shipment.Fedex.Strategies;
-using KontrolaPakowania.API.Services.Shipment.Mapping;
+using KontrolaPakowania.API.Integrations.Couriers.Fedex;
+using KontrolaPakowania.API.Integrations.Couriers.Fedex.DTOs;
+using KontrolaPakowania.API.Integrations.Couriers.Fedex.Strategies;
+using KontrolaPakowania.API.Integrations.Couriers.Mapping;
 using KontrolaPakowania.API.Settings;
 using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
@@ -53,17 +53,17 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests.Fedex
                         ApiKey = "test",
                         ApiSecret = "test"
                     },
-                    Sender = new SenderSettings
-                    {
-                        Street = "Street",
-                        City = "City",
-                        Company = "Company",
-                        Phone = "123",
-                        Email = "123@test.com",
-                        PersonName = "Test",
-                        Country = "PL",
-                        PostalCode = "00-001"
-                    }
+                },
+                Sender = new SenderSettings
+                {
+                    Street = "Street",
+                    City = "City",
+                    Company = "Company",
+                    Phone = "123",
+                    Email = "123@test.com",
+                    PersonName = "Test",
+                    Country = "PL",
+                    PostalCode = "00-001"
                 }
             };
 
@@ -92,7 +92,7 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests.Fedex
 
         private FedexRestStrategy CreateRestStrategy(HttpClient client)
         {
-            return new FedexRestStrategy(client, _tokenServiceMock.Object, _restMapperMock.Object, _courierSettings);
+            return new FedexRestStrategy(client, _tokenServiceMock.Object, _restMapperMock.Object);
         }
 
         [Fact]

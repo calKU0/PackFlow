@@ -15,21 +15,21 @@ namespace KontrolaPakowania.Server.Services
             _dbClient = httpFactory.CreateClient("Database");
         }
 
-        public async Task<List<JlDto>> GetJlList(PackingLevel packingLocation)
+        public async Task<List<JlData>> GetJlList(PackingLevel packingLocation)
         {
             var response = await _dbClient.GetAsync($"api/packing/jl-list?location={packingLocation}");
             response.EnsureSuccessStatusCode();
 
-            var jlList = await response.Content.ReadFromJsonAsync<List<JlDto>>();
+            var jlList = await response.Content.ReadFromJsonAsync<List<JlData>>();
             return jlList!;
         }
 
-        public async Task<JlDto> GetJlInfoByCode(string jlCode, PackingLevel packingLocation)
+        public async Task<JlData> GetJlInfoByCode(string jlCode, PackingLevel packingLocation)
         {
             var response = await _dbClient.GetAsync($"api/packing/jl-info?jl={jlCode}&location={packingLocation}");
             response.EnsureSuccessStatusCode();
 
-            var jlInfo = await response.Content.ReadFromJsonAsync<JlDto>();
+            var jlInfo = await response.Content.ReadFromJsonAsync<JlData>();
             return jlInfo;
         }
 

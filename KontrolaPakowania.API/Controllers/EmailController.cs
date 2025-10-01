@@ -1,4 +1,4 @@
-﻿using KontrolaPakowania.API.Services;
+﻿using KontrolaPakowania.API.Integrations.Email;
 using KontrolaPakowania.Shared.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
 

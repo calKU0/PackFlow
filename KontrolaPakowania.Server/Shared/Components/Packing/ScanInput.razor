@@ -1,0 +1,28 @@
+﻿<div class="mb-3 flex-shrink-0">
+    <input type="text" @ref="inputRef" @onkeydown="OnKeyDown" class="form-control form-control-lg" placeholder="Skanuj kod..." />
+</div>
+
+@code {
+    private ElementReference inputRef;
+    [Parameter] public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
+
+    // Focus input
+    public async Task FocusAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", inputRef);
+    }
+
+    // Get current value
+    public async Task<string> GetValueAsync()
+    {
+        return await JSRuntime.InvokeAsync<string>("blazorFocus.getValue", inputRef);
+    }
+
+    // Clear value
+    public async Task ClearAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("blazorFocus.clearValue", inputRef);
+    }
+
+    [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
+}

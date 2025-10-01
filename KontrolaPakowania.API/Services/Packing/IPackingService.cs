@@ -6,13 +6,13 @@ namespace KontrolaPakowania.API.Services.Packing
 {
     public interface IPackingService
     {
-        Task<IEnumerable<JlDto>> GetJlListAsync(PackingLevel location);
+        Task<IEnumerable<JlData>> GetJlListAsync(PackingLevel location);
+
+        Task<JlData> GetJlInfoByCodeAsync(string jl, PackingLevel location);
 
         Task<IEnumerable<JlItemDto>> GetJlItemsAsync(string jl, PackingLevel location);
 
         Task<IEnumerable<JlItemDto>> GetPackingJlItemsAsync(string barcode);
-
-        Task<JlDto> GetJlInfoByCodeAsync(string jl, PackingLevel location);
 
         Task<bool> AddJlRealization(JlInProgressDto jl);
 

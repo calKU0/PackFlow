@@ -32,8 +32,8 @@ public class PackingServiceUnitTests
         {
             new()
             {
-                Id = 1,
-                Name = "KS-001-001-001",
+                JlId = 1,
+                JlCode = "KS-001-001-001",
                 ClientName = "TESTCDN",
                 Barcode = "5901234123457",
                 Status = 1,
@@ -59,8 +59,8 @@ public class PackingServiceUnitTests
         Assert.Single(result);
 
         var item = result.First();
-        Assert.Equal(1, item.Id);
-        Assert.Equal("KS-001-001-001", item.Name);
+        Assert.Equal(1, item.JlId);
+        Assert.Equal("KS-001-001-001", item.JlCode);
         Assert.Equal("TESTCDN", item.ClientName);
         Assert.Equal("5901234123457", item.Barcode);
         Assert.Equal(1, item.Status);
@@ -77,8 +77,8 @@ public class PackingServiceUnitTests
         // Arrange
         var fakeData = new JlDto
         {
-            Id = 1,
-            Name = "KS-001-001-001",
+            JlId = 1,
+            JlCode = "KS-001-001-001",
             ClientName = "TESTCDN",
             Barcode = "5901234123457",
             Status = 1,
@@ -102,8 +102,8 @@ public class PackingServiceUnitTests
 
         // Assert
 
-        Assert.Equal(1, result.Id);
-        Assert.Equal("KS-001-001-001", result.Name);
+        Assert.Equal(1, result.JlId);
+        Assert.Equal("KS-001-001-001", result.JlCode);
         Assert.Equal("TESTCDN", result.ClientName);
         Assert.Equal("5901234123457", result.Barcode);
         Assert.Equal("DPD", result.CourierName);
@@ -123,18 +123,18 @@ public class PackingServiceUnitTests
             {
                 new JlItemDto
                 {
-                    Id = 1,
-                    Code = "618186.00",
-                    Name = "Panewka",
+                    ItemErpId = 1,
+                    ItemCode = "618186.00",
+                    ItemName = "Panewka",
                     SupplierCode = "42901",
                     DocumentId = 100,
                     DocumentQuantity = 5,
                     JlQuantity = 3,
-                    Unit = "szt.",
-                    Weight = 1.2m,
-                    Country = "PL",
+                    ItemUnit = "szt.",
+                    ItemWeight = 1.2m,
+                    DestinationCountry = "PL",
                     JlCode = "KS-001-001-001",
-                    ProductType = "Gabarytowy"
+                    ItemType = "Gabarytowy"
                 }
             };
 
@@ -153,16 +153,16 @@ public class PackingServiceUnitTests
         var item = result.First();
 
         Assert.Equal("KS-001-001-001", item.JlCode);
-        Assert.Equal("Panewka", item.Name);
-        Assert.Equal("618186.00", item.Code);
+        Assert.Equal("Panewka", item.ItemName);
+        Assert.Equal("618186.00", item.ItemCode);
         Assert.Equal("42901", item.SupplierCode);
         Assert.Equal(100, item.DocumentId);
         Assert.Equal(5, item.DocumentQuantity);
         Assert.Equal(3, item.JlQuantity);
-        Assert.Equal("szt.", item.Unit);
-        Assert.Equal(1.2m, item.Weight);
-        Assert.Equal("PL", item.Country);
-        Assert.Equal("Gabarytowy", item.ProductType);
+        Assert.Equal("szt.", item.ItemUnit);
+        Assert.Equal(1.2m, item.ItemWeight);
+        Assert.Equal("PL", item.DestinationCountry);
+        Assert.Equal("Gabarytowy", item.ItemType);
     }
 
     [Fact, Trait("Category", "Unit")]
@@ -173,8 +173,8 @@ public class PackingServiceUnitTests
             {
                 new JlItemDto
                 {
-                    Code = "618186.00",
-                    Name = "Panewka",
+                    ItemCode = "618186.00",
+                    ItemName = "Panewka",
                     JlQuantity = 3,
                 }
             };
@@ -193,8 +193,8 @@ public class PackingServiceUnitTests
         Assert.Single(result);
         var item = result.First();
 
-        Assert.Equal("Panewka", item.Name);
-        Assert.Equal("618186.00", item.Code);
+        Assert.Equal("Panewka", item.ItemName);
+        Assert.Equal("618186.00", item.ItemCode);
         Assert.Equal(3, item.JlQuantity);
     }
 
@@ -395,7 +395,7 @@ public class PackingServiceUnitTests
 
         var result = await _service.ClosePackage(request);
 
-        Assert.True(result);
+        Assert.True(result > 0);
     }
 
     [Fact, Trait("Category", "Unit")]

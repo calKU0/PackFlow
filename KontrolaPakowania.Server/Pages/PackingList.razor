@@ -1,6 +1,5 @@
 ﻿@page "/kontrola-pakowania"
-@inherits ProtectedPageBase
-
+@using KontrolaPakowania.Server.Services
 @using KontrolaPakowania.Shared.DTOs.Requests
 @using KontrolaPakowania.Shared.Enums
 @using KontrolaPakowania.Shared.Helpers
@@ -107,12 +106,12 @@
 <ChangePackingWarehouseModal @ref="ChangePackingWarehouseModal" />
 <PackingJlItemsModal @ref="PackingJlItemsModal" />
 <TextBoxModal @ref="TextBoxModal" />
-<MergeJlsModal @ref="MergeJlsModal" />
+@* <MergeJlsModal @ref="MergeJlsModal" /> *@
 
 <Toast @ref="Toast"/>
 
 @code  {
-    private List<JlDto> JlList = new();
+    private List<JlData> JlList = new();
     private string Kuweta { get; set; } = string.Empty;
     private System.Threading.Timer? _timer;
     private ElementReference kuwetaInputRef;
@@ -148,7 +147,7 @@
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", kuwetaInputRef);
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", kuwetaInputRef);
         }
     }
 
@@ -160,10 +159,10 @@
             JlList = await PackingService.GetJlList(Settings.PackingLevel);
 
             // Calculate count
-            var jlReadyToPack = JlList.Where(jl => jl.Status == 1).ToList();
+            var jlReadyToPack = JlList.ToList();
 
             JlReadyToPackCount = jlReadyToPack.Count;
-            AddressesCount = jlReadyToPack.Select(jl => jl.ClientAddressId).Distinct().Count();
+            AddressesCount = jlReadyToPack.Where(jl => jl.ClientAddressId != 0).Select(jl => jl.ClientAddressId).Distinct().Count();
         }
         catch (Exception ex)
         {
@@ -178,16 +177,16 @@
     private async Task RefreshData()
     {
         await LoadData();
-        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", kuwetaInputRef);
+        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", kuwetaInputRef);
     }
 
-    private async Task OnRowDoubleClick(JlDto jl)
+    private async Task OnRowDoubleClick(JlData jl)
     {
         if (Settings.PackingLevel == PackingLevel.Dół)
         {
             // Check for other JLs with the same client address
             var matchingJls = JlList
-                .Where(x => x.ClientAddressId == jl.ClientAddressId && x.Id != jl.Id)
+                .Where(x => x.ClientAddressId == jl.ClientAddressId && x.Id != jl.Id && jl.ClientAddressId != 0)
                 .ToList();
 
             if (matchingJls.Count > 0)
@@ -213,7 +212,14 @@
         }
         else
         {
-            Navigation.NavigateTo($"/kontrola-pakowania/{jl.Name}");
+            if (jl.ClientName == "MIX")
+            {
+                Navigation.NavigateTo($"/kontrola-pakowania/{jl.Name}/single");
+            }
+            else
+            {
+                Navigation.NavigateTo($"/kontrola-pakowania/{jl.Name}");
+            }
         }
     }
 
@@ -277,7 +283,7 @@
                 await ChangePackingWarehouseModal.Show();
                 break;
         }
-        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", kuwetaInputRef);
+        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", kuwetaInputRef);
     }
 
     public void Dispose()

@@ -1,0 +1,103 @@
+﻿<div class="row g-3 flex-grow-1">
+    <!-- Left table -->
+    <div class="col-12 col-lg-8 d-flex flex-column">
+        <div class="card shadow-sm flex-grow-1 d-flex flex-column">
+            <div class="card-header d-flex justify-content-between">
+                <span>Do spakowania</span>
+                <span>
+                    Waga: @(JlItems != null && JlItems.Any()
+                                        ? JlItems.Sum(w => w.ItemWeight * w.JlQuantity).ToString("F2")
+                                        : "0") kg
+                </span>
+            </div>
+            <div class="table-responsive flex-grow-1 overflow-auto">
+                <table class="table custom-striped table-hover align-middle mb-0 table-tall">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Kod</th>
+                            <th>Ilość</th>
+                            <th>Nazwa</th>
+                            <th>Obraz</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (JlItems == null)
+                        {
+                            <tr><td colspan="4" class="text-center">Ładowanie...</td></tr>
+                        }
+                        else if (!JlItems.Any())
+                        {
+                            <tr><td colspan="4" class="text-center text-muted">Brak danych</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in JlItems)
+                            {
+                                var rowClass = HighlightedRows.Contains(item.ItemCode) ? "table-warning" : "";
+                                <tr class="@rowClass clickable-row" @ondblclick="() => OnRowDoubleClick.InvokeAsync(item)">
+                                    <td>@item.ItemCode</td>
+                                    <td>@item.JlQuantity</td>
+                                    <td>@item.ItemName</td>
+                                    <td>
+                                        <img src="@(item.ItemImage ?? "images/no-image.png")" class="jl-item-img rounded" />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right table -->
+    <div class="col-12 col-lg-4 d-flex flex-column">
+        <div class="card shadow-sm flex-grow-1 d-flex flex-column">
+            <div class="card-header d-flex justify-content-between">
+                <span>Spakowane</span>
+                <span>
+                    Waga: @(PackedItems.Any()
+                                        ? PackedItems.Sum(w => w.ItemWeight * w.JlQuantity).ToString("F2")
+                                        : "0") / @(CourierConfiguration.MaxPackageWeight.ToString("F2")) kg
+                </span>
+            </div>
+            <div class="table-responsive flex-grow-1 overflow-auto">
+                <table class="table custom-striped table-hover align-middle mb-0 table-tall">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Kod</th>
+                            <th>Ilość</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!PackedItems.Any())
+                        {
+                            <tr><td colspan="2" class="text-center text-muted">Jeszcze nic nie spakowano</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var packed in PackedItems)
+                            {
+                                var isSelected = packed == SelectedPackedItem ? "table-danger" : "";
+                                <tr class="@isSelected" @onclick="() => OnPackedItemSelect.InvokeAsync(packed)">
+                                    <td>@packed.ItemCode</td>
+                                    <td>@packed.JlQuantity</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public List<JlItemDto> JlItems { get; set; }
+    [Parameter] public List<JlItemDto> PackedItems { get; set; }
+    [Parameter] public JlItemDto SelectedPackedItem { get; set; }
+    [Parameter] public HashSet<string> HighlightedRows { get; set; }
+    [Parameter] public EventCallback<JlItemDto> OnRowDoubleClick { get; set; }
+    [Parameter] public EventCallback<JlItemDto> OnPackedItemSelect { get; set; }
+    [Parameter] public CourierConfiguration CourierConfiguration { get; set; }
+}

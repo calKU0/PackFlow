@@ -2,27 +2,67 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace KontrolaPakowania.Shared.DTOs
 {
     public class JlItemDto
     {
-        public int Id { get; set; }
-        public int PositionNumber { get; set; }
-        public string Code { get; set; } = "";
-        public string Name { get; set; } = "";
-        public string SupplierCode { get; set; } = "";
-        public int DocumentId { get; set; }
-        public int DocumentType { get; set; }
+        public int ItemErpId { get; set; }
+        public int ItemWmsId { get; set; }
+        public int ErpPositionNumber { get; set; }
+        public string ItemCode { get; set; } = string.Empty;
+        public string ItemName { get; set; } = string.Empty;
+        public string ItemEan { get; set; } = string.Empty;
+        public string ItemUnit { get; set; } = string.Empty;
+        public string ItemType { get; set; } = string.Empty;
+        public string ItemImage { get; set; } = string.Empty;
+        public decimal ItemWeight { get; set; }
+        public decimal ItemVolume { get; set; }
+        public string SupplierCode { get; set; } = string.Empty;
+        public string ClientErpId { get; set; } = string.Empty;
+        public string ClientErpAddressId { get; set; } = string.Empty;
+        public string ClientName { get; set; } = string.Empty;
+        public string DestinationCountry { get; set; } = string.Empty;
+        public string Courier { get; set; } = string.Empty;
+        public int BatchId { get; set; }
+        public string BatchNumber { get; set; } = string.Empty;
+        public string TermValidity { get; set; } = string.Empty;
+
+        [JsonPropertyName("erpDocumentId")]
+        public string ErpDocumentId { get; set; } = string.Empty;
+
+        private int _documentId;
+        private int _documentType;
+
+        [JsonIgnore]
+        public int DocumentId
+        {
+            get => _documentId != 0 ? _documentId : ParseErpDocumentId().documentId;
+            set => _documentId = value;
+        }
+
+        [JsonIgnore]
+        public int DocumentType
+        {
+            get => _documentType != 0 ? _documentType : ParseErpDocumentId().documentType;
+            set => _documentType = value;
+        }
+
         public decimal DocumentQuantity { get; set; }
         public decimal JlQuantity { get; set; }
-        public string Unit { get; set; } = "";
-        public decimal Weight { get; set; }
-        public decimal Volume { get; set; }
-        public string Country { get; set; } = "";
-        public string JlCode { get; set; } = "";
-        public string ProductType { get; set; } = "";
-        public byte[]? Image { get; set; }
+
+        private (int documentId, int documentType) ParseErpDocumentId()
+        {
+            if (string.IsNullOrWhiteSpace(ErpDocumentId))
+                return (0, 0);
+
+            var parts = ErpDocumentId.Split('|', 2);
+            var documentId = parts.Length > 0 ? Convert.ToInt32(parts[0]) : 0;
+            var documentType = parts.Length > 1 ? Convert.ToInt32(parts[1]) : 0;
+            return (documentId, documentType);
+        }
     }
 }

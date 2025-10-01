@@ -1,4 +1,5 @@
 ﻿using KontrolaPakowania.API.Data;
+using KontrolaPakowania.API.Integrations.Couriers.GLS;
 using KontrolaPakowania.API.Services.Shipment;
 using KontrolaPakowania.API.Services.Shipment.GLS;
 using KontrolaPakowania.API.Services.Shipment.Mapping;

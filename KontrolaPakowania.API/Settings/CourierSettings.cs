@@ -5,5 +5,6 @@
         public DpdSettings DPD { get; set; } = new DpdSettings();
         public GlsSettings GLS { get; set; } = new GlsSettings();
         public FedexSettings Fedex { get; set; } = new FedexSettings();
+        public SenderSettings Sender { get; set; } = new SenderSettings();
     }
 }

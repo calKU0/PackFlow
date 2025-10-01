@@ -2,8 +2,10 @@
 using Dapper;
 using KontrolaPakowania.API.Data;
 using KontrolaPakowania.API.Data.Enums;
+using KontrolaPakowania.API.Integrations.Wms;
 using KontrolaPakowania.API.Services;
 using KontrolaPakowania.API.Services.Packing;
+using KontrolaPakowania.API.Services.Packing.Mapping;
 using KontrolaPakowania.Shared;
 using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
@@ -18,67 +20,57 @@ using System.Reflection.Emit;
 public class PackingService : IPackingService
 {
     private readonly IDbExecutor _db;
+    private readonly IWmsApiClient _wmsApi;
 
-    public PackingService(IDbExecutor db)
+    public PackingService(IDbExecutor db, IWmsApiClient wmsApi)
     {
         _db = db;
+        _wmsApi = wmsApi;
     }
 
-    public async Task<IEnumerable<JlDto>> GetJlListAsync(PackingLevel location)
+    public async Task<IEnumerable<JlData>> GetJlListAsync(PackingLevel location)
     {
-        var procedure = location switch
-        {
-            PackingLevel.Góra => "kp.GetPackingListTop",
-            PackingLevel.Dół => "kp.GetPackingListBottom",
-            _ => throw new ArgumentOutOfRangeException(nameof(location), "Invalid packing location")
-        };
+        var jlList = await _wmsApi.GetJlListAsync();
 
-        var jlList = await _db.QueryAsync<JlDto>(procedure, commandType: CommandType.StoredProcedure, connection: Connection.WMSConnection);
+        // Map string courier to enum
         foreach (var jl in jlList)
         {
-            jl.Courier = CourierHelper.GetCourierFromName(jl.CourierName);
+            foreach (var client in jl.Clients)
+            {
+                client.Courier = CourierHelper.GetCourierFromName(client.CourierName);
+
+                // Optionally determine shipment services
+                var courierLower = client.CourierName.ToLower();
+                client.ShipmentServices = new ShipmentServices
+                {
+                    D12 = courierLower.Contains("12"),
+                    D10 = courierLower.Contains("10"),
+                    Saturday = courierLower.Contains("sobota"),
+                    PZ = courierLower.Contains("zwrotna"),
+                    Dropshipping = courierLower.Contains("dropshipping")
+                };
+            }
         }
 
-        return jlList;
+        // Map to flattened JlData
+        return jlList.ToJlData();
     }
 
-    public async Task<JlDto> GetJlInfoByCodeAsync(string jl, PackingLevel location)
+    public async Task<JlData?> GetJlInfoByCodeAsync(string jlCode, PackingLevel location)
     {
-        var procedure = location switch
-        {
-            PackingLevel.Góra => "kp.GetPackingListInfoTop",
-            PackingLevel.Dół => "kp.GetPackingListInfoBottom",
-            _ => throw new ArgumentOutOfRangeException(nameof(location))
-        };
+        var jlList = await _wmsApi.GetJlListAsync();
 
-        var jlDto = await _db.QuerySingleOrDefaultAsync<JlDto>(procedure, new { jl }, CommandType.StoredProcedure, Connection.WMSConnection);
+        // Find the JL by code
+        var jlDto = jlList.FirstOrDefault(x => x.JlCode.Equals(jlCode, StringComparison.OrdinalIgnoreCase));
+        if (jlDto == null)
+            return null;
 
-        var courierLower = jlDto.CourierName.ToLower();
-        var services = new ShipmentServices
-        {
-            D12 = courierLower.Contains("12"),
-            D10 = courierLower.Contains("10"),
-            Saturday = courierLower.Contains("sobota"),
-            PZ = courierLower.Contains("zwrotna"),
-            Dropshipping = courierLower.Contains("dropshipping")
-        };
-
-        jlDto.ShipmentServices = ShipmentServices.FromString(jlDto.CourierName);
-        jlDto.Courier = CourierHelper.GetCourierFromName(jlDto.CourierName);
-
-        return jlDto;
+        return jlDto.ToJlData();
     }
 
     public async Task<IEnumerable<JlItemDto>> GetJlItemsAsync(string jl, PackingLevel location)
     {
-        var procedure = location switch
-        {
-            PackingLevel.Góra => "kp.GetPackingItemsTop",
-            PackingLevel.Dół => "kp.GetPackingItemsBottom",
-            _ => throw new ArgumentOutOfRangeException(nameof(location))
-        };
-
-        return await _db.QueryAsync<JlItemDto>(procedure, new { jl }, CommandType.StoredProcedure, Connection.WMSConnection);
+        return await _wmsApi.GetJlItemsAsync(jl);
     }
 
     public async Task<IEnumerable<JlItemDto>> GetPackingJlItemsAsync(string barcode)

@@ -42,9 +42,10 @@ namespace KontrolaPakowania.API.Services.Shipment
             string S12 = packageInfo.ShipmentServices.D12 ? "TAK" : "NIE";
             string Saturday = packageInfo.ShipmentServices.Saturday ? "TAK" : "NIE";
             string COD = packageInfo.ShipmentServices.COD ? "TAK" : "NIE";
+            string HasInvoice = packageInfo.HasInvoice ? "TAK" : "NIE";
 
-            var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { POD, ROD, EXW, S10, S12, Saturday, COD, documentId }, CommandType.StoredProcedure, Connection.ERPConnection);
-            return result == 7;
+            var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { POD, ROD, EXW, S10, S12, Saturday, COD, HasInvoice, documentId }, CommandType.StoredProcedure, Connection.ERPConnection);
+            return result == 8;
         }
 
         public async Task<PackageData?> GetShipmentDataByBarcode(string barcode)

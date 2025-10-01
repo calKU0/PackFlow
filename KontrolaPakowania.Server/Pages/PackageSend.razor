@@ -216,7 +216,7 @@
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
         }
     }
 
@@ -253,7 +253,7 @@
         finally
         {
             await InvokeAsync(StateHasChanged);
-            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
         }
     }
 
@@ -294,7 +294,7 @@
         finally
         {
             await ClearData();
-            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
         }
     }
 
@@ -303,7 +303,7 @@
         Package = new();
         ManualEdit = false;
         Barcode = string.Empty;
-        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
         await InvokeAsync(StateHasChanged);
     }
 
@@ -311,7 +311,7 @@
     {
         ConfirmDialog.Hide();
         await ClearData();
-        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
     }
 
     private async Task ConfirmDelete()
@@ -328,7 +328,7 @@
         finally
         {
             await ClearData();
-            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElementRef", InputRef);
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
         }
     }
 

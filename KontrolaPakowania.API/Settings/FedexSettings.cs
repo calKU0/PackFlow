@@ -4,7 +4,6 @@
     {
         public FedexRestSettings Rest { get; set; } = new();
         public FedexSoapSettings Soap { get; set; } = new();
-        public SenderSettings Sender { get; set; } = new SenderSettings();
     }
 
     public class FedexRestSettings
