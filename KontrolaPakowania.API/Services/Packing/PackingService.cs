@@ -40,18 +40,6 @@ public class PackingService : IPackingService
             {
                 client.Courier = CourierHelper.GetCourierFromName(client.CourierName);
 
-                if (int.TryParse(client.ClientErpId, out var clientId) && jl.Clients.Count() == 1)
-                {
-                    var jlItems = await _wmsApi.GetJlItemsAsync(jl.JlCode);
-                    var details = await GetClientDetailsFromErpAsync(jlItems.FirstOrDefault().DocumentId, jlItems.FirstOrDefault().DocumentType);
-                    if (details != null)
-                    {
-                        client.ClientAddressId = details.AddressId;
-                        client.ClientAddressType = details.AddressType;
-                        client.ClientName = details.Name;
-                    }
-                }
-
                 var courierLower = client.CourierName.ToLower();
                 client.ShipmentServices = new ShipmentServices
                 {
@@ -72,32 +60,6 @@ public class PackingService : IPackingService
         var jlList = await _wmsApi.GetJlListAsync();
         // Find the JL by code
         var jlDto = jlList.FirstOrDefault(x => x.JlCode.Equals(jlCode, StringComparison.OrdinalIgnoreCase));
-        foreach (var client in jlDto.Clients)
-        {
-            client.Courier = CourierHelper.GetCourierFromName(client.CourierName);
-
-            if (int.TryParse(client.ClientErpId, out var clientId) && jlDto.Clients.Count() == 1)
-            {
-                var jlItems = await _wmsApi.GetJlItemsAsync(jlDto.JlCode);
-                var details = await GetClientDetailsFromErpAsync(jlItems.FirstOrDefault().DocumentId, jlItems.FirstOrDefault().DocumentType);
-                if (details != null)
-                {
-                    client.ClientAddressId = details.AddressId;
-                    client.ClientAddressType = details.AddressType;
-                    client.ClientName = details.Name;
-                }
-            }
-
-            var courierLower = client.CourierName.ToLower();
-            client.ShipmentServices = new ShipmentServices
-            {
-                D12 = courierLower.Contains("12"),
-                D10 = courierLower.Contains("10"),
-                Saturday = courierLower.Contains("sobota"),
-                PZ = courierLower.Contains("zwrotna"),
-                Dropshipping = courierLower.Contains("dropshipping")
-            };
-        }
 
         if (jlDto == null)
             return null;
@@ -108,16 +70,9 @@ public class PackingService : IPackingService
     public async Task<IEnumerable<JlItemDto>> GetJlItemsAsync(string jl, PackingLevel location)
     {
         var jlItems = await _wmsApi.GetJlItemsAsync(jl);
-        var details = await GetClientDetailsFromErpAsync(jlItems.FirstOrDefault().DocumentId, jlItems.FirstOrDefault().DocumentType);
         foreach (var item in jlItems)
         {
             item.Courier = CourierHelper.GetCourierFromName(item.CourierName);
-            if (details != null)
-            {
-                item.ClientAddressId = details.AddressId;
-                item.ClientAddressType = details.AddressType;
-                item.ClientName = details.Name;
-            }
             item.JlCode = jl;
             // Optionally determine shipment services
             var courierLower = item.CourierName.ToLower();
@@ -178,7 +133,7 @@ public class PackingService : IPackingService
     {
         const string procedure = "kp.CreatePackageDocument";
         string courier = request.Courier.GetDescription();
-        return await _db.QuerySingleOrDefaultAsync<int>(procedure, new { request.Username, courier, request.ClientId, request.ClientAddressId, request.ClientAddressType }, CommandType.StoredProcedure, Connection.ERPConnection);
+        return await _db.QuerySingleOrDefaultAsync<int>(procedure, new { request.Username, courier, request.ClientId, request.AddressName, request.AddressCity, request.AddressCountry, request.AddressPostalCode, request.AddressStreet }, CommandType.StoredProcedure, Connection.ERPConnection);
     }
 
     public async Task<bool> AddPackedPosition(AddPackedPositionRequest request)
@@ -282,6 +237,7 @@ public class PackingService : IPackingService
 
                 allPackItems.Add(new PackStockItems
                 {
+                    LocSourceNr = v.LocationCode,
                     LocDestNr = packageDestination,
                     LuSourceNr = v.JlCode,
                     LuDestNr = v.PackageCode,

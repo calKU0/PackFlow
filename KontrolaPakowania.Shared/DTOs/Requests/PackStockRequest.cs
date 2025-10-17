@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace KontrolaPakowania.Shared.DTOs.Requests
@@ -10,6 +11,8 @@ namespace KontrolaPakowania.Shared.DTOs.Requests
     {
         public string WhsSource { get; set; } = "6";
         public string Proces { get; set; } = "PCK";
+
+        [JsonPropertyName("Items")]
         public List<PackStockItems> Items { get; set; } = new();
     }
 

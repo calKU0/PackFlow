@@ -172,8 +172,11 @@ namespace KontrolaPakowania.Server.Shared.Base
             {
                 var request = new CreatePackageRequest
                 {
-                    ClientAddressId = CurrentJl.ClientAddressId,
-                    ClientAddressType = CurrentJl.ClientAddressType,
+                    AddressName = CurrentJl.AddressName,
+                    AddressCity = CurrentJl.AddressCity,
+                    AddressStreet = CurrentJl.AddressStreet,
+                    AddressPostalCode = CurrentJl.AddressPostalCode,
+                    AddressCountry = CurrentJl.AddressCountry,
                     ClientId = CurrentJl.ClientId,
                     Username = UserSession.Username,
                     Courier = CurrentJl.Courier,
@@ -449,6 +452,7 @@ namespace KontrolaPakowania.Server.Shared.Base
 
                 var packStockRequest = CumulativePackedItems.Select(i => new WmsPackStockRequest
                 {
+                    LocationCode = CurrentJl.LocationCode,
                     ItemCode = i.ItemCode,
                     Quantity = i.JlQuantity,
                     JlCode = i.JlCode,

@@ -1,0 +1,15 @@
+
+==== PACK STOCK LOG ====
+Timestamp: 2025-10-17T12:56:37.9942092Z
+URL: wms-int-api/companies/62/integrations/own/service?integrationName=packStock
+Method: POST
+
+-- REQUEST BODY --
+{"whsSource":"6","proces":"PCK","Items":[{"locSourceNr":"PACK-1-1-1","locDestNr":"Zrzuty-rolotok-1-5-1","luSourceNr":"KK-002","luDestNr":"44680029232","luDestTypeSymbol":"PACZKA","itemNr":"181055C1.01","batchId":null,"itemQty":"2"}]}
+
+-- RESPONSE STATUS --
+200 OK
+
+-- RESPONSE BODY --
+{"status":"-1","desc":"Wystąpił błąd: Podana ilość jest za duża, nie rozliczono 2 z 2  ->> OK"}
+========================

@@ -359,7 +359,7 @@ namespace KontrolaPakowania.API.Controllers
             try
             {
                 var result = await _packingService.PackWmsStock(items);
-                if (result.Desc == "OK")
+                if (result.Status == "1")
                     return Ok(result);
                 else
                     return BadRequest(result.Desc);

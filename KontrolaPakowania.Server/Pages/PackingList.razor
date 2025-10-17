@@ -162,7 +162,7 @@
             var jlReadyToPack = JlList.ToList();
 
             JlReadyToPackCount = jlReadyToPack.Count;
-            AddressesCount = jlReadyToPack.Where(jl => jl.ClientAddressId != 0).Select(jl => jl.ClientAddressId).Distinct().Count();
+            AddressesCount = jlReadyToPack.Where(jl => string.IsNullOrEmpty(jl.AddressName)).Select(jl => jl.AddressName).Distinct().Count();
         }
         catch (Exception ex)
         {
@@ -186,7 +186,7 @@
         {
             // Check for other JLs with the same client address
             var matchingJls = JlList
-                .Where(x => x.ClientAddressId == jl.ClientAddressId && x.Id != jl.Id && jl.ClientAddressId != 0)
+                .Where(x => string.IsNullOrEmpty(x.AddressName) && x.AddressName == jl.AddressName && x.AddressCountry == jl.AddressCountry && x.AddressCity == jl.AddressCity && x.AddressStreet == jl.AddressStreet && x.Id != jl.Id)
                 .ToList();
 
             if (matchingJls.Count > 0)

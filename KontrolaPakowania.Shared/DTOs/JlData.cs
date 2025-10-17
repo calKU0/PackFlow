@@ -36,11 +36,15 @@ namespace KontrolaPakowania.Shared.DTOs
         public int Priority { get; set; }
         public int Sorting { get; set; }
         public string Country { get; set; } = string.Empty;
+        public string LocationCode { get; set; } = string.Empty;
         public bool OutsideEU { get; set; } = false;
         public int ClientId { get; set; }
-        public int ClientAddressType { get; set; }
-        public int ClientAddressId { get; set; }
         public string ClientName { get; set; } = string.Empty;
+        public string AddressName { get; set; } = string.Empty;
+        public string AddressCity { get; set; } = string.Empty;
+        public string AddressStreet { get; set; } = string.Empty;
+        public string AddressPostalCode { get; set; } = string.Empty;
+        public string AddressCountry { get; set; } = string.Empty;
         public bool PackageClosed { get; set; }
         public string PackingRequirements { get; set; } = string.Empty;
 

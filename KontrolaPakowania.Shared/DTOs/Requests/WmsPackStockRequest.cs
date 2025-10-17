@@ -10,6 +10,7 @@ namespace KontrolaPakowania.Shared.DTOs.Requests
     public class WmsPackStockRequest
     {
         public string ItemCode { get; set; } = string.Empty;
+        public string LocationCode { get; set; } = string.Empty;
         public decimal Quantity { get; set; }
         public string JlCode { get; set; } = string.Empty;
         public decimal Weight { get; set; }

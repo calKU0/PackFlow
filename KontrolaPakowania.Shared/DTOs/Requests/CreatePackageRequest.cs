@@ -12,8 +12,11 @@ namespace KontrolaPakowania.Shared.DTOs.Requests
         public string Username { get; set; } = string.Empty;
         public Courier Courier { get; set; }
         public int ClientId { get; set; }
-        public int ClientAddressId { get; set; }
-        public int ClientAddressType { get; set; }
+        public string AddressName { get; set; } = string.Empty;
+        public string AddressCity { get; set; } = string.Empty;
+        public string AddressStreet { get; set; } = string.Empty;
+        public string AddressPostalCode { get; set; } = string.Empty;
+        public string AddressCountry { get; set; } = string.Empty;
         public PackingWarehouse PackageWarehouse { get; set; }
         public PackingLevel PackingLevel { get; set; }
 

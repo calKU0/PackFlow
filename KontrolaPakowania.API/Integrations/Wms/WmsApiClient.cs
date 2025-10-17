@@ -40,45 +40,12 @@ namespace KontrolaPakowania.API.Integrations.Wms
 
         public async Task<PackWMSResponse> PackStock(PackStockRequest request, CancellationToken cancellationToken = default)
         {
-            string logFilePath = "packstock_log.txt";
-            string timeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var response = await _httpClient.PostAsJsonAsync("wms-int-api/companies/62/integrations/own/service?integrationName=packStock", request, _jsonOptions, cancellationToken);
 
-            try
-            {
-                // Serialize the request for logging
-                string requestJson = JsonSerializer.Serialize(request, _jsonOptions);
+            response.EnsureSuccessStatusCode();
+            var data = await response.Content.ReadFromJsonAsync<PackWMSResponse>(_jsonOptions, cancellationToken);
 
-                // Log request
-                await File.AppendAllTextAsync(logFilePath,
-                    $"\n[{timeStamp}] REQUEST:\n{requestJson}\n", cancellationToken);
-
-                // Send request
-                var response = await _httpClient.PostAsJsonAsync(
-                    "wms-int-api/companies/62/integrations/own/service?integrationName=packStock",
-                    request, _jsonOptions, cancellationToken);
-
-                // Ensure response is successful
-                response.EnsureSuccessStatusCode();
-
-                // Read response content
-                var rawContent = await response.Content.ReadAsStringAsync(cancellationToken);
-
-                // Deserialize into object
-                var data = await response.Content.ReadFromJsonAsync<PackWMSResponse>(_jsonOptions, cancellationToken);
-
-                // Log response
-                await File.AppendAllTextAsync(logFilePath,
-                    $"[{timeStamp}] RESPONSE:\n{rawContent}\n", cancellationToken);
-
-                return data ?? new PackWMSResponse();
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                await File.AppendAllTextAsync(logFilePath,
-                    $"[{timeStamp}] ERROR:\n{ex}\n", cancellationToken);
-                throw;
-            }
+            return data ?? new PackWMSResponse();
         }
 
         public async Task<PackWMSResponse> CloseJl(CloseLuRequest request, CancellationToken cancellationToken = default)

@@ -26,8 +26,11 @@ namespace KontrolaPakowania.Shared.DTOs
         public decimal ItemVolume { get; set; }
         public string SupplierCode { get; set; } = string.Empty;
         public string ClientErpId { get; set; } = string.Empty;
-        public int ClientAddressId { get; set; }
-        public int ClientAddressType { get; set; }
+        public string AddressName { get; set; } = string.Empty;
+        public string AddressCity { get; set; } = string.Empty;
+        public string AddressStreet { get; set; } = string.Empty;
+        public string AddressPostalCode { get; set; } = string.Empty;
+        public string AddressCountry { get; set; } = string.Empty;
 
         public string ClientName { get; set; } = string.Empty;
         public string DestinationCountry { get; set; } = string.Empty;
