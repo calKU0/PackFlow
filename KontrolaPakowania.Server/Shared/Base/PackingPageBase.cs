@@ -471,6 +471,12 @@ namespace KontrolaPakowania.Server.Shared.Base
 
                 // Shipment
                 var package = await ShipmentService.GetShipmentDataByBarcode(internalBarcode);
+                if (package is not null && package.TaxFree)
+                {
+                    Toast.Show("Tax Free", "Paczka zawiera dokument Tax Free. Nadaj numer wewnętrzny.", ToastType.Info);
+                    return;
+                }
+
                 var response = await ShipmentService.SendPackage(package);
 
                 if (response?.PackageId > 0)
@@ -528,18 +534,6 @@ namespace KontrolaPakowania.Server.Shared.Base
                 case 4: /* Kurier */
                     try
                     {
-                        if (CurrentJl.Country != "PL")
-                        {
-                            Toast.Show("Błąd!", "Nie można zmienić kuriera na export!");
-                            return;
-                        }
-
-                        if (CurrentJl.ShipmentServices.HasAnyService())
-                        {
-                            Toast.Show("Błąd!", $"Przesyłka z dodatkową usługą (Sobota, Zwrotna, 12:00 lub Dropshipping). Nie możesz zmienić kuriera. Nadaj numer wewnętrzny lub wyślij bieżącym kurierem");
-                            return;
-                        }
-
                         var selectedCourier = await CourierModal.ShowModal(CurrentJl.Courier);
                         if (selectedCourier.HasValue && selectedCourier.Value != Courier.Unknown)
                         {

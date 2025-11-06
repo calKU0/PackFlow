@@ -54,6 +54,7 @@ namespace KontrolaPakowania.Shared.DTOs
         public int WysNumber { get; set; }
         public int WysType { get; set; }
         public bool HasInvoice { get; set; }
+        public bool TaxFree { get; set; }
         public ShipmentServices ShipmentServices { get; set; } = new ShipmentServices();
 
         private void InitCourierLogo()
@@ -64,7 +65,7 @@ namespace KontrolaPakowania.Shared.DTOs
             {
                 if (prop.PropertyType == typeof(bool) && (bool)prop.GetValue(ShipmentServices))
                 {
-                    suffixes.Add(prop.Name); // Or map to user-friendly names
+                    suffixes.Add(prop.Name);
                 }
             }
 

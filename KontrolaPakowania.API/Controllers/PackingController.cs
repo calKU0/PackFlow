@@ -4,6 +4,7 @@ using KontrolaPakowania.Shared.DTOs.Requests;
 using KontrolaPakowania.Shared.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace KontrolaPakowania.API.Controllers
 {
@@ -12,370 +13,367 @@ namespace KontrolaPakowania.API.Controllers
     public class PackingController : ControllerBase
     {
         private readonly IPackingService _packingService;
+        private readonly Serilog.ILogger _logger;
 
         public PackingController(IPackingService packingService)
         {
             _packingService = packingService;
+            _logger = Log.ForContext<PackingController>();
         }
 
         [HttpGet("jl-list")]
         public async Task<IActionResult> GetJlList([FromQuery] PackingLevel location)
         {
+            _logger.Information("Request: GetJlList for location {Location}", location);
             try
             {
                 var list = await _packingService.GetJlListAsync(location);
+                _logger.Information("GetJlList succeeded with {Count} results for location {Location}", list.Count(), location);
                 return Ok(list);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in GetJlList for location {Location}", location);
+                return HandleException(ex);
             }
         }
 
         [HttpGet("jl-info")]
         public async Task<IActionResult> GetJlInfo([FromQuery] string jl, [FromQuery] PackingLevel location)
         {
+            _logger.Information("Request: GetJlInfo for JL {Jl} at location {Location}", jl, location);
             try
             {
                 var info = await _packingService.GetJlInfoByCodeAsync(jl, location);
+                _logger.Information("GetJlInfo succeeded for JL {Jl}", jl);
                 return Ok(info);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in GetJlInfo for JL {Jl} at location {Location}", jl, location);
+                return HandleException(ex);
             }
         }
 
         [HttpGet("jl-items")]
         public async Task<IActionResult> GetJlItems([FromQuery] string jl, [FromQuery] PackingLevel location)
         {
+            _logger.Information("Request: GetJlItems for JL {Jl} at location {Location}", jl, location);
             try
             {
                 var items = await _packingService.GetJlItemsAsync(jl, location);
+                _logger.Information("GetJlItems succeeded for JL {Jl} with {Count} items", jl, items.Count());
                 return Ok(items);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in GetJlItems for JL {Jl}", jl);
+                return HandleException(ex);
             }
         }
 
         [HttpGet("packing-jl-items")]
         public async Task<IActionResult> GetPackingJlItems([FromQuery] string barcode)
         {
+            _logger.Information("Request: GetPackingJlItems for barcode {Barcode}", barcode);
             try
             {
                 var items = await _packingService.GetPackingJlItemsAsync(barcode);
+                _logger.Information("GetPackingJlItems succeeded for barcode {Barcode} with {Count} items", barcode, items.Count());
                 return Ok(items);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in GetPackingJlItems for barcode {Barcode}", barcode);
+                return HandleException(ex);
             }
         }
 
         [HttpPost("add-jl-realization")]
         public async Task<IActionResult> AddJlRealization([FromBody] JlInProgressDto jl)
         {
+            _logger.Information("Request: AddJlRealization for JL {JlCode}", jl.Name);
             try
             {
                 bool success = await _packingService.AddJlRealization(jl);
+                _logger.Information("AddJlRealization result for JL {JlCode}: {Result}", jl.Name, success);
                 return Ok(success);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in AddJlRealization for JL {JlCode}", jl.Name);
+                return HandleException(ex);
             }
         }
 
         [HttpGet("jl-in-progress")]
         public async Task<IActionResult> GetJlListInProgress()
         {
+            _logger.Information("Request: GetJlListInProgress");
             try
             {
                 var list = await _packingService.GetJlListInProgress();
+                _logger.Information("GetJlListInProgress succeeded with {Count} items", list.Count());
                 return Ok(list);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in GetJlListInProgress");
+                return HandleException(ex);
             }
         }
 
         [HttpDelete("remove-jl-realization")]
         public async Task<IActionResult> RemoveJlRealization([FromQuery] string jl)
         {
+            _logger.Information("Request: RemoveJlRealization for JL {Jl}", jl);
             try
             {
                 bool success = await _packingService.RemoveJlRealization(jl);
+                _logger.Information("RemoveJlRealization result for JL {Jl}: {Result}", jl, success);
                 return Ok(success);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in RemoveJlRealization for JL {Jl}", jl);
+                return HandleException(ex);
             }
         }
 
         [HttpDelete("release-jl")]
         public async Task<IActionResult> ReleaseJl([FromQuery] string jl)
         {
+            _logger.Information("Request: ReleaseJl for JL {Jl}", jl);
             try
             {
                 bool success = await _packingService.ReleaseJl(jl);
+                _logger.Information("ReleaseJl result for JL {Jl}: {Result}", jl, success);
                 return Ok(success);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in ReleaseJl for JL {Jl}", jl);
+                return HandleException(ex);
             }
         }
 
         [HttpGet("courier-configuration")]
         public async Task<IActionResult> GetCourierConfiguration([FromQuery] string courier, [FromQuery] PackingLevel level, [FromQuery] string country)
         {
+            _logger.Information("Request: GetCourierConfiguration for courier {Courier}, level {Level}, country {Country}", courier, level, country);
             try
             {
                 var settings = await _packingService.GetCourierConfiguration(courier, level, country);
+                _logger.Information("GetCourierConfiguration succeeded for courier {Courier}, country {Country}", courier, country);
                 return Ok(settings);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in GetCourierConfiguration for courier {Courier}, level {Level}, country {Country}", courier, level, country);
+                return HandleException(ex);
             }
         }
 
         [HttpPost("create-package")]
         public async Task<IActionResult> CreatePackage([FromBody] CreatePackageRequest request)
         {
+            _logger.Information("Request: CreatePackage for warehouse {Warehouse}, level {Level}, station {Station}",
+                request.PackageWarehouse, request.PackingLevel, request.StationNumber);
             try
             {
                 int packageId = await _packingService.CreatePackage(request);
                 if (packageId > 0)
+                {
                     await _packingService.AddPackageAttributes(packageId, request.PackageWarehouse, request.PackingLevel, request.StationNumber);
+                    _logger.Information("CreatePackage succeeded, new package ID {PackageId}", packageId);
+                }
+                else
+                {
+                    _logger.Warning("CreatePackage returned invalid ID for warehouse {Warehouse}", request.PackageWarehouse);
+                }
 
                 return Ok(packageId);
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in CreatePackage for warehouse {Warehouse}", request.PackageWarehouse);
+                return HandleException(ex);
             }
         }
 
         [HttpPost("add-packed-position")]
         public async Task<IActionResult> AddPackedPosition([FromBody] AddPackedPositionRequest request)
         {
+            _logger.Information("Request: AddPackedPosition for Package Id {PackageId}", request.PackingDocumentId);
             try
             {
                 bool success = await _packingService.AddPackedPosition(request);
+                _logger.Information("AddPackedPosition result for {PackageId}: {Result}", request.PackingDocumentId, success);
                 return Ok(success);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in AddPackedPosition for Package ID {PackageId}", request.PackingDocumentId);
+                return HandleException(ex);
             }
         }
 
         [HttpPost("remove-packed-position")]
         public async Task<IActionResult> RemovePackedPosition([FromBody] RemovePackedPositionRequest request)
         {
+            _logger.Information("Request: RemovePackedPosition for Package Id {PackageId}", request.PackingDocumentId);
             try
             {
                 bool success = await _packingService.RemovePackedPosition(request);
+                _logger.Information("RemovePackedPosition result for {PackageId}: {Result}", request.PackingDocumentId, success);
                 return Ok(success);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in RemovePackedPosition for Package Id {PackageId}", request.PackingDocumentId);
+                return HandleException(ex);
             }
         }
 
         [HttpPost("close-package")]
         public async Task<IActionResult> ClosePackage([FromBody] ClosePackageRequest request)
         {
+            _logger.Information("Request: ClosePackage for barcode {PackageCode}", request.InternalBarcode);
             try
             {
                 int result = await _packingService.ClosePackage(request);
-
                 switch (result)
                 {
                     case 1:
+                        _logger.Information("Package {PackageCode} closed successfully", request.InternalBarcode);
                         return Ok();
 
                     case -1:
+                        _logger.Warning("Conflict closing package {PackageCode}: already exists", request.InternalBarcode);
                         return Conflict("Paczka z tym kodem wewnętrznym już istnieje w systemie!");
 
-                    case 0:
                     default:
+                        _logger.Warning("Failed to close package {PackageCode} in ERP", request.InternalBarcode);
                         return BadRequest("Nie udało się zamknąć paczki w ERP.");
                 }
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error while closing package {PackageCode}", request.InternalBarcode);
+                return HandleException(ex);
             }
         }
 
         [HttpPatch("update-package-courier")]
         public async Task<IActionResult> UpdatePackageCourier([FromBody] UpdatePackageCourierRequest request)
         {
+            _logger.Information("Request: UpdatePackageCourier for package {PackageId} courier {Courier}", request.PackageId, request.Courier);
             try
             {
                 bool success = await _packingService.UpdatePackageCourier(request);
+                _logger.Information("UpdatePackageCourier result for package {PackageId}: {Result}", request.PackageId, success);
                 return Ok(success);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in UpdatePackageCourier for package {PackageId}", request.PackageId);
+                return HandleException(ex);
             }
         }
 
         [HttpGet("generate-internal-barcode")]
         public async Task<IActionResult> GenerateInternalBarcode([FromQuery] string stationNumber)
         {
+            _logger.Information("Request: GenerateInternalBarcode for station {StationNumber}", stationNumber);
             try
             {
                 string barcode = await _packingService.GenerateInternalBarcode(stationNumber);
+                _logger.Information("GenerateInternalBarcode succeeded for station {StationNumber} -> {Barcode}", stationNumber, barcode);
                 return Ok(barcode);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in GenerateInternalBarcode for station {StationNumber}", stationNumber);
+                return HandleException(ex);
             }
         }
 
-        /// <summary>
-        /// Get current warehouse for package by barcode.
-        /// </summary>
         [HttpGet("get-package-warehouse")]
-        public async Task<ActionResult<PackingWarehouse>> GetPackageWarehouse([FromQuery] string barcode)
+        public async Task<IActionResult> GetPackageWarehouse([FromQuery] string barcode)
         {
+            _logger.Information("Request: GetPackageWarehouse for barcode {Barcode}", barcode);
             try
             {
                 if (string.IsNullOrWhiteSpace(barcode))
                     return BadRequest("Barcode is required.");
 
                 var warehouse = await _packingService.GetPackageWarehouse(barcode);
-
+                _logger.Information("GetPackageWarehouse succeeded for barcode {Barcode}: warehouse {Warehouse}", barcode, warehouse);
                 return Ok(warehouse);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in GetPackageWarehouse for barcode {Barcode}", barcode);
+                return HandleException(ex);
             }
         }
 
-        /// <summary>
-        /// Update warehouse for package by barcode.
-        /// </summary>
         [HttpPatch("update-package-warehouse")]
-        public async Task<ActionResult<bool>> UpdatePackageWarehouse([FromQuery] string barcode, [FromBody] PackingWarehouse warehouse)
+        public async Task<IActionResult> UpdatePackageWarehouse([FromQuery] string barcode, [FromBody] PackingWarehouse warehouse)
         {
+            _logger.Information("Request: UpdatePackageWarehouse for barcode {Barcode} to warehouse {Warehouse}", barcode, warehouse);
             try
             {
                 if (string.IsNullOrWhiteSpace(barcode))
                     return BadRequest("Barcode is required.");
 
                 var success = await _packingService.UpdatePackageWarehouse(barcode, warehouse);
-
+                _logger.Information("UpdatePackageWarehouse result for {Barcode}: {Result}", barcode, success);
                 return Ok(success);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in UpdatePackageWarehouse for barcode {Barcode}", barcode);
+                return HandleException(ex);
             }
         }
 
         [HttpPost("pack-wms-stock")]
         public async Task<IActionResult> PackWmsStock([FromBody] WmsPackStockRequest request)
         {
+            _logger.Information("Request: PackWmsStock for package {PackageCode} courier {Courier}", request.PackageCode, request.Courier);
             try
             {
                 var packResult = await _packingService.PackWmsStock(request);
                 if (packResult.Status != "1")
+                {
+                    _logger.Warning("PackWmsStock failed for package {PackageCode}: {Desc}", request.PackageCode, packResult.Desc);
                     return BadRequest(packResult.Desc);
+                }
 
                 var closeResult = await _packingService.CloseWmsPackage(request.PackageCode, request.Courier);
-                if (packResult.Status != "1")
+                if (closeResult.Status != "1")
+                {
+                    _logger.Warning("CloseWmsPackage failed for package {PackageCode}: {Desc}", request.PackageCode, closeResult.Desc);
                     return BadRequest(closeResult.Desc);
+                }
 
+                _logger.Information("PackWmsStock succeeded for package {PackageCode}", request.PackageCode);
                 return Ok();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.Error(ex, "Error in PackWmsStock for package {PackageCode}", request.PackageCode);
+                return HandleException(ex);
             }
+        }
+
+        private IActionResult HandleException(Exception ex)
+        {
+            if (ex is ArgumentException)
+                return BadRequest(ex.Message);
+
+            return StatusCode(500, ex.Message);
         }
     }
 }

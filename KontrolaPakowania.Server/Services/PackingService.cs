@@ -81,7 +81,6 @@ namespace KontrolaPakowania.Server.Services
         public async Task<bool> PackWmsStock(WmsPackStockRequest request)
         {
             var response = await _dbClient.PostAsJsonAsync($"api/packing/pack-wms-stock", request);
-            response.EnsureSuccessStatusCode();
 
             if (response.IsSuccessStatusCode)
             {
@@ -177,10 +176,14 @@ namespace KontrolaPakowania.Server.Services
         public async Task<bool> UpdatePackageCourier(UpdatePackageCourierRequest request)
         {
             var response = await _dbClient.PatchAsJsonAsync($"api/packing/update-package-courier", request);
-            response.EnsureSuccessStatusCode();
 
-            bool success = await response.Content.ReadFromJsonAsync<bool>();
-            return success;
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<bool>();
+            }
+
+            var generic = await response.Content.ReadAsStringAsync();
+            throw new Exception(generic);
         }
 
         public async Task<string> GenerateInternalBarcode(string stationNumber)

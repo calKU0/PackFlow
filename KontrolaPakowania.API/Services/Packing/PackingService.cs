@@ -58,6 +58,7 @@ public class PackingService : IPackingService
     public async Task<JlData?> GetJlInfoByCodeAsync(string jlCode, PackingLevel location)
     {
         var jlList = await _wmsApi.GetJlListAsync();
+
         // Find the JL by code
         var jlDto = jlList.FirstOrDefault(x => x.JlCode.Equals(jlCode, StringComparison.OrdinalIgnoreCase));
 
@@ -160,10 +161,17 @@ public class PackingService : IPackingService
 
     public async Task<bool> UpdatePackageCourier(UpdatePackageCourierRequest request)
     {
-        string courier = request.Courier.GetDescription();
-        const string updateProcedure = "kp.UpdatePackageCourier";
-        var result = await _db.QuerySingleOrDefaultAsync<int>(updateProcedure, new { request.PackageId, courier }, CommandType.StoredProcedure, Connection.ERPConnection);
-        return result > 0;
+        try
+        {
+            string courier = request.Courier.GetDescription();
+            const string updateProcedure = "kp.UpdatePackageCourier";
+            var result = await _db.QuerySingleOrDefaultAsync<int>(updateProcedure, new { request.PackageId, courier }, CommandType.StoredProcedure, Connection.ERPConnection);
+            return result > 0;
+        }
+        catch (SqlException ex) when (ex.Number == 50001)
+        {
+            throw new InvalidOperationException(ex.Message);
+        }
     }
 
     public async Task<string> GenerateInternalBarcode(string stationNumber)

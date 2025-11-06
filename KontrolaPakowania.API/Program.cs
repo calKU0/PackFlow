@@ -3,6 +3,7 @@ using KontrolaPakowania.API.Data;
 using KontrolaPakowania.API.Integrations.Couriers;
 using KontrolaPakowania.API.Integrations.Couriers.DPD;
 using KontrolaPakowania.API.Integrations.Couriers.DPD.DTOs;
+using KontrolaPakowania.API.Integrations.Couriers.DPD_Romania.DTOs;
 using KontrolaPakowania.API.Integrations.Couriers.Fedex;
 using KontrolaPakowania.API.Integrations.Couriers.Fedex.DTOs;
 using KontrolaPakowania.API.Integrations.Couriers.Fedex.Strategies;
@@ -10,6 +11,7 @@ using KontrolaPakowania.API.Integrations.Couriers.GLS;
 using KontrolaPakowania.API.Integrations.Couriers.Mapping;
 using KontrolaPakowania.API.Integrations.Email;
 using KontrolaPakowania.API.Integrations.Wms;
+using KontrolaPakowania.API.Middleware;
 using KontrolaPakowania.API.Services.Auth;
 using KontrolaPakowania.API.Services.Packing;
 using KontrolaPakowania.API.Services.Shipment;
@@ -17,15 +19,47 @@ using KontrolaPakowania.API.Services.Shipment.GLS;
 using KontrolaPakowania.API.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Net.Http.Headers;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ==================================
+// Configure Serilog
+// ==================================
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File(
+        path: Path.Combine(AppContext.BaseDirectory, "Logs", "log-.txt"),
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 31,
+        buffered: true)
+    .Enrich.FromLogContext()
+    .MinimumLevel.Information()
+    .CreateLogger();
+
+// Replace default logging
+builder.Host.UseSerilog();
+
 // Add controllers & Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "KontrolaPakowania API",
+        Version = "v1",
+        Description = "API for package control and courier integrations"
+    });
+
+    options.SupportNonNullableReferenceTypes();
+    options.UseAllOfToExtendReferenceSchemas();
+    options.UseOneOfForPolymorphism();
+    options.UseInlineDefinitionsForEnums();
+});
 
 // =====================
 // Settings
@@ -47,6 +81,13 @@ builder.Services.AddHttpClient<DpdService>((sp, client) =>
     client.DefaultRequestHeaders.Authorization =
         new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
     client.DefaultRequestHeaders.Add("x-dpd-fid", settings.MasterFID);
+});
+
+// DPD-Romania REST client
+builder.Services.AddHttpClient<DpdService>((sp, client) =>
+{
+    var settings = sp.GetRequiredService<IOptions<CourierSettings>>().Value.DPDRomania;
+    client.BaseAddress = new Uri(settings.BaseUrl);
 });
 
 // FedEx REST client
@@ -73,6 +114,7 @@ builder.Services.AddSingleton<IParcelMapper<cConsign>, GlsParcelMapper>();
 builder.Services.AddSingleton<IParcelMapper<FedexShipmentRequest>, FedexRestParcelMapper>();
 builder.Services.AddSingleton<IParcelMapper<listV2>, FedexSoapParcelMapper>();
 builder.Services.AddSingleton<IParcelMapper<DpdCreatePackageRequest>, DpdPackageMapper>();
+builder.Services.AddSingleton<IParcelMapper<DpdRomaniaCreateShipmentRequest>, DpdRomaniaPackageMapper>();
 
 // =====================
 // Services
@@ -111,4 +153,19 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-app.Run();
+app.UseSerilogRequestLogging();
+app.UseMiddleware<RequestInfoEnricherMiddleware>();
+
+try
+{
+    Log.Information("Starting application...");
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application failed to start correctly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
