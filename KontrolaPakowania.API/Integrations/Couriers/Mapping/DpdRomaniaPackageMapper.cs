@@ -87,7 +87,7 @@ namespace KontrolaPakowania.API.Integrations.Couriers.Mapping
                 },
                 Recipient = new()
                 {
-                    Phone1 = new() { Number = package.RecipientPhone },
+                    Phone1 = new() { Number = FormatPhoneNumber(package.RecipientPhone) },
                     PrivatePerson = true,
                     ClientName = package.RecipientName,
                     ContactName = package.RecipientName,
@@ -132,6 +132,38 @@ namespace KontrolaPakowania.API.Integrations.Couriers.Mapping
             }
 
             return 2003;
+        }
+
+        private static string FormatPhoneNumber(string? input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return string.Empty;
+
+            // Trim spaces
+            var phone = input.Trim();
+
+            // Keep only digits, '+', and spaces
+            phone = new string(phone.Where(c => char.IsDigit(c) || c == '+' || c == ' ').ToArray());
+
+            // If starts with a digit but not '0', add '+'
+            if (phone.Length > 0 && char.IsDigit(phone[0]) && phone[0] != '0')
+            {
+                phone = "+" + phone;
+            }
+
+            // Ensure it starts only with '0' or '+'
+            if (!(phone.StartsWith("0") || phone.StartsWith("+")))
+            {
+                phone = "+" + phone;
+            }
+
+            // Limit to 20 characters
+            if (phone.Length > 20)
+            {
+                phone = phone.Substring(0, 20);
+            }
+
+            return phone;
         }
     }
 }

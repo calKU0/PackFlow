@@ -449,33 +449,26 @@ namespace KontrolaPakowania.Server.Shared.Base
 
         protected virtual async Task CloseJlInWMS(string courier, string packageCode)
         {
-            try
+            if (PackedItems == null || !PackedItems.Any())
+                return;
+
+            var PackedWmsItems = PackedItems.Select(i => new WMSPackStockItemsRequest
             {
-                if (PackedItems == null || !PackedItems.Any())
-                    return;
+                ItemCode = i.ItemCode,
+                Quantity = i.JlQuantity,
+            }).ToList();
 
-                var PackedWmsItems = PackedItems.Select(i => new WMSPackStockItemsRequest
-                {
-                    ItemCode = i.ItemCode,
-                    Quantity = i.JlQuantity,
-                }).ToList();
-
-                var packStockRequest = new WmsPackStockRequest
-                {
-                    LocationCode = CurrentJl.LocationCode,
-                    PackageCode = packageCode,
-                    Courier = courier,
-                    JlCode = CurrentJl.Name,
-                    Weight = PackedItems.Sum(i => i.ItemWeight * i.JlQuantity),
-                    Items = PackedWmsItems
-                };
-
-                await PackingService.PackWmsStock(packStockRequest);
-            }
-            catch (Exception ex)
+            var packStockRequest = new WmsPackStockRequest
             {
-                Toast.Show("Błąd!", $"Błąd przy próbie zwalniania kuwety: {ex.Message}");
-            }
+                LocationCode = CurrentJl.LocationCode,
+                PackageCode = packageCode,
+                Courier = courier,
+                JlCode = CurrentJl.Name,
+                Weight = PackedItems.Sum(i => i.ItemWeight * i.JlQuantity),
+                Items = PackedWmsItems
+            };
+
+            await PackingService.PackWmsStock(packStockRequest);
         }
 
         protected virtual async Task HandleCourierLabel()
@@ -492,6 +485,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                     Toast.Show("Błąd!", "Nie udało się wygenerować numeru wewnętrznego. Spróbuj ponownie.");
                     return;
                 }
+
                 await ClosePackage(CurrentJl.InternalBarcode, new Dimensions());
 
                 // Shipment
@@ -501,7 +495,6 @@ namespace KontrolaPakowania.Server.Shared.Base
                     Toast.Show("Tax Free", "Paczka zawiera dokument Tax Free. Nadaj numer wewnętrzny.", ToastType.Info);
                     return;
                 }
-
                 var response = await ShipmentService.SendPackage(package);
 
                 if (response?.PackageId > 0)
@@ -509,7 +502,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                     if (!string.IsNullOrEmpty(response.LabelBase64))
                     {
                         var labelContent = response.LabelBase64;
-                        _ = CloseJlInWMS(CurrentJl.CourierName, response.TrackingNumber);
+                        await CloseJlInWMS(CurrentJl.CourierName, response.TrackingNumber);
                         await ClientPrinterService.PrintAsync(Settings.PrinterLabel, response.LabelType.ToString(), labelContent);
                         ShipmentModal.Show(response.TrackingNumber, response.LabelBase64, response.LabelType, Settings.PrinterLabel, package.HasInvoice);
                         if (package.HasInvoice)
@@ -780,8 +773,8 @@ namespace KontrolaPakowania.Server.Shared.Base
                     dimensions = await DimensionsModal.Show();
                 }
 
+                await CloseJlInWMS(CurrentJl.CourierName, internalBarcode);
                 await ClosePackage(internalBarcode, dimensions);
-                _ = CloseJlInWMS(CurrentJl.CourierName, internalBarcode);
                 await ClientPrinterService.PrintCrystalAsync(Settings.PrinterLabel, "Label", new Dictionary<string, string> { { "Kod Kreskowy", internalBarcode } });
 
                 switch (_currentPackingFlow)
