@@ -1,4 +1,6 @@
-﻿<div class="mb-3 flex-shrink-0">
+﻿@inject IJSRuntime JSRuntime
+
+<div class="mb-3 flex-shrink-0">
     <input type="text" @ref="inputRef" @onkeydown="OnKeyDown" class="form-control form-control-lg" placeholder="Skanuj kod..." disabled="@Disabled" />
 </div>
 
@@ -10,7 +12,14 @@
     // Focus input
     public async Task FocusAsync()
     {
-        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", inputRef);
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", inputRef);
+        }
+        catch (Exception)
+        {
+            // Ignore JS exceptions (e.g., if the element is not yet rendered)
+        }
     }
 
     // Get current value
@@ -24,6 +33,4 @@
     {
         await JSRuntime.InvokeVoidAsync("blazorFocus.clearValue", inputRef);
     }
-
-    [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
 }

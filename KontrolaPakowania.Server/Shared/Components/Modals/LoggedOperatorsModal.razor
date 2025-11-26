@@ -1,4 +1,5 @@
-﻿@inject AuthService AuthService
+﻿@using KontrolaPakowania.Shared.Enums
+@inject AuthService AuthService
 
 @if (Show)
 {
@@ -111,7 +112,7 @@
                 try
                 {
                     await AuthService.Logout(SelectedUser.Username);
-                    Toast.Show("Sukces!", $"Operator {SelectedUser.Username} został usunięty.");
+                    Toast.Show("Sukces!", $"Operator {SelectedUser.Username} został usunięty.", ToastType.Success);
                 }
                 catch (Exception ex)
                 {

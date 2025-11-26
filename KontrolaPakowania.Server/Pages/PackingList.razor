@@ -20,13 +20,13 @@
         {
             <div class="text-center">
                 <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">Ładownie...</span>
                 </div>
             </div>
         }
         else if (!JlList.Any())
         {
-            <div class="alert alert-info">No items found.</div>
+            <div class="alert alert-info">Brak kuwet do spakowania.</div>
         }
         else
         {
@@ -80,7 +80,12 @@
         <div class="card shadow-sm p-3">
             <div class="mb-3">
                 <label for="kuwetaInput" class="form-label">Kuweta:</label>
-                <input type="text" @ref="kuwetaInputRef" class="form-control" @bind="Kuweta" />
+                <input type="text"
+                       @bind="Kuweta"
+                       @bind:event="oninput"
+                       @ref="InputRef"
+                       @onkeydown="HandleKeyDown"
+                       class="form-control" />
             </div>
             <button class="btn btn-primary w-100" @onclick="RefreshData">
                 Odśwież
@@ -109,13 +114,13 @@
 <PackagesInBuforModal @ref="PackagesInBuforModal"/>
 <MergeJlsModal @ref="MergeJlsModal" />
 
-<Toast @ref="Toast"/>
+<Toast FocusAfterCloseInput="InputRef" @ref="Toast" />
 
 @code  {
     private List<JlData> JlList = new();
     private string Kuweta { get; set; } = string.Empty;
     private System.Threading.Timer? _timer;
-    private ElementReference kuwetaInputRef;
+    private ElementReference InputRef;
     private Toast Toast = new();
     private WorkstationSettings Settings = new();
 
@@ -149,7 +154,7 @@
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", kuwetaInputRef);
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
         }
     }
 
@@ -179,7 +184,36 @@
     private async Task RefreshData()
     {
         await LoadData();
-        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", kuwetaInputRef);
+        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key != "Enter")
+            return;
+
+        var trimmedKuweta = Kuweta?.Trim();
+        if (string.IsNullOrWhiteSpace(trimmedKuweta))
+            return;
+
+        // Find JL by barcode or name
+        var jl = JlList.FirstOrDefault(x =>
+            string.Equals(x.Name, trimmedKuweta, StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(x.Barcode, trimmedKuweta, StringComparison.OrdinalIgnoreCase));
+
+        if (jl == null)
+        {
+            Toast.Show("Nie znaleziono", $"Nie znaleziono kuwet o kodzie lub nazwie '{Kuweta}'");
+            Kuweta = string.Empty;
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
+            return;
+        }
+
+        Kuweta = string.Empty;
+        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
+
+        // Reuse existing logic from row double-click
+        await OnRowDoubleClick(jl);
     }
 
     private async Task OnRowDoubleClick(JlData jl)
@@ -317,8 +351,30 @@
             case 8: /* Zmień magazyn */
                 await ChangePackingWarehouseModal.Show();
                 break;
+
+            case 9: /* Zabuforuj */
+                try
+                {
+                    var internalBarcode = await TextBoxModal.Show("Odbuforuj paczkę/palete.", "Zeskanuj kod kreskowy paczki/palety, która jest zatwierdona i nie została wygenerowana do niej wysyłka. Paczka zmieni status na bufor.", "Kod kreskowy");
+                    if (!string.IsNullOrEmpty(internalBarcode))
+                    {
+                        var success = await PackingService.BufferPackage(internalBarcode);
+                        if (!success)
+                        {
+                            Toast.Show("Błąd!", "Nie udało się odbuforować paczki. Spróbuj ponownie.");
+                            return;
+                        }
+
+                        Toast.Show("Sukces!", "Paczka została pomyślnie zabuforowana.", ToastType.Success);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Toast.Show("Błąd!", $"Błąd przy próbie odbuforowania paczki: {ex.Message}");
+                }
+                break;
         }
-        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", kuwetaInputRef);
+        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
     }
 
     public void Dispose()

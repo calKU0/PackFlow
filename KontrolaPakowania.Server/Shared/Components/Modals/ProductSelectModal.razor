@@ -1,83 +1,83 @@
 ﻿@using KontrolaPakowania.Shared.Helpers
 @inject IJSRuntime JSRuntime
 
-<div class="modal-backdrop fade show" @onclick="Close"></div>
-<div class="modal d-block" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-header-content">
-                    <img src="@Product.ItemImage" class="product-image" />
-                    <div class="product-info">
-                        <h5 class="mb-3">@Product.ItemName</h5>
-                        <p class="mb-0"><strong>Kod:</strong> @Product.ItemCode</p>
-                        <p class="mb-0"><strong>Kod dostawcy:</strong> @Product.SupplierCode</p>
-                        <p class="mb-3"><strong>Waga:</strong> @Product.ItemWeight kg</p>
-                        <p class="mb-0"><strong>Ilość na dokumencie:</strong> @Product.DocumentQuantity @Product.ItemUnit</p>
-                        <p class="mb-0"><strong>Ilość w kuwecie:</strong> @Product.JlQuantity @Product.ItemUnit</p>
+@if (IsVisible)
+{
+    <div class="modal-backdrop fade show" @onclick="Close"></div>
+    <div class="modal d-block" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-header-content">
+                        <img src="@Product.ItemImage" class="product-image" />
+                        <div class="product-info">
+                            <h5 class="mb-3">@Product.ItemName</h5>
+                            <p class="mb-0"><strong>Kod:</strong> @Product.ItemCode</p>
+                            <p class="mb-0"><strong>Kod dostawcy:</strong> @Product.SupplierCode</p>
+                            <p class="mb-3"><strong>Waga:</strong> @Product.ItemWeight kg</p>
+                            <p class="mb-0"><strong>Ilość na dokumencie:</strong> @Product.DocumentQuantity @Product.ItemUnit</p>
+                            <p class="mb-0"><strong>Ilość w kuwecie:</strong> @Product.JlQuantity @Product.ItemUnit</p>
+                        </div>
+                        <button type="button" class="btn-close ms-auto" @onclick="Close"></button>
                     </div>
-                    <button type="button" class="btn-close ms-auto" @onclick="Close"></button>
-                </div>
-            </div>
-
-            <div class="modal-body d-flex flex-column align-items-center">
-
-                <!-- Top row: Input left, Image right -->
-                <div class="top-row d-flex align-items-center justify-content-between w-100 mb-3">
-                    <div class="d-flex align-items-center input-wrapper">
-                        <label class="me-2 mb-0 fw-bold fs-5">Podaj ilość:</label>
-                        <input type="text" class="form-control form-control-lg text-center quantity-input" @ref="quantityInputRef" @bind="InputQuantity" />
-                    </div>
-                    @if (!string.IsNullOrEmpty(GetProductTypeImage()))
-                    {
-                        <img class="image-placeholder" src="@GetProductTypeImage()" />
-                    }
                 </div>
 
-                <!-- Bottom row: Numeric keyboard + Enter button -->
-                <div class="bottom-row d-flex gap-2 w-100">
-                    <div class="numeric-keyboard d-grid flex-grow-1">
-                        @foreach (var key in new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ",", "⌫" })
+                <div class="modal-body d-flex flex-column align-items-center">
+
+                    <!-- Top row: Input left, Image right -->
+                    <div class="top-row d-flex align-items-center justify-content-between w-100 mb-3">
+                        <div class="d-flex align-items-center input-wrapper">
+                            <label class="me-2 mb-0 fw-bold fs-5">Podaj ilość:</label>
+                            <input type="text" class="form-control form-control-lg text-center quantity-input" @ref="quantityInputRef" @bind="InputQuantity" />
+                        </div>
+                        @if (!string.IsNullOrEmpty(GetProductTypeImage()))
                         {
-                            <button class="btn btn-secondary key-btn" @onclick="() => HandleKey(key)">
-                                @key
-                            </button>
+                            <img class="image-placeholder" src="@GetProductTypeImage()" />
                         }
                     </div>
 
-                    <button class="btn btn-success ok-btn d-flex align-items-center justify-content-center" @onclick="Confirm">
-                        Enter
-                    </button>
+                    <!-- Bottom row: Numeric keyboard + Enter button -->
+                    <div class="bottom-row d-flex gap-2 w-100">
+                        <div class="numeric-keyboard d-grid flex-grow-1">
+                            @foreach (var key in new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ",", "⌫" })
+                            {
+                                <button class="btn btn-secondary key-btn" @onclick="() => HandleKey(key)">
+                                    @key
+                                </button>
+                            }
+                        </div>
+
+                        <button class="btn btn-success ok-btn d-flex align-items-center justify-content-center" @onclick="Confirm">
+                            Enter
+                        </button>
+                    </div>
+
                 </div>
 
             </div>
-
         </div>
     </div>
-</div>
 
-<Toast @ref="Toast"/>
+    <Toast @ref="Toast"/>
+}
 
 @code {
-    [Parameter] public JlItemDto Product { get; set; } = default!;
+    private JlItemDto Product { get; set; } = default!;
     [Parameter] public EventCallback<decimal> OnConfirm { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public ScanInput? FocusOnClose { get; set; }
 
     private ElementReference quantityInputRef;
     private string InputQuantity = string.Empty;
     private Toast Toast = new();
+    private bool IsVisible = false;
 
-    protected override void OnParametersSet()
+    public async Task Show(JlItemDto product)
     {
+        Product = product;
         InputQuantity = Product.JlQuantity == 1 ? Product.JlQuantity.ToString() : string.Empty;
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", quantityInputRef);
-        }
+        IsVisible = true;
+        await InvokeAsync(StateHasChanged);
     }
 
     private void AppendNumber(int num) => InputQuantity += num.ToString();
@@ -99,6 +99,10 @@
             else
             {
                 await OnConfirm.InvokeAsync(qty);
+                IsVisible = false;
+
+                if (FocusOnClose != null)
+                    await FocusOnClose.FocusAsync();
             }
         }
         else
@@ -111,6 +115,10 @@
     {
         if (OnClose.HasDelegate)
             await OnClose.InvokeAsync();
+        IsVisible = false;
+
+        if (FocusOnClose != null)
+            await FocusOnClose.FocusAsync();
     }
 
     private void AppendKey(string key)

@@ -34,6 +34,7 @@ namespace KontrolaPakowania.API.Integrations.Wms
             var response = await _httpClient.PostAsJsonAsync("wms-int-api/companies/62/integrations/own/service?integrationName=getLuItems", request, cancellationToken);
 
             response.EnsureSuccessStatusCode();
+            var text = await response.Content.ReadAsStringAsync();
             var data = await response.Content.ReadFromJsonAsync<IEnumerable<JlItemDto>>(cancellationToken);
             return data ?? Enumerable.Empty<JlItemDto>();
         }

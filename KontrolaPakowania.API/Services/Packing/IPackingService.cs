@@ -49,5 +49,7 @@ namespace KontrolaPakowania.API.Services.Packing
         Task<PackWMSResponse> PackWmsStock(WmsPackStockRequest request);
 
         Task<PackWMSResponse> CloseWmsPackage(string packageCode, string courier);
+
+        Task<bool> BufferPackage(string barcode);
     }
 }

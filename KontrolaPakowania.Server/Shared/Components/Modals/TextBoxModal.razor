@@ -13,10 +13,15 @@
                 </div>
                 <div class="modal-body">
                     <p>@Message</p>
-                    <input class="form-control" tabindex="-1" @bind="InputValue" @ref=inputRef placeholder="@InputPlaceholder" />
+                    <input class="form-control"
+                           @bind="InputValue"
+                           @bind:event="oninput"
+                           @ref="inputRef"
+                           @onkeydown="HandleKeyDown"
+                           placeholder="@InputPlaceholder" />
                 </div>
                 <div class="modal-footer d-flex gap-2 w-100">
-                    <button class="btn btn-primary btn-lg tall-btn" style="flex: 7;" @onclick="Confirm">Potwierdź</button>
+                    <button class="btn btn-primary btn-lg tall-btn" style="flex: 7;" @onclick="() => Confirm(InputValue)">Potwierdź</button>
                     <button class="btn btn-secondary btn-lg tall-btn" style="flex: 3;" @onclick="Close">Anuluj</button>
                 </div>
             </div>
@@ -66,7 +71,7 @@
         Close();
     }
 
-    private void Confirm()
+    private void Confirm(string value)
     {
         _tcs?.SetResult(InputValue);
         Close();
@@ -77,5 +82,13 @@
         InputValue = string.Empty;
         IsVisible = false;
         StateHasChanged();
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            Confirm(InputValue);
+        }
     }
 }

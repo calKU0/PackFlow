@@ -287,4 +287,11 @@ public class PackingService : IPackingService
         var result = await _db.QuerySingleOrDefaultAsync<string>(procedure, new { courier }, CommandType.StoredProcedure, Connection.ERPConnection);
         return result;
     }
+
+    public async Task<bool> BufferPackage(string barcode)
+    {
+        const string procedure = "kp.BufferPackage";
+        var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { barcode }, CommandType.StoredProcedure, Connection.ERPConnection);
+        return true;
+    }
 }

@@ -41,6 +41,7 @@ namespace KontrolaPakowania.Server.Shared.Base
         // Modals & Toasts
         protected Toast Toast = new();
 
+        protected ProductSelectModal ProductSelectModal = new();
         protected PasswordModal ManagerPasswordModal = new();
         protected PasswordModal PackingRequirementsModal = new();
         protected ConfirmDialog ConfirmDialog = new();
@@ -55,8 +56,6 @@ namespace KontrolaPakowania.Server.Shared.Base
         protected FinishPackingModal FinishPackingModal = new();
         protected ShipmentModal ShipmentModal = new();
         protected ScanInput ScanInputComponent = new();
-
-        protected bool ShowProductModal = false;
         protected PasswordPurpose CurrentPasswordPurpose = PasswordPurpose.None;
 
         protected JlItemDto? SelectedItem;
@@ -373,6 +372,7 @@ namespace KontrolaPakowania.Server.Shared.Base
             HighlightedRows.Remove(SelectedPackedItem.ItemCode);
 
             SelectedPackedItem = null;
+            await ScanInputComponent.FocusAsync();
         }
 
         protected virtual async Task HandleCodeInput(KeyboardEventArgs e)
@@ -409,10 +409,10 @@ namespace KontrolaPakowania.Server.Shared.Base
             }
         }
 
-        protected virtual void OpenProductModal(JlItemDto item)
+        protected virtual async void OpenProductModal(JlItemDto item)
         {
+            await ProductSelectModal.Show(item);
             SelectedItem = item;
-            ShowProductModal = true;
         }
 
         protected virtual void FinishPacking()
@@ -567,6 +567,28 @@ namespace KontrolaPakowania.Server.Shared.Base
                 case 8: /* Zmień magazyn */
                     await ChangePackingWarehouseModal.Show();
                     break;
+
+                case 9: /* Zabuforuj */
+                    try
+                    {
+                        var internalBarcode = await TextBoxModal.Show("Odbuforuj paczkę/palete.", "Zeskanduj kod kreskowy paczki/palety, która jest zatwierdona i nie została wygenerowana do niej wysyłka. Paczka zmieni status na bufor.", "Kod kreskowy");
+                        if (!string.IsNullOrEmpty(internalBarcode))
+                        {
+                            var success = await PackingService.BufferPackage(internalBarcode);
+                            if (!success)
+                            {
+                                Toast.Show("Błąd!", "Nie udało się odbuforować paczki. Spróbuj ponownie.");
+                                return;
+                            }
+
+                            Toast.Show("Sukces!", "Paczka została pomyślnie zabuforowana.", ToastType.Success);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Toast.Show("Błąd!", $"Błąd przy próbie odbuforowania paczki: {ex.Message}");
+                    }
+                    break;
             }
             await ScanInputComponent.FocusAsync();
         }
@@ -633,6 +655,7 @@ namespace KontrolaPakowania.Server.Shared.Base
             if (!valid)
             {
                 Toast.Show("Błąd!", "Błędne hasło");
+                await ScanInputComponent.FocusAsync();
                 return;
             }
 
@@ -640,7 +663,7 @@ namespace KontrolaPakowania.Server.Shared.Base
             {
                 case PasswordPurpose.ManagerAction:
                     await ManagerPasswordModal.Hide();
-                    ManagerModal.OpenModal();
+                    ManagerModal.OpenModal(ScanInputComponent);
                     break;
 
                 case PasswordPurpose.PackingRequirementAction:
@@ -659,7 +682,7 @@ namespace KontrolaPakowania.Server.Shared.Base
         protected virtual async Task OnManagerButtonClick()
         {
             CurrentPasswordPurpose = PasswordPurpose.ManagerAction;
-            await ManagerPasswordModal.Show();
+            await ManagerPasswordModal.Show(scanInput: ScanInputComponent);
             StateHasChanged();
         }
 
@@ -690,7 +713,6 @@ namespace KontrolaPakowania.Server.Shared.Base
             }
             finally
             {
-                ShowProductModal = false;
                 SelectedItem = null;
                 await ScanInputComponent.FocusAsync();
                 await InvokeAsync(StateHasChanged);

@@ -1,4 +1,5 @@
 ﻿@using KontrolaPakowania.Shared.Enums
+@inject IJSRuntime JSRuntime
 
 <div class="toast-backdrop @( _isVisible ? "show" : "" )" @onclick="Hide">
     <div class="toast-container @ToastClass" @onclick:stopPropagation="true">
@@ -19,6 +20,7 @@
     public string Title { get; private set; } = string.Empty;
     public string Message { get; private set; } = string.Empty;
     public ToastType Type { get; private set; } = ToastType.Info;
+    [Parameter] public object? FocusAfterCloseInput { get; set; }
 
     private string ToastClass => Type switch
     {
@@ -44,10 +46,18 @@
         _timer.Start();
     }
 
-    public void Hide()
+    public async void Hide()
     {
         _timer?.Stop();
         _isVisible = false;
+
+        if (FocusAfterCloseInput is ElementReference elRef)
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", elRef);
+
+        else if (FocusAfterCloseInput is ScanInput scanInput)
+            await scanInput.FocusAsync();
+
         StateHasChanged();
     }
+
 }

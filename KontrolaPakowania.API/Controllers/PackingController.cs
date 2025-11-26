@@ -405,6 +405,23 @@ namespace KontrolaPakowania.API.Controllers
             }
         }
 
+        [HttpPatch("buffer-package")]
+        public async Task<IActionResult> BufferPackage([FromBody] string barcode)
+        {
+            _logger.Information("Request: BufferPackage for barcode {Barcode}", barcode);
+            try
+            {
+                await _packingService.BufferPackage(barcode);
+                _logger.Information("BufferPackage succeeded for barcode {Barcode}", barcode);
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error in BufferPackage for barcode {Barcode}", barcode);
+                return HandleException(ex);
+            }
+        }
+
         private IActionResult HandleException(Exception ex)
         {
             if (ex is ArgumentException)

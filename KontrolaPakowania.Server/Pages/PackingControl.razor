@@ -36,13 +36,8 @@
 </div>
 
 
-@if (ShowProductModal && SelectedItem != null)
-{
-    <ProductSelectModal Product="SelectedItem"
-                        OnConfirm="PackItem"
-                        OnClose="() => ShowProductModal = false" />
-}
 
+<ProductSelectModal @ref=ProductSelectModal FocusOnClose ="ScanInputComponent" OnConfirm="PackItem" />
 <PasswordModal @ref=PackingRequirementsModal OnConfirm ="HandlePasswordConfirm" OnCancel="HandlePasswordCancel" />
 <PasswordModal @ref=ManagerPasswordModal OnConfirm="HandlePasswordConfirm" />
 <ConfirmDialog @ref="ConfirmDialog" />
@@ -64,7 +59,7 @@
 <DimensionsModal @ref="DimensionsModal"  />
 <ShipmentModal @ref="ShipmentModal" OnOk="HandleShipmentOkClick" />
 
-<Toast @ref="Toast" />
+<Toast FocusAfterCloseInput="ScanInputComponent" @ref="Toast" />
 
 @code {
     private PackingHeader? Header;

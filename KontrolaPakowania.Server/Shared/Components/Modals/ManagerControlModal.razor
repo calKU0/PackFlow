@@ -49,6 +49,9 @@
                                 <div class="col-4">
                                     <button class="btn btn-primary w-100 py-3" @onclick="() => HandleClick(8)">Zm. magazyn</button>
                                 </div>
+                                <div class="col-4">
+                                    <button class="btn btn-primary w-100 py-3" @onclick="() => HandleClick(9)">Zabuforuj</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -69,6 +72,7 @@
     [Parameter] public EventCallback<int> OnButtonClick { get; set; }
     [Parameter] public EventCallback OnRequestPassword { get; set; }
     [Parameter] public bool ShowPackingButtons { get; set; } = false;
+    private ScanInput? ScanInput = null;
 
     private async Task OnLockClick()
     {
@@ -78,12 +82,20 @@
         }
     }
 
-    public async void OpenModal()
+    public async void OpenModal(ScanInput scanInput = null)
     {
         IsOpen = true;
+        ScanInput = scanInput;
         await InvokeAsync(StateHasChanged);
     }
-    private void CloseModal() => IsOpen = false;
+    private async Task CloseModal()
+    {
+        IsOpen = false;
+        if (ScanInput != null)
+        {
+            await ScanInput.FocusAsync();
+        }
+    }
 
     private async Task HandleClick(int value)
     {
