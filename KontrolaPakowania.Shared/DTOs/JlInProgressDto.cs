@@ -13,6 +13,7 @@ namespace KontrolaPakowania.Shared.DTOs
         public string StationNumber { get; set; } = string.Empty;
         public string Courier { get; set; } = string.Empty;
         public string ClientName { get; set; } = string.Empty;
+        public int PackageId { get; set; }
         public DateTime Date { get; set; }
     }
 }

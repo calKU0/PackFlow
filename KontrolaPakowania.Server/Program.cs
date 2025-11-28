@@ -20,6 +20,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddBlazoredLocalStorage();
 
 // Settings
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("Apis"));
 builder.Services.Configure<CrystalReportsOptions>(builder.Configuration.GetSection("CrystalReports"));
 
@@ -54,6 +55,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseRouting();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()

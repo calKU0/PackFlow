@@ -7,7 +7,7 @@
             <strong class="toast-title">@Title</strong>
             <button type="button" class="btn-close btn-close-white toast-close" @onclick="Hide" aria-label="Close"></button>
         </div>
-        <div class="toast-body"> @Message</div>
+        <div class="toast-body">@((MarkupString)Message)</div>
     </div>
 </div>
 
@@ -30,7 +30,7 @@
         _ => "toast-info"
     };
 
-    public void Show(string title, string message, ToastType type = ToastType.Error, int autoHideMs = 6000)
+    public void Show(string title, string message, ToastType type = ToastType.Error, int? autoHideMs = 6000)
     {
         Title = title;
         Message = message;
@@ -39,11 +39,18 @@
 
         StateHasChanged();
 
+        // Stop any existing timer
         _timer?.Stop();
-        _timer = new System.Timers.Timer(autoHideMs);
-        _timer.Elapsed += (s, e) => InvokeAsync(Hide);
-        _timer.AutoReset = false;
-        _timer.Start();
+        _timer = null;
+
+        // Only start timer if autoHideMs is provided
+        if (autoHideMs.HasValue)
+        {
+            _timer = new System.Timers.Timer(autoHideMs.Value);
+            _timer.Elapsed += (s, e) => InvokeAsync(Hide);
+            _timer.AutoReset = false;
+            _timer.Start();
+        }
     }
 
     public async void Hide()

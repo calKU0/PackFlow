@@ -1,6 +1,6 @@
 ﻿@using KontrolaPakowania.Server.Services
 @using KontrolaPakowania.Shared.Helpers
-@inject PackingService _packingService
+@inject PackingService PackingService
 
 @if (Show)
 {
@@ -80,7 +80,7 @@
         try
         {
             IsLoading = true;
-            JlItems = await _packingService.GetPackingJlItems(Barcode);
+            JlItems = await PackingService.GetPackingJlItems(Barcode);
         }
         catch (Exception ex)
         {

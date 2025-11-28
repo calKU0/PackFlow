@@ -1,6 +1,6 @@
 ﻿@using KontrolaPakowania.Server.Services
 @using KontrolaPakowania.Shared.Enums
-@inject PackingService _packingService
+@inject PackingService PackingService
 
 @if (Show)
 {
@@ -91,7 +91,7 @@
         try
         {
             IsLoading = true;
-            JlList = await _packingService.GetJlListInProgress();
+            JlList = await PackingService.GetJlListInProgress();
         }
         catch (Exception ex)
         {
@@ -118,7 +118,7 @@
 
                 try
                 {
-                    await _packingService.RemoveJlRealization(SelectedJl.Name);
+                    await PackingService.RemoveJlRealization(SelectedJl.Name);
                     Toast.Show("Sukces!", "Kuweta została usunięta z realizacji.", ToastType.Success);
                 }
                 catch (Exception ex)

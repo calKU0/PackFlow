@@ -1,11 +1,14 @@
 ﻿@page "/wysylka-paczek"
+@using KontrolaPakowania.Server.Settings
 @using KontrolaPakowania.Shared.DTOs.Requests
 @using KontrolaPakowania.Shared.Enums
 @using KontrolaPakowania.Shared.Helpers
+@using Microsoft.Extensions.Options
 @inject UserSessionService UserSession
 @inject ShipmentService ShipmentService
 @inject WorkstationService WorkstationService
 @inject ClientPrinterService ClientPrinterService
+@inject IOptions<AppSettings> AppOptions
 @inject IJSRuntime JSRuntime
 @implements IDisposable
 
@@ -200,7 +203,8 @@
 @code {
     private string Barcode { get; set; } = string.Empty;
     private PackageData Package { get; set; } = new();
-    private WorkstationSettings Settings = new();
+    private WorkstationSettings WorkstationSettings = new();
+    private AppSettings AppSettings => AppOptions.Value;
     private ElementReference InputRef;
     private RoutesStatus RoutesStatus = new();
 
@@ -218,13 +222,13 @@
     {
         try
         {
-            Settings = await WorkstationService.GetSettingsAsync();
+            WorkstationSettings = await WorkstationService.GetSettingsAsync();
 
             // Auto-refresh every 1 minute.
             Timer = new System.Threading.Timer(async _ =>
             {
                 await InvokeAsync(CheckRouteStatus);
-            }, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(AppSettings.Intervals.RefreshRoutesStatus));
         }
         catch (Exception ex)
         {
@@ -325,11 +329,11 @@
                 }
 
                 var labelContent = response.LabelBase64;
-                await ClientPrinterService.PrintAsync(Settings.PrinterLabel, response.LabelType.ToString(), labelContent);
-                ShipmentModal.Show(response.TrackingNumber, response.LabelBase64, response.LabelType, Settings.PrinterLabel, Package.HasInvoice);
+                await ClientPrinterService.PrintAsync(WorkstationSettings.PrinterLabel, response.LabelType.ToString(), labelContent);
+                ShipmentModal.Show(response.TrackingNumber, response.LabelBase64, response.LabelType, WorkstationSettings.PrinterLabel, Package.HasInvoice);
                 if (Package.HasInvoice)
                 {
-                    await ClientPrinterService.PrintCrystalAsync(Settings.PrinterInvoice, Package.Recipient.Country != "PL" ? "InvoiceEN" : "InvoicePL", new Dictionary<string, string> { { "DocumentId", Package.InvoiceId.ToString() } });
+                    await ClientPrinterService.PrintCrystalAsync(WorkstationSettings.PrinterInvoice, Package.Recipient.Country != "PL" ? "InvoiceEN" : "InvoicePL", new Dictionary<string, string> { { "DocumentId", Package.InvoiceId.ToString() } });
                 }
                 await ClearData();
                 await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
@@ -369,7 +373,7 @@
     {
         try
         {          
-            await ClientPrinterService.PrintCrystalAsync(Settings.PrinterLabel, "Label", new Dictionary<string, string> { { "Kod Kreskowy", Barcode } });
+            await ClientPrinterService.PrintCrystalAsync(WorkstationSettings.PrinterLabel, "Label", new Dictionary<string, string> { { "Kod Kreskowy", Barcode } });
         }
         catch (Exception ex)
         {

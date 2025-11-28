@@ -427,5 +427,29 @@ namespace KontrolaPakowania.Server.Services
             var generic = await response.Content.ReadAsStringAsync();
             throw new Exception(generic);
         }
+
+        public async Task<bool> UpdateJlRealization(JlInProgressDto jlInProgressDto)
+        {
+            var response = await _dbClient.PatchAsJsonAsync($"api/packing/update-jl-realization", jlInProgressDto);
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<bool>();
+            }
+
+            if (response.StatusCode == HttpStatusCode.Conflict)
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                throw new ArgumentException(message);
+            }
+
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                throw new ArgumentException(message);
+            }
+
+            var generic = await response.Content.ReadAsStringAsync();
+            throw new Exception(generic);
+        }
     }
 }

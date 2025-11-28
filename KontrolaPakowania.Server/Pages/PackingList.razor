@@ -1,10 +1,13 @@
 ﻿@page "/kontrola-pakowania"
 @using KontrolaPakowania.Server.Services
+@using KontrolaPakowania.Server.Settings
 @using KontrolaPakowania.Shared.DTOs.Requests
 @using KontrolaPakowania.Shared.Enums
 @using KontrolaPakowania.Shared.Helpers
+@using Microsoft.Extensions.Options
 @inject PackingService PackingService
 @inject WorkstationService WorkstationService
+@inject IOptions<AppSettings> AppOptions
 @inject NavigationManager Navigation
 @inject UserSessionService UserSession
 @inject AuthService AuthService
@@ -119,10 +122,12 @@
 @code  {
     private List<JlData> JlList = new();
     private string Kuweta { get; set; } = string.Empty;
-    private System.Threading.Timer? _timer;
+    private System.Threading.Timer? RefreshListTimer;
+    private System.Threading.Timer? AfkTimer;
     private ElementReference InputRef;
     private Toast Toast = new();
     private WorkstationSettings Settings = new();
+    private AppSettings AppSettings => AppOptions.Value;
 
     private PasswordModal PasswordModal = new();
     private ManagerControlModal ManagerModal = new();
@@ -144,10 +149,12 @@
         await LoadData();
 
         // Auto-refresh every 1 minute
-        _timer = new System.Threading.Timer(async _ =>
+        RefreshListTimer = new System.Threading.Timer(async _ =>
         {
             await InvokeAsync(LoadData);
-        }, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+        }, null, TimeSpan.FromSeconds(AppSettings.Intervals.RefreshPackingList), TimeSpan.FromSeconds(AppSettings.Intervals.RefreshPackingList));
+
+        AfkTimer = new System.Threading.Timer(async _ => await CheckAfkAsync(), null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -185,6 +192,27 @@
     {
         await LoadData();
         await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
+    }
+
+    private async Task CheckAfkAsync()
+    {
+        try
+        {
+            // get last activity from JS
+            var lastActivity = await JSRuntime.InvokeAsync<long>("activityTracker.getLastActivity");
+            var idleSeconds = (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - lastActivity) / 1000;
+
+            if (idleSeconds >= AppSettings.Intervals.Logout)
+            {
+                AfkTimer?.Dispose();
+                await UserSession.LogoutAsync();
+                Navigation.NavigateTo("/login", forceLoad: true);
+            }
+        }
+        catch
+        {
+            // optionally ignore errors
+        }
     }
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
@@ -379,6 +407,7 @@
 
     public void Dispose()
     {
-        _timer?.Dispose();
+        RefreshListTimer?.Dispose();
+        AfkTimer?.Dispose();
     }
 }

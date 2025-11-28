@@ -106,6 +106,12 @@
             FillJlData(SelectedItem);
             await LoadCourierConfiguration();
             await CreatePackage();
+            var jlInProgress = new JlInProgressDto
+            {
+                Name = Jl,
+                PackageId = PackageId
+            };
+            await PackingService.UpdateJlRealization(jlInProgress);
             bool moved = await MoveItemToPacked(SelectedItem, qty);
             if (!moved) 
             {
@@ -155,6 +161,12 @@
             Toast.Show("Błąd!", "Nie udało się usunąć spakowanej pozycji.");
             return;
         }
+        var jlInProgress = new JlInProgressDto
+        {
+            Name = Jl,
+            PackageId = 0
+        };
+        await PackingService.UpdateJlRealization(jlInProgress);
 
         var existingLeft = JlItems.FirstOrDefault(j => j.ItemCode == SelectedPackedItem.ItemCode);
         if (existingLeft != null) existingLeft.JlQuantity += SelectedPackedItem.JlQuantity;

@@ -52,8 +52,15 @@ else
         <div class="container settings-container mt-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h3 class="card-title mb-4">Ustawienia stanowiska</h3>
-
+                    <h3 class="card-title mb-4">
+                        Ustawienia stanowiska
+                        <!-- Icon in top-right corner -->
+                        <button class="btn btn-outline-secondary btn-sm position-absolute top-0 end-0 mt-2 me-2"
+                                @onclick="ShowInstructions"
+                                title="Instrukcja instalacji">
+                            <i class="bi bi-info-circle"></i>
+                        </button>
+                    </h3>
                     <div class="mb-3">
                         <label class="form-label">Drukarka etykiet:</label>
                         <input class="form-control" @bind="WorkStationSettings.PrinterLabel" placeholder="Wprowadź drukarkę etykiet" />
@@ -128,5 +135,21 @@ else
         {
             Toast.Show("Błąd!", $"Nie udało się zapisać ustawień. {ex.Message}");
         }
+    }
+
+    private void ShowInstructions()
+    {
+        string message = @"
+        <ol style='text-align:left'>
+            <li>Uzupełnij wymagane ustawienie konfiguracji w <a href='/settings' target='_blank' style='color:#ffd700'>/settings</a></li>
+            <li>Pobierz <a href='javascript:void(0)' onclick=""window.downloadFile('/downloads/Wydruki.rar', 'Wydruki.rar')""
+                   style='color:#ffd700'>Wyduki.rar</a> i rozpakuj w <strong>C:\Program Files\KontrolaPakowania\Wydruki</strong></li>
+            <li>Pobierz <a href='javascript:void(0)' onclick=""window.downloadFile('/downloads/PrintingAgent.rar', 'PrintingAgent.rar')""
+                   style='color:#ffd700'>PrinterAgent.rar</a> i rozpakuj w <strong>C:\Program Files\KontrolaPakowania\PrintingAgent</strong></li>
+        </ol>";
+
+
+        // Show as toast, set a longer duration if needed
+        Toast.Show("Instrukcja instalacji", message, ToastType.Info);
     }
 }

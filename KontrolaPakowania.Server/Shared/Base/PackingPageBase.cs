@@ -186,7 +186,8 @@ namespace KontrolaPakowania.Server.Shared.Base
                 ClientName = CurrentJl.ClientName,
                 StationNumber = Settings.StationNumber,
                 Date = DateTime.Now,
-                User = UserSession.Username
+                User = UserSession.Username,
+                PackageId = PackageId
             });
 
             // Additional merged JLs realizations
@@ -199,7 +200,8 @@ namespace KontrolaPakowania.Server.Shared.Base
                     ClientName = CurrentJl.ClientName,
                     StationNumber = Settings.StationNumber,
                     Date = DateTime.Now,
-                    User = UserSession.Username
+                    User = UserSession.Username,
+                    PackageId = PackageId
                 });
             }
         }
@@ -790,9 +792,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                     break;
 
                 case PackingFlow.NextPackage:
-                    PackedItems.Clear();
-                    await CreatePackage();
-                    StateHasChanged();
+                    await HandleNextPackage();
                     break;
             }
         }
@@ -827,8 +827,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                         break;
 
                     case PackingFlow.NextPackage:
-                        PackedItems.Clear();
-                        StateHasChanged();
+                        await HandleNextPackage();
                         break;
                 }
             }
@@ -867,14 +866,33 @@ namespace KontrolaPakowania.Server.Shared.Base
                         break;
 
                     case PackingFlow.NextPackage:
-                        PackedItems.Clear();
-                        StateHasChanged();
+                        await HandleNextPackage();
                         break;
                 }
             }
             catch (Exception ex)
             {
                 Toast.Show("Błąd!", $"Błąd przy próbie finalizacji pakowania: {ex.Message}");
+            }
+        }
+
+        protected virtual async Task HandleNextPackage()
+        {
+            try
+            {
+                PackedItems.Clear();
+                await CreatePackage();
+                var JlInProgressDto = new JlInProgressDto
+                {
+                    Name = Jl,
+                    PackageId = PackageId
+                };
+                await PackingService.UpdateJlRealization(JlInProgressDto);
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                Toast.Show("Błąd!", $"Błąd przy próbie przygotowania następnej paczki: {ex.Message}");
             }
         }
 

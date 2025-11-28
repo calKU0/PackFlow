@@ -111,7 +111,7 @@ public class PackingService : IPackingService
     public async Task<bool> AddJlRealization(JlInProgressDto jl)
     {
         const string procedure = "kp.AddJlRealization";
-        var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { jl.Name, jl.User, jl.StationNumber, jl.Courier, jl.ClientName }, CommandType.StoredProcedure, Connection.ERPConnection);
+        var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { jl.Name, jl.User, jl.StationNumber, jl.Courier, jl.ClientName, jl.PackageId }, CommandType.StoredProcedure, Connection.ERPConnection);
         return result > 0;
     }
 
@@ -119,6 +119,28 @@ public class PackingService : IPackingService
     {
         const string procedure = "kp.RemoveJlRealization";
         var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { jl }, CommandType.StoredProcedure, Connection.ERPConnection);
+        return result > 0;
+    }
+
+    public async Task<bool> UpdateJlRealization(JlInProgressDto jl)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Jl", jl.Name);
+        if (!string.IsNullOrEmpty(jl.User))
+            parameters.Add("User", jl.User);
+        if (!string.IsNullOrEmpty(jl.ClientName))
+            parameters.Add("ClientName", jl.ClientName);
+        if (!string.IsNullOrEmpty(jl.Courier))
+            parameters.Add("Courier", jl.Courier);
+        if (jl.PackageId != 0)
+            parameters.Add("PackageId", jl.PackageId);
+        if (!string.IsNullOrEmpty(jl.StationNumber))
+            parameters.Add("StationNumber", jl.StationNumber);
+        if (jl.Date != DateTime.MinValue)
+            parameters.Add("Date", jl.Date);
+
+        const string procedure = "kp.UpdateJlRealization";
+        var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, parameters, CommandType.StoredProcedure, Connection.ERPConnection);
         return result > 0;
     }
 

@@ -147,12 +147,40 @@ namespace KontrolaPakowania.API.Controllers
             try
             {
                 bool success = await _packingService.RemoveJlRealization(jl);
-                _logger.Information("RemoveJlRealization result for JL {Jl}: {Result}", jl, success);
+                if (success)
+                    _logger.Information("JL {Jl} realization removed successfully", jl);
+                else
+                    _logger.Warning("JL {Jl} realization removal failed", jl);
                 return Ok(success);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error in RemoveJlRealization for JL {Jl}", jl);
+                return HandleException(ex);
+            }
+        }
+
+        [HttpPatch("update-jl-realization")]
+        public async Task<IActionResult> UpdateJlRealization([FromBody] JlInProgressDto jl)
+        {
+            _logger.Information("Request: UpdateJlRealization for JL {Jl}", jl.Name);
+            try
+            {
+                bool success = await _packingService.UpdateJlRealization(jl);
+                if (success)
+                {
+                    _logger.Information("JL {Jl} realization updated successfully", jl.Name);
+                    return Ok(success);
+                }
+                else
+                {
+                    _logger.Warning("JL {Jl} realization update failed", jl.Name);
+                    return NotFound("Nie znaleziono JL");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error in UpdateJlRealization for JL {Jl}", jl.Name);
                 return HandleException(ex);
             }
         }
