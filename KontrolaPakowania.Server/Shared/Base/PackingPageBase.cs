@@ -1,5 +1,4 @@
-﻿using KontrolaPakowania.Server.Data.Enums;
-using KontrolaPakowania.Server.Services;
+﻿using KontrolaPakowania.Server.Services;
 using KontrolaPakowania.Server.Shared.Components;
 using KontrolaPakowania.Server.Shared.Components.Packing;
 using KontrolaPakowania.Server.Shared.Components.Modals;
@@ -30,20 +29,20 @@ namespace KontrolaPakowania.Server.Shared.Base
         // Shared state
         protected JlData CurrentJl = new();
 
-        protected List<string> MergeJlsName = new();
+        protected List<(string jlName,string locationCode)> MergeJls = new();
         protected List<JlItemDto> JlItems = new();
         protected List<JlItemDto> PackedItems = new();
         protected HashSet<string> HighlightedRows = new();
         protected WorkstationSettings Settings = new();
         protected CourierConfiguration CourierConfiguration = new();
         protected int PackageId;
+        protected bool PackingToBufor = false;
 
         // Modals & Toasts
         protected Toast Toast = new();
 
         protected ProductSelectModal ProductSelectModal = new();
-        protected PasswordModal ManagerPasswordModal = new();
-        protected PasswordModal PackingRequirementsModal = new();
+        protected PasswordModal PasswordModal = new();
         protected ConfirmDialog ConfirmDialog = new();
         protected ManagerControlModal ManagerModal = new();
         protected TextBoxModal TextBoxModal = new();
@@ -56,7 +55,6 @@ namespace KontrolaPakowania.Server.Shared.Base
         protected FinishPackingModal FinishPackingModal = new();
         protected ShipmentModal ShipmentModal = new();
         protected ScanInput ScanInputComponent = new();
-        protected PasswordPurpose CurrentPasswordPurpose = PasswordPurpose.None;
 
         protected JlItemDto? SelectedItem;
         protected JlItemDto? SelectedPackedItem;
@@ -76,6 +74,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                 await LoadJlData();
                 await AddJlRealizations();
                 await ShowPackingRequirements();
+                await CheckRouteStatus();
 
                 Navigation.LocationChanged += OnLocationChanged;
             }
@@ -135,11 +134,11 @@ namespace KontrolaPakowania.Server.Shared.Base
                 CurrentJl.InternalBarcode = InternalBarcodeTemp;
                 JlItems = await PackingService.GetJlItems(CurrentJl.Name, Settings.PackingLevel);
 
-                if (MergeJlsName.Any())
+                if (MergeJls.Any())
                 {
-                    foreach (var jl in MergeJlsName)
+                    foreach (var jl in MergeJls)
                     {
-                        var items = await PackingService.GetJlItems(jl, Settings.PackingLevel);
+                        var items = await PackingService.GetJlItems(jl.jlName, Settings.PackingLevel);
                         JlItems.AddRange(items);
                     }
                 }
@@ -156,18 +155,28 @@ namespace KontrolaPakowania.Server.Shared.Base
             var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
             var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
 
-            // Read mergeNames
-            if (query.TryGetValue("mergeNames", out var mergeNamesStr))
+            if (query.TryGetValue("mergeJls", out var mergeJlsValue))
             {
-                MergeJlsName = mergeNamesStr.ToString()
+                MergeJls = mergeJlsValue
+                    .ToString()
                     .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x =>
+                    {
+                        var parts = x.Split('|', 2);
+                        return (
+                            jlCode: Uri.UnescapeDataString(parts[0]),
+                            location: parts.Length > 1
+                                ? Uri.UnescapeDataString(parts[1])
+                                : string.Empty
+                        );
+                    })
                     .ToList();
             }
 
-            // Read packTo
             if (query.TryGetValue("packTo", out var packToValue))
             {
                 PackageId = Convert.ToInt32(packToValue);
+                PackingToBufor = true;
             }
 
             if (query.TryGetValue("barcode", out var barcodeValue))
@@ -183,7 +192,7 @@ namespace KontrolaPakowania.Server.Shared.Base
             {
                 Name = CurrentJl.Name,
                 Courier = CurrentJl.CourierName,
-                ClientName = CurrentJl.ClientName,
+                ClientName = CurrentJl.ClientSymbol,
                 StationNumber = Settings.StationNumber,
                 Date = DateTime.Now,
                 User = UserSession.Username,
@@ -191,11 +200,11 @@ namespace KontrolaPakowania.Server.Shared.Base
             });
 
             // Additional merged JLs realizations
-            foreach (var jl in MergeJlsName)
+            foreach (var jl in MergeJls)
             {
                 await PackingService.AddJlRealization(new JlInProgressDto
                 {
-                    Name = jl,
+                    Name = jl.jlName,
                     Courier = CurrentJl.CourierName,
                     ClientName = CurrentJl.ClientName,
                     StationNumber = Settings.StationNumber,
@@ -226,7 +235,12 @@ namespace KontrolaPakowania.Server.Shared.Base
                 };
 
                 var packageId = await PackingService.CreatePackage(request);
-                if (packageId > 0) PackageId = packageId;
+                if (packageId > 0)
+                {
+                    PackageId = packageId;
+                    CurrentJl.InternalBarcode = string.Empty;
+                    CurrentJl.PackageClosed = false;
+                }
                 else Toast.Show("Błąd!", "Nie udało się utworzyć dokumentu pakowania.");
             }
             catch (Exception ex)
@@ -239,8 +253,68 @@ namespace KontrolaPakowania.Server.Shared.Base
         {
             if (!string.IsNullOrEmpty(CurrentJl.PackingRequirements))
             {
-                CurrentPasswordPurpose = PasswordPurpose.PackingRequirementAction;
-                await PackingRequirementsModal.Show("Wytyczne do pakowania", CurrentJl.PackingRequirements);
+                var password = await PasswordModal.ShowAsync("Wytyczne do pakowania", CurrentJl.PackingRequirements);
+                if (password == null)
+                    return;
+
+                bool valid = await AuthService.ValidatePasswordAsync(password);
+                if (!valid)
+                {
+                    Toast.Show("Błąd!", "Błędne hasło");
+                    Navigation.NavigateTo("/kontrola-pakowania");
+                }
+
+                StateHasChanged();
+            }
+        }
+
+        protected virtual async Task CheckRouteStatus()
+        {
+            var routeStatuses = await ShipmentService.GetRoutesStatus();
+            if (routeStatuses.DPDClosed && routeStatuses.FedexClosed && routeStatuses.GLSClosed)
+                return;
+
+            if (((routeStatuses.DPDClosed && CurrentJl.Courier == Courier.DPD)
+                || (routeStatuses.FedexClosed && CurrentJl.Courier == Courier.Fedex)
+                || (routeStatuses.GLSClosed && CurrentJl.Courier == Courier.GLS)) && CurrentJl.Country == "PL")
+            {
+                ConfirmDialog.Show("Kurier poza trasą", $"Trasa kuriera {CurrentJl.Courier.GetDescription()} została zamknięta. Czy chcesz zmienić kuriera?",
+                    onConfirm: async () =>
+                    {
+                        try
+                        {
+                            var selectedCourier = await CourierModal.ShowModal(CurrentJl.Courier);
+                            if (selectedCourier.HasValue && selectedCourier.Value != Courier.Unknown)
+                            {
+                                UpdatePackageCourierRequest updateRequest = new UpdatePackageCourierRequest
+                                {
+                                    PackageId = PackageId,
+                                    DocumentId = JlItems.FirstOrDefault()?.DocumentId,
+                                    Courier = selectedCourier.Value
+                                };
+
+                                var success = await PackingService.UpdatePackageCourier(updateRequest);
+                                if (!success)
+                                {
+                                    Toast.Show("Błąd!", "Nie udało się zmienić kuriera. Spróbuj ponownie.");
+                                    return;
+                                }
+
+                                CurrentJl.Courier = selectedCourier.Value;
+                                await LoadCourierConfiguration();
+                                await InvokeAsync(StateHasChanged);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Toast.Show("Błąd!", $"Błąd przy próbie zamknięcia pakowania: {ex.Message}");
+                        }
+                    },
+                    onCancel: async () =>
+                    {
+
+                    });
+                await ScanInputComponent.FocusAsync();
             }
         }
 
@@ -250,8 +324,7 @@ namespace KontrolaPakowania.Server.Shared.Base
             if (item == null) return false;
 
             // Check weight limit
-            if (CourierHelper.AllowedCouriersForLabel.Contains(CurrentJl.Courier) &&
-                PackedItems.Sum(w => w.ItemWeight * w.JlQuantity) + (item.ItemWeight * qty) > CourierConfiguration.MaxPackageWeight)
+            if (CourierHelper.AllowedCouriersForLabel.Contains(CurrentJl.Courier) && PackedItems.Sum(w => w.ItemWeight * w.JlQuantity) + (item.ItemWeight * qty) > CourierConfiguration.MaxPackageWeight)
             {
                 Toast.Show("Błąd!", $"Przekroczona waga, dopuszczalna: {CourierConfiguration.MaxPackageWeight}");
                 return false;
@@ -278,7 +351,7 @@ namespace KontrolaPakowania.Server.Shared.Base
 
             // Move to PackedItems
             JlItemDto packedItem;
-            var existingPacked = PackedItems.FirstOrDefault(p => p.ItemCode == item.ItemCode);
+            var existingPacked = PackedItems.FirstOrDefault(p => p.ItemCode == item.ItemCode && p.DocumentId == item.DocumentId && p.ErpPositionNumber == item.ErpPositionNumber && p.JlCode == item.JlCode);
             if (qty == item.DocumentQuantity || qty == item.JlQuantity)
             {
                 if (existingPacked == null)
@@ -317,7 +390,9 @@ namespace KontrolaPakowania.Server.Shared.Base
                         ItemType = item.ItemType,
                         DestinationCountry = item.DestinationCountry,
                         ItemUnit = item.ItemUnit,
-                        DocumentId = item.DocumentId
+                        DocumentId = item.DocumentId,
+                        ErpPositionNumber = item.ErpPositionNumber,
+                        
                     };
                     PackedItems.Add(packedItem);
                 }
@@ -363,7 +438,7 @@ namespace KontrolaPakowania.Server.Shared.Base
             }
 
             // --- Move back to JlItems ---
-            var existingLeft = JlItems.FirstOrDefault(j => j.ItemCode == SelectedPackedItem.ItemCode);
+            var existingLeft = JlItems.FirstOrDefault(j => j.ItemCode == SelectedPackedItem.ItemCode && j.DocumentId == SelectedPackedItem.DocumentId && j.ErpPositionNumber == SelectedPackedItem.ErpPositionNumber && j.JlCode == SelectedPackedItem.JlCode);
             if (existingLeft != null)
                 existingLeft.JlQuantity += SelectedPackedItem.JlQuantity;
             else
@@ -384,19 +459,28 @@ namespace KontrolaPakowania.Server.Shared.Base
                 try
                 {
                     var code = await ScanInputComponent.GetValueAsync();
-                    if (!string.IsNullOrEmpty(code) && JlItems != null)
+
+                    if (!string.IsNullOrWhiteSpace(code) && JlItems != null)
                     {
-                        // Search by code, barcode, or supplier code
                         var item = JlItems.FirstOrDefault(x =>
                             string.Equals(x.ItemCode, code, StringComparison.OrdinalIgnoreCase) ||
-                            string.Equals(x.SupplierCode, code, StringComparison.OrdinalIgnoreCase) ||
-                            string.Equals(x.ItemEan, code, StringComparison.OrdinalIgnoreCase) ||
-                            string.Equals(x.ItemName, code, StringComparison.OrdinalIgnoreCase));
+                            string.Equals(x.ItemName, code, StringComparison.OrdinalIgnoreCase) ||
+
+                            // Supplier codes list
+                            (x.SupplierCode != null &&
+                             x.SupplierCode.Any(sc =>
+                                 string.Equals(sc, code, StringComparison.OrdinalIgnoreCase))) ||
+
+                            // EANs list
+                            (x.ItemEan != null &&
+                             x.ItemEan.Any(ean =>
+                                 string.Equals(ean, code, StringComparison.OrdinalIgnoreCase)))
+                        );
 
                         if (item != null)
-                        {
                             OpenProductModal(item);
-                        }
+                        else
+                            Toast.Show("Brak towaru", $"Brak towaru o kodzie {code}", ToastType.Info, 3000);
                     }
                 }
                 catch (Exception ex)
@@ -441,6 +525,22 @@ namespace KontrolaPakowania.Server.Shared.Base
             }
         }
 
+        protected virtual async Task OpenPackage(DocumentStatus status = DocumentStatus.Ready)
+        {
+            if (CurrentJl.PackageClosed && !PackingToBufor)
+            {
+                var success = await PackingService.OpenPackage(PackageId);
+                if (!success)
+                {
+                    Toast.Show("Błąd!", "Nie udało się otworzyć dokumentu pakowania. Spróbuj ponownie.");
+                    return;
+                }
+
+                CurrentJl.PackageClosed = false;
+                CurrentJl.InternalBarcode = string.Empty;
+            }
+        }
+
         protected virtual async Task ClosePackage(string internalBarcode, Dimensions dimensions, DocumentStatus status = DocumentStatus.Ready)
         {
             if (!CurrentJl.PackageClosed)
@@ -471,7 +571,33 @@ namespace KontrolaPakowania.Server.Shared.Base
             if (PackedItems == null || !PackedItems.Any())
                 return;
 
-            var PackedWmsItems = PackedItems.Select(i => new WMSPackStockItemsRequest
+            var request = new List<WmsPackStockRequest>();
+            foreach (var jl in MergeJls)
+            {
+                var additionalPackedWmsItems = PackedItems.Where(i => i.JlCode == jl.jlName).Select(i => new WMSPackStockItemsRequest
+                {
+                    ItemCode = i.ItemCode,
+                    Quantity = i.JlQuantity,
+                }).ToList();
+
+                var additionalPackStockRequest = new WmsPackStockRequest
+                {
+                    PackingLevel = Settings.PackingLevel,
+                    PackingWarehouse = Settings.PackingWarehouse,
+                    LocationCode = jl.locationCode,
+                    PackageCode = packageCode,
+                    StationNumber = Settings.StationNumber,
+                    Courier = courier,
+                    JlCode = jl.jlName,
+                    Weight = PackedItems.Where(i => i.JlCode == jl.jlName).Sum(i => i.ItemWeight * i.JlQuantity),
+                    Status = status,
+                    Items = additionalPackedWmsItems
+                };
+
+                request.Add(additionalPackStockRequest);
+            }
+
+            var PackedWmsItems = PackedItems.Where(i => i.JlCode == CurrentJl.Name).Select(i => new WMSPackStockItemsRequest
             {
                 ItemCode = i.ItemCode,
                 Quantity = i.JlQuantity,
@@ -486,12 +612,13 @@ namespace KontrolaPakowania.Server.Shared.Base
                 StationNumber = Settings.StationNumber,
                 Courier = courier,
                 JlCode = CurrentJl.Name,
-                Weight = PackedItems.Sum(i => i.ItemWeight * i.JlQuantity),
+                Weight = PackedItems.Where(i => i.JlCode == CurrentJl.Name).Sum(i => i.ItemWeight * i.JlQuantity),
                 Status = status,
                 Items = PackedWmsItems
             };
 
-            await PackingService.PackWmsStock(packStockRequest);
+            request.Add(packStockRequest);
+            await PackingService.PackWmsStock(request);
         }
 
         protected virtual async Task HandleManagerClick(int returnClick)
@@ -530,6 +657,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                                 Toast.Show("Błąd!", "Nie udało się zmienić kuriera. Spróbuj ponownie.");
                                 return;
                             }
+
                             CurrentJl.Courier = selectedCourier.Value;
                             await LoadCourierConfiguration();
                             await InvokeAsync(StateHasChanged);
@@ -625,18 +753,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                     try
                     {
                         // Remove the JL realization
-                        await PackingService.RemoveJlRealization(CurrentJl.Name, true);
-
-                        // Close package if it exists
-                        if (PackageId > 0)
-                        {
-                            var closePackageRequest = new ClosePackageRequest
-                            {
-                                DocumentId = PackageId,
-                                Status = DocumentStatus.Delete
-                            };
-                            await PackingService.ClosePackage(closePackageRequest);
-                        }
+                        await PackingService.RemoveJlRealization(CurrentJl.Name, PackingToBufor ? false : true);
 
                         // Navigate back
                         Navigation.NavigateTo("/kontrola-pakowania");
@@ -654,8 +771,12 @@ namespace KontrolaPakowania.Server.Shared.Base
             );
         }
 
-        protected virtual async Task HandlePasswordConfirm(string password)
+        protected virtual async Task OnManagerButtonClick()
         {
+            var password = await PasswordModal.ShowAsync(scanInput: ScanInputComponent);
+            if (password == null)
+                return;
+
             bool valid = await AuthService.ValidatePasswordAsync(password);
             if (!valid)
             {
@@ -664,30 +785,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                 return;
             }
 
-            switch (CurrentPasswordPurpose)
-            {
-                case PasswordPurpose.ManagerAction:
-                    await ManagerPasswordModal.Hide();
-                    ManagerModal.OpenModal(ScanInputComponent);
-                    break;
-
-                case PasswordPurpose.PackingRequirementAction:
-                    await PackingRequirementsModal.Hide();
-                    break;
-            }
-
-            CurrentPasswordPurpose = PasswordPurpose.None;
-        }
-
-        protected virtual void HandlePasswordCancel()
-        {
-            Navigation.NavigateTo("/kontrola-pakowania");
-        }
-
-        protected virtual async Task OnManagerButtonClick()
-        {
-            CurrentPasswordPurpose = PasswordPurpose.ManagerAction;
-            await ManagerPasswordModal.Show(scanInput: ScanInputComponent);
+            ManagerModal.OpenModal(ScanInputComponent);
             StateHasChanged();
         }
 
@@ -746,6 +844,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                 if (package is not null && package.TaxFree)
                 {
                     Toast.Show("Tax Free", "Paczka zawiera dokument Tax Free. Nadaj numer wewnętrzny.", ToastType.Info);
+                    await OpenPackage();
                     return;
                 }
                 var response = await ShipmentService.SendPackage(package);
@@ -756,7 +855,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                     {
                         var labelContent = response.LabelBase64;
                         await ClientPrinterService.PrintAsync(Settings.PrinterLabel, response.LabelType.ToString(), labelContent);
-                        ShipmentModal.Show(response.TrackingNumber, response.LabelBase64, response.LabelType, Settings.PrinterLabel, package.HasInvoice);
+                        ShipmentModal.Show(CurrentJl.InternalBarcode, response.TrackingNumber, response.LabelBase64, response.LabelType, Settings.PrinterLabel, package.HasInvoice);
                         if (package.HasInvoice)
                         {
                             await ClientPrinterService.PrintCrystalAsync(Settings.PrinterInvoice, package.Recipient.Country != "PL" ? "InvoiceEN" : "InvoicePL", new Dictionary<string, string> { { "DocumentId", package.InvoiceId.ToString() } });
@@ -765,8 +864,8 @@ namespace KontrolaPakowania.Server.Shared.Base
                     else
                     {
                         var msg = string.IsNullOrWhiteSpace(response.ErrorMessage) ? "Nie udało się wygenerować etykiety kurierskiej!" : response.ErrorMessage;
-
                         Toast.Show("Błąd!", msg);
+                        await OpenPackage();
                     }
                 }
                 else
@@ -776,27 +875,37 @@ namespace KontrolaPakowania.Server.Shared.Base
                         : response.ErrorMessage;
 
                     Toast.Show("Błąd!", msg);
+                    await OpenPackage();
                 }
             }
             catch (Exception ex)
             {
                 Toast.Show("Błąd!", $"Błąd przy próbie finalizacji pakowania: {ex.Message}");
+                await OpenPackage();
             }
         }
 
-        protected virtual async Task HandleShipmentOkClick(string trackingNumber)
+        protected virtual async Task HandleShipmentOkClick(string scannedCode)
         {
-            await CloseJlInWMS(CurrentJl.CourierName, trackingNumber, DocumentStatus.Ready);
-
-            switch (_currentPackingFlow)
+            try
             {
-                case PackingFlow.FinishPacking:
-                    Navigation.NavigateTo("/kontrola-pakowania");
-                    break;
+                await CloseJlInWMS(CurrentJl.CourierName, scannedCode, DocumentStatus.Ready);
 
-                case PackingFlow.NextPackage:
-                    await HandleNextPackage();
-                    break;
+                switch (_currentPackingFlow)
+                {
+                    case PackingFlow.FinishPacking:
+                        Navigation.NavigateTo("/kontrola-pakowania");
+                        break;
+
+                    case PackingFlow.NextPackage:
+                        await HandleNextPackage();
+                        await ScanInputComponent.FocusAsync();
+                        break;
+                }
+            }
+            catch(Exception ex)
+            {
+                Toast.Show("Błąd!", $"Błąd przy próbie finalizacji pakowania: {ex.Message}");
             }
         }
 
@@ -831,11 +940,13 @@ namespace KontrolaPakowania.Server.Shared.Base
 
                     case PackingFlow.NextPackage:
                         await HandleNextPackage();
+                        await ScanInputComponent.FocusAsync();
                         break;
                 }
             }
             catch (Exception ex)
             {
+                await OpenPackage();
                 Toast.Show("Błąd!", $"Błąd przy próbie finalizacji pakowania: {ex.Message}");
             }
         }
@@ -859,7 +970,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                 }
 
                 await CloseJlInWMS(CurrentJl.CourierName, internalBarcode, DocumentStatus.InProgress);
-                await ClosePackage(internalBarcode, dimensions, DocumentStatus.InProgress);
+                await ClosePackage(internalBarcode, dimensions, DocumentStatus.Bufor);
                 await ClientPrinterService.PrintCrystalAsync(Settings.PrinterLabel, "Label", new Dictionary<string, string> { { "Kod Kreskowy", internalBarcode } });
 
                 switch (_currentPackingFlow)
@@ -891,6 +1002,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                     PackageId = PackageId
                 };
                 await PackingService.UpdateJlRealization(JlInProgressDto);
+                CurrentJl.InternalBarcode = string.Empty;
                 StateHasChanged();
             }
             catch (Exception ex)
@@ -905,9 +1017,9 @@ namespace KontrolaPakowania.Server.Shared.Base
             var uri = Navigation.ToBaseRelativePath(Navigation.Uri);
             if (!uri.StartsWith("kontrola-pakowania/", StringComparison.OrdinalIgnoreCase))
             {
-                foreach (var jl in MergeJlsName)
+                foreach (var jl in MergeJls)
                 {
-                    await PackingService.RemoveJlRealization(jl, false);
+                    await PackingService.RemoveJlRealization(jl.jlName, false);
                 }
                 await PackingService.RemoveJlRealization(Jl, false);
             }

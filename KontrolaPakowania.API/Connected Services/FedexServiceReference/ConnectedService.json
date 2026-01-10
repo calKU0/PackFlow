@@ -1,7 +1,7 @@
 {
   "ExtendedData": {
     "inputs": [
-      "https://test.poland.fedex.com/fdsWs/IklServicePort?WSDL"
+      "https://poland.fedex.com/fdsWs/IklServicePort?WSDL"
     ],
     "collectionTypes": [
       "System.Array",

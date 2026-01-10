@@ -10,6 +10,12 @@ namespace KontrolaPakowania.API.Services.Packing.Mapping
         {
             foreach (var jl in jlList)
             {
+                int status = jl.Status;
+                if (jl.ReadyToPack == "TAK" && status != 3)
+                    status = 1;
+                if (jl.ReadyToPack == "NIE" && status != 3)
+                    status = 2;
+
                 // If exactly one client, map to flattened JlData
                 if (jl.Clients.Count == 1)
                 {
@@ -18,9 +24,11 @@ namespace KontrolaPakowania.API.Services.Packing.Mapping
                     yield return new JlData
                     {
                         Id = jl.JlId,
-                        Barcode = jl.JlCode,
+                        Barcode = jl.JlEanCode,
                         Name = jl.JlCode,
-                        Status = jl.Status,
+                        Destination = jl.DestZone,
+                        ReadyToPack = jl.ReadyToPack,
+                        Status = status,
                         Weight = jl.Weight,
                         LocationCode = jl.LocationCode,
                         CourierName = client.CourierName,
@@ -44,10 +52,12 @@ namespace KontrolaPakowania.API.Services.Packing.Mapping
                     yield return new JlData
                     {
                         Id = jl.JlId,
-                        Barcode = jl.JlCode,
+                        Barcode = jl.JlEanCode,
+                        Destination = jl.DestZone,
                         LocationCode = jl.LocationCode,
+                        ReadyToPack = jl.ReadyToPack,
                         Name = jl.JlCode,
-                        Status = jl.Status,
+                        Status = status,
                         Weight = jl.Weight,
                         CourierName = "MIX",
                         Courier = Courier.Unknown,
@@ -71,6 +81,12 @@ namespace KontrolaPakowania.API.Services.Packing.Mapping
         {
             if (jlDto == null)
                 throw new ArgumentNullException(nameof(jlDto));
+
+            int status = jlDto.Status;
+            if (jlDto.ReadyToPack == "TAK" && status != 3)
+                status = 1;
+            if (jlDto.ReadyToPack == "NIE" && status != 3)
+                status = 2;
 
             // Map clients: convert string to enum and calculate shipment services
             foreach (var client in jlDto.Clients)
@@ -96,9 +112,11 @@ namespace KontrolaPakowania.API.Services.Packing.Mapping
                 {
                     Id = jlDto.JlId,
                     LocationCode = jlDto.LocationCode,
-                    Barcode = jlDto.JlCode,
+                    Destination = jlDto.DestZone,
+                    Barcode = jlDto.JlEanCode,
+                    ReadyToPack = jlDto.ReadyToPack,
                     Name = jlDto.JlCode,
-                    Status = jlDto.Status,
+                    Status = status,
                     Weight = jlDto.Weight,
                     CourierName = client.CourierName,
                     Courier = client.Courier,
@@ -121,9 +139,11 @@ namespace KontrolaPakowania.API.Services.Packing.Mapping
             return new JlData
             {
                 Id = jlDto.JlId,
-                Barcode = jlDto.JlCode,
+                Barcode = jlDto.JlEanCode,
+                Destination = jlDto.DestZone,
                 Name = jlDto.JlCode,
-                Status = jlDto.Status,
+                Status = status,
+                ReadyToPack = jlDto.ReadyToPack,
                 LocationCode = jlDto.LocationCode,
                 Weight = jlDto.Weight,
                 CourierName = "MIX",

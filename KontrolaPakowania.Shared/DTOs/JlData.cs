@@ -16,6 +16,7 @@ namespace KontrolaPakowania.Shared.DTOs
         public int Status { get; set; }
         public decimal Weight { get; set; }
         public string CourierName { get; set; } = string.Empty;
+        public string Destination { get; set; } = string.Empty;
         private Courier courier;
 
         public Courier Courier
@@ -34,6 +35,7 @@ namespace KontrolaPakowania.Shared.DTOs
         public int Sorting { get; set; }
         public string Country { get; set; } = string.Empty;
         public string LocationCode { get; set; } = string.Empty;
+        public string ReadyToPack { get; set; } = string.Empty;
         public bool OutsideEU { get; set; } = false;
         public int ClientId { get; set; }
         public string ClientSymbol { get; set; } = string.Empty;

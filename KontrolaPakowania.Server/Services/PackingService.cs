@@ -159,7 +159,7 @@ namespace KontrolaPakowania.Server.Services
             throw new Exception(generic);
         }
 
-        public async Task<bool> PackWmsStock(WmsPackStockRequest request)
+        public async Task<bool> PackWmsStock(List<WmsPackStockRequest> request)
         {
             var response = await _dbClient.PostAsJsonAsync($"api/packing/pack-wms-stock", request);
 
@@ -322,6 +322,26 @@ namespace KontrolaPakowania.Server.Services
             var generic = await response.Content.ReadAsStringAsync();
             throw new Exception(generic);
         }
+
+        public async Task<bool> OpenPackage(int packageId)
+        {
+            var response = await _dbClient.PostAsJsonAsync($"api/packing/open-package", packageId);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                throw new ArgumentException(message);
+            }
+
+            var generic = await response.Content.ReadAsStringAsync();
+            throw new Exception(generic);
+        }
+
 
         public async Task<bool> UpdatePackageCourier(UpdatePackageCourierRequest request)
         {

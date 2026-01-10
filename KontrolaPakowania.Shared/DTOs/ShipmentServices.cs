@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace KontrolaPakowania.Shared.DTOs
@@ -47,8 +48,24 @@ namespace KontrolaPakowania.Shared.DTOs
 
             foreach (var kvp in ServiceMapping)
             {
-                if (lowerInput.Contains(kvp.Key))
-                    kvp.Value(services);
+                if (!lowerInput.Contains(kvp.Key))
+                    continue;
+
+                string? value = null;
+
+                // Special handling for codamount
+                if (kvp.Key == "codamount")
+                {
+                    // codamount=123.45
+                    var match = Regex.Match(
+                        lowerInput,
+                        @"codamount\s*=\s*([\d.,]+)");
+
+                    if (match.Success)
+                        value = match.Groups[1].Value;
+                }
+
+                kvp.Value(services, value);
             }
 
             return services;
@@ -62,13 +79,21 @@ namespace KontrolaPakowania.Shared.DTOs
                 .Any(p => (bool)p.GetValue(this));
         }
 
-        private static readonly Dictionary<string, Action<ShipmentServices>> ServiceMapping = new()
-        {
-            ["10"] = s => s.D10 = true,
-            ["12"] = s => s.D12 = true,
-            ["sobota"] = s => s.Saturday = true,
-            ["zwrotna"] = s => s.PZ = true,
-            ["dropshipping"] = s => s.Dropshipping = true
-        };
+        private static readonly Dictionary<string, Action<ShipmentServices, string>> ServiceMapping =
+            new()
+            {
+                ["10"] = (s, _) => s.D10 = true,
+                ["12"] = (s, _) => s.D12 = true,
+                ["sobota"] = (s, _) => s.Saturday = true,
+                ["zwrotna"] = (s, _) => s.PZ = true,
+                ["dropshipping"] = (s, _) => s.Dropshipping = true,
+                ["cod"] = (s, _) => s.COD = true,
+                ["exw"] = (s, _) => s.EXW = true,
+                ["codamount"] = (s, value) =>
+                {
+                    if (decimal.TryParse(value, out var amount))
+                        s.CODAmount = amount;
+                }
+            };
     }
 }

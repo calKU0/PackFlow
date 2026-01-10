@@ -75,7 +75,6 @@ namespace KontrolaPakowania.API.Services.Shipment
             if (result is not null)
             {
                 result.Courier = CourierHelper.GetCourierFromName(result.CourierName);
-                result.ShipmentServices = ShipmentServices.FromString(result.CourierName);
             }
 
             return result;

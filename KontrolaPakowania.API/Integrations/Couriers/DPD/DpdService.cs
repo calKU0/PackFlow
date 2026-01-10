@@ -50,7 +50,20 @@ namespace KontrolaPakowania.API.Integrations.Couriers.DPD
             if (string.IsNullOrWhiteSpace(waybill))
                 return ShipmentResponse.CreateFailure("Nie zwrócono etykiety przez DPD API.");
 
-            var labelResponse = await CreateDpdLabel(createDpdResponse.SessionId, waybill, package.Recipient.Country, createDpdResponse.Packages);
+            DpdCreateLabelResponse labelResponse = null;
+            for (int i = 0; i <= 7; i++)
+            {
+                try
+                {
+                    labelResponse = await CreateDpdLabel(createDpdResponse.SessionId, waybill, package.Recipient.Country, createDpdResponse.Packages);
+                    break;
+                }
+                catch (HttpRequestException)
+                {
+                    await Task.Delay(100);
+                }
+            }
+
             if (labelResponse == null)
                 return ShipmentResponse.CreateFailure("Pusta odpowiedź z tworzenia etykiety DPD przez API.");
             if (labelResponse.Status != "OK")
@@ -69,36 +82,93 @@ namespace KontrolaPakowania.API.Integrations.Couriers.DPD
 
         private async Task<DpdCreatePackageResponse?> CreateDpdPackage(object dpdRequest)
         {
-            var json = JsonSerializer.Serialize(dpdRequest, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
+            var json = JsonSerializer.Serialize(dpdRequest, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            });
+
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("public/shipment/v1/generatePackagesNumbers", content);
-            var responseContent = await response.Content.ReadAsStringAsync();
 
-            // If response is XML, wrap it in an error response
-            if (responseContent.TrimStart().StartsWith("<"))
+            const int maxAttempts = 7;
+
+            for (int attempt = 1; attempt <= maxAttempts; attempt++)
             {
-                return new DpdCreatePackageResponse
+                try
                 {
-                    Status = "ERROR",
-                    ErrorsXml = responseContent,
-                    Packages = new List<DpdPackageResponse>()
-                };
+                    using var response = await _httpClient.PostAsync(
+                        "public/shipment/v1/generatePackagesNumbers",
+                        content);
+
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    // Retry on HTTP-level failure
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        if (attempt < maxAttempts)
+                        {
+                            await Task.Delay(100);
+                            continue;
+                        }
+
+                        return new DpdCreatePackageResponse
+                        {
+                            Status = "ERROR",
+                            ErrorsXml = $"HTTP {(int)response.StatusCode}: {responseContent}",
+                            Packages = new List<DpdPackageResponse>()
+                        };
+                    }
+
+                    // XML error returned by API
+                    if (responseContent.TrimStart().StartsWith("<"))
+                    {
+                        return new DpdCreatePackageResponse
+                        {
+                            Status = "ERROR",
+                            ErrorsXml = responseContent,
+                            Packages = new List<DpdPackageResponse>()
+                        };
+                    }
+
+                    // Try JSON deserialize
+                    try
+                    {
+                        return JsonSerializer.Deserialize<DpdCreatePackageResponse>(
+                            responseContent,
+                            new JsonSerializerOptions
+                            {
+                                PropertyNameCaseInsensitive = true
+                            });
+                    }
+                    catch (JsonException)
+                    {
+                        return new DpdCreatePackageResponse
+                        {
+                            Status = "ERROR",
+                            ErrorsXml = responseContent,
+                            Packages = new List<DpdPackageResponse>()
+                        };
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    if (attempt < maxAttempts)
+                    {
+                        await Task.Delay(100);
+                        continue;
+                    }
+
+                    return new DpdCreatePackageResponse
+                    {
+                        Status = "ERROR",
+                        ErrorsXml = $"HttpRequestException: {ex.Message}",
+                        Packages = new List<DpdPackageResponse>()
+                    };
+                }
             }
 
-            try
-            {
-                return JsonSerializer.Deserialize<DpdCreatePackageResponse>(responseContent,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            }
-            catch (JsonException)
-            {
-                return new DpdCreatePackageResponse
-                {
-                    Status = "ERROR",
-                    ErrorsXml = responseContent,
-                    Packages = new List<DpdPackageResponse>()
-                };
-            }
+            // Should never happen
+            return null;
         }
 
         private async Task<DpdCreateLabelResponse?> CreateDpdLabel(long? sessionId, string waybill, string country, List<DpdPackageResponse>? packages)
@@ -133,7 +203,12 @@ namespace KontrolaPakowania.API.Integrations.Couriers.DPD
 
             var json = JsonSerializer.Serialize(labelRequest, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("public/shipment/v1/generateSpedLabels", content);
+            var response = await _httpClient.SendAsync(
+            new HttpRequestMessage(HttpMethod.Post, "public/shipment/v1/generateSpedLabels")
+            {
+                Content = content
+            },
+            HttpCompletionOption.ResponseContentRead);
 
             var responseJson = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)

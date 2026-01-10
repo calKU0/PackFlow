@@ -39,6 +39,17 @@ namespace KontrolaPakowania.API.Integrations.Email
                 mail.To.Add(recipient.Trim());
             }
 
+            if (!string.IsNullOrWhiteSpace(_settings.CopyTo))
+            {
+                var ccRecipients = _settings.CopyTo
+                    .Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var cc in ccRecipients)
+                {
+                    mail.CC.Add(cc.Trim());
+                }
+            }
+
             await _smtp.SendMailAsync(mail);
         }
 

@@ -30,7 +30,7 @@
         _ => "toast-info"
     };
 
-    public void Show(string title, string message, ToastType type = ToastType.Error, int? autoHideMs = 6000)
+    public void Show(string title, string message, ToastType type = ToastType.Error, int? autoHideMs = null)
     {
         Title = title;
         Message = message;

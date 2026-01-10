@@ -1,8 +1,8 @@
-﻿
-@using KontrolaPakowania.Server.Services
+﻿@using KontrolaPakowania.Server.Services
 @using KontrolaPakowania.Shared.Enums
 @inject ClientPrinterService ClientPrinterService
 @inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
 @inherits ComponentBase
 
 @if (IsVisible)
@@ -15,6 +15,18 @@
                     <h5 class="modal-title">Przesyłka wysłana</h5>
                 </div>
                 <div class="modal-body text-center">
+                    <input class="form-control mb-3 text-center"
+                           placeholder="Zeskanuj kod kreskowy etykiety"
+                           @bind="ScannedCode"
+                           @bind:event="oninput"
+                           @onkeydown="HandleKeyDown"
+                           @ref="InputRef"
+                           autofocus />
+                    @if (!string.IsNullOrEmpty(ScanErrorMessage))
+                    {
+                        <p class="text-danger fw-bold mt-2">@ScanErrorMessage</p>
+                    }
+                    <p>Kod wewnętrzny: <strong>@InternalBarcode</strong></p>
                     <p>Numer przesyłki: <strong>@TrackingNumber</strong></p>
                     @if (HasInvoice)
                     {
@@ -24,7 +36,7 @@
                 <div class="modal-footer container-fluid border-0">
                     <div class="row w-100">
                         <div class="col-8">
-                            <button class="btn btn-primary shipment-btn w-100 tall-btn" @onclick="OnOkClicked">
+                            <button class="btn btn-primary shipment-btn w-100 tall-btn" @onclick="OnOkClicked" disabled="@string.IsNullOrWhiteSpace(ScannedCode)">
                                 OK
                             </button>
                         </div>
@@ -42,39 +54,83 @@
 }
 
 @code {
-    public bool IsVisible { get; set; }
-    public string TrackingNumber { get; set; } = string.Empty;
-    public string LabelBase64 { get; set; } = string.Empty;
-    public string Printer { get; set; } = string.Empty;
-    public PrintDataType LabelType { get; set; }
-    public bool HasInvoice { get; set; }
+    private bool IsVisible { get; set; }
+    private string TrackingNumber { get; set; } = string.Empty;
+    private string LabelBase64 { get; set; } = string.Empty;
+    private string Printer { get; set; } = string.Empty;
+    private PrintDataType LabelType { get; set; }
+    private bool HasInvoice { get; set; }
+    private string InternalBarcode { get; set; } = string.Empty;
+    private string ScannedCode { get; set; } = string.Empty;
+    private ElementReference InputRef;
+    private string? ScanErrorMessage;
     [Parameter] public EventCallback<string> OnOk { get; set; }
+
+    public async void Show(string internalBarcode, string trackingNumber, string labelBase64, PrintDataType labelType, string printer, bool hasInvoice)
+    {
+        try
+        {
+            TrackingNumber = trackingNumber;
+            LabelBase64 = labelBase64;
+            LabelType = labelType;
+            Printer = printer;
+            HasInvoice = hasInvoice;
+            InternalBarcode = internalBarcode;
+
+            ScannedCode = string.Empty;
+            IsVisible = true;
+            await InvokeAsync(StateHasChanged);
+            await InputRef.FocusAsync();
+        }
+        catch
+        {
+            
+        }
+    }
 
     private async Task OnOkClicked()
     {
-        if (OnOk.HasDelegate)
-        {
-            await OnOk.InvokeAsync(TrackingNumber);
-        }
-        Hide();
+        await ConfirmAsync();
     }
+
     private async Task OnPrintClicked()
     {
         if (!string.IsNullOrEmpty(LabelBase64))
         {
             await ClientPrinterService.PrintAsync(Printer, LabelType.ToString(), LabelBase64);
+            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
         }
     }
 
-    public void Show(string trackingNumber, string labelBase64, PrintDataType labelType, string printer, bool hasInvoice)
+    private async Task HandleKeyDown(KeyboardEventArgs e)
     {
-        TrackingNumber = trackingNumber;
-        LabelBase64 = labelBase64;
-        LabelType = labelType;
-        Printer = printer;
-        HasInvoice = hasInvoice;
-        IsVisible = true;
-        StateHasChanged();
+        if (e.Key == "Enter")
+        {
+            if (ScannedCode.Length > 29)
+            {
+                ScanErrorMessage = "Za długi kod etykiety. Zeskanuj ponownie.";
+                ScannedCode = string.Empty;
+
+                await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
+
+                StateHasChanged();
+                return;
+            }
+
+            ScanErrorMessage = null;
+            await ConfirmAsync();
+        }
+    }
+
+    private async Task ConfirmAsync()
+    {
+        if (OnOk.HasDelegate)
+        {
+            await OnOk.InvokeAsync(ScannedCode);
+        }
+
+        ScannedCode = string.Empty;
+        Hide();
     }
 
     public void Hide()

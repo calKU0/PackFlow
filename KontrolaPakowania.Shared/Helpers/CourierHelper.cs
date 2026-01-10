@@ -26,7 +26,14 @@ namespace KontrolaPakowania.Shared.Helpers
             ["gls"] = Courier.GLS,
             ["odbiór własny"] = Courier.Personal_Collection,
             ["hellmann"] = Courier.Hellmann,
-            ["shenker"] = Courier.Schenker
+            ["transport na zlecenie"] = Courier.Transport_On_Request,
+            ["trans. na zlecenie"] = Courier.Transport_On_Request,
+            ["transport odbiorcy"] = Courier.Recipient_Transport,
+            ["raben"] = Courier.Raben,
+            ["schenker"] = Courier.Schenker,
+            ["suus"] = Courier.Suus,
+            ["dachser"] = Courier.Dachser,
+            ["diera"] = Courier.Diera
         };
 
         public static Courier GetCourierFromName(string name)

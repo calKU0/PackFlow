@@ -30,6 +30,24 @@ namespace KontrolaPakowania.Shared.Enums
         [Description("Odbiór własny")]
         Personal_Collection,
 
+        [Description("Raben")]
+        Raben,
+
+        [Description("Trans. na zlecenie")]
+        Transport_On_Request,
+
+        [Description("Transport odbiorcy")]
+        Recipient_Transport,
+
+        [Description("Diera")]
+        Diera,
+
+        [Description("Dachser")]
+        Dachser,
+
+        [Description("Suus")]
+        Suus,
+
         [Description("Nieznany")]
         Unknown,
     }

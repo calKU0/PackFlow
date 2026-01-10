@@ -18,13 +18,13 @@ namespace KontrolaPakowania.Shared.DTOs
         public int ErpPositionNumber { get; set; }
         public string ItemCode { get; set; } = string.Empty;
         public string ItemName { get; set; } = string.Empty;
-        public string ItemEan { get; set; } = string.Empty;
+        public List<string> ItemEan { get; set; } = new List<string>();
         public string ItemUnit { get; set; } = string.Empty;
         public string ItemType { get; set; } = string.Empty;
         public string ItemImage { get; set; } = string.Empty;
         public decimal ItemWeight { get; set; }
         public decimal ItemVolume { get; set; }
-        public string SupplierCode { get; set; } = string.Empty;
+        public List<string> SupplierCode { get; set; } = new List<string>();
         public string ClientErpId { get; set; } = string.Empty;
         public string AddressName { get; set; } = string.Empty;
         public string AddressCity { get; set; } = string.Empty;

@@ -34,3 +34,27 @@
 [2025-12-30T14:24:40.0601659Z] Received Response (200)
 {"status":"1","desc":"OK"}
 
+[2026-01-02T13:57:55.0121841Z] Sending Request to wms-int-api/companies/62/integrations/own/service?integrationName=packStock
+{"whsSource":"6","proces":"PCK","Items":[{"locSourceNr":"Rolotok","locDestNr":"PAK-A1199","luSourceNr":"KK-189","luDestNr":"1033646358382U","luDestTypeSymbol":"PACZKA","itemNr":"182-1.01","batchId":null,"itemQty":"2"}]}
+
+[2026-01-02T13:57:55.3315396Z] Received Response (200)
+{"status":"-1","desc":"Wystąpił błąd: Nieprawidłowa lokalizacja ->> OK"}
+
+[2026-01-02T14:04:10.8336128Z] Sending Request to wms-int-api/companies/62/integrations/own/service?integrationName=packStock
+{"whsSource":"6","proces":"PCK","Items":[{"locSourceNr":"Rolotok","locDestNr":"PAK-A1199","luSourceNr":"KK-094","luDestNr":"1033646736182U","luDestTypeSymbol":"PACZKA","itemNr":"7700019961.01","batchId":null,"itemQty":"1"}]}
+
+[2026-01-02T14:04:11.1008074Z] Received Response (200)
+{"status":"-1","desc":"Wystąpił błąd: Nieprawidłowa lokalizacja ->> OK"}
+
+[2026-01-02T14:04:44.9283275Z] Sending Request to wms-int-api/companies/62/integrations/own/service?integrationName=packStock
+{"whsSource":"6","proces":"PCK","Items":[{"locSourceNr":"Rolotok","locDestNr":"PAK-A1105","luSourceNr":"KK-035","luDestNr":"1033646772520U","luDestTypeSymbol":"PACZKA","itemNr":"132211.0","batchId":null,"itemQty":"2"}]}
+
+[2026-01-02T14:04:45.3128625Z] Received Response (200)
+{"status":"1","desc":"OK"}
+
+[2026-01-02T16:37:34.0746767Z] Sending Request to wms-int-api/companies/62/integrations/own/service?integrationName=packStock
+{"whsSource":"6","proces":"PCK","Items":[{"locSourceNr":"Rolotok","locDestNr":"PAK-A1105","luSourceNr":"KK-250","luDestNr":"6232239179514","luDestTypeSymbol":"PACZKA","itemNr":"1693129M1.02","batchId":null,"itemQty":"1"},{"locSourceNr":"Rolotok","locDestNr":"PAK-A1105","luSourceNr":"KK-250","luDestNr":"6232239179514","luDestTypeSymbol":"PACZKA","itemNr":"84156844.01","batchId":null,"itemQty":"1"},{"locSourceNr":"Rolotok","locDestNr":"PAK-A1105","luSourceNr":"KK-250","luDestNr":"6232239179514","luDestTypeSymbol":"PACZKA","itemNr":"JAG92-0059","batchId":null,"itemQty":"1"},{"locSourceNr":"Rolotok","locDestNr":"PAK-A1105","luSourceNr":"KK-250","luDestNr":"6232239179514","luDestTypeSymbol":"PACZKA","itemNr":"JAG92-0076","batchId":null,"itemQty":"1"},{"locSourceNr":"Rolotok","locDestNr":"PAK-A1105","luSourceNr":"KK-250","luDestNr":"6232239179514","luDestTypeSymbol":"PACZKA","itemNr":"JAG92-0077","batchId":null,"itemQty":"1"}]}
+
+[2026-01-02T16:37:34.4353207Z] Received Response (200)
+{"status":"1","desc":"OK"}
+

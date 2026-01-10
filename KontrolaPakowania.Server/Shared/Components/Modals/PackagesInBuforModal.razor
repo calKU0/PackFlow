@@ -12,8 +12,8 @@
                 <p>Klient posiada zabuforowane paczki/palety. Zeskanuj lub wybierz paczkę:</p>
 
                 <input class="form-control mb-3"
-                       value="@ScanInput"
-                       @oninput="OnScanInputChanged"
+                       @bind="ScanInput"
+                       @onkeydown="OnScanKeyDown"
                        @ref="InputRef"
                        placeholder="Zeskanuj kod kreskowy..." />
 
@@ -72,21 +72,22 @@
         return await _tcs.Task;
     }
 
-    private void OnScanInputChanged(ChangeEventArgs e)
+    private void OnScanKeyDown(KeyboardEventArgs e)
     {
-        ScanInput = e?.Value?.ToString() ?? string.Empty;
+        if (e.Key != "Enter")
+            return;
 
         if (string.IsNullOrWhiteSpace(ScanInput))
             return;
 
-        var pkg = AvaliablePackages
-            .FirstOrDefault(p => p.InternalBarcode.Equals(ScanInput, StringComparison.OrdinalIgnoreCase));
+        var pkg = AvaliablePackages.FirstOrDefault(p =>
+            p.InternalBarcode.Equals(ScanInput, StringComparison.OrdinalIgnoreCase));
 
-        if (pkg != null)
-        {
-            SelectedPackage = pkg.Id;
-            Confirm();
-        }
+        if (pkg is null)
+            return;
+
+        SelectedPackage = pkg.Id;
+        Confirm();
     }
 
     private void OnRowDoubleClick(PackageData package)

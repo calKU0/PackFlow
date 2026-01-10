@@ -12,11 +12,17 @@
                         <img src="@Product.ItemImage" class="product-image" />
                         <div class="product-info">
                             <h5 class="mb-3">@Product.ItemName</h5>
+
                             <p class="mb-0"><strong>Kod:</strong> @Product.ItemCode</p>
-                            <p class="mb-0"><strong>Kod dostawcy:</strong> @Product.SupplierCode</p>
+                            <p class="mb-0">
+                                <strong>Kod dostawcy:</strong> @(Product.SupplierCode?.FirstOrDefault() ?? "-")
+                            </p>
                             <p class="mb-3"><strong>Waga:</strong> @Product.ItemWeight kg</p>
-                            <p class="mb-0"><strong>Ilość na dokumencie:</strong> @Product.DocumentQuantity @Product.ItemUnit</p>
-                            <p class="mb-0"><strong>Ilość w kuwecie:</strong> @Product.JlQuantity @Product.ItemUnit</p>
+
+                            <hr class="my-2 opacity-50">
+
+                            <p class="mb-0 fs-5"><strong>Ilość na dok:</strong> @Product.DocumentQuantity @Product.ItemUnit</p>
+                            <p class="mb-0 fs-5"><strong>Ilość w kuwecie:</strong> @Product.JlQuantity @Product.ItemUnit</p>
                         </div>
                         <button type="button" class="btn-close ms-auto" @onclick="Close"></button>
                     </div>

@@ -12,363 +12,363 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", ConfigurationName= "KontrolaPakowania.API.Services.Shipment.GLS.Ade2PortType")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", ConfigurationName= "KontrolaPakowania.API.Services.Shipment.GLS.Ade2PortType")]
     public interface Ade2PortType
     {
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLogin", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLogin", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cSession> adeLoginAsync(string user_name, string user_password);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLoginIntegrat" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLoginIntegrat" +
             "or", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cSession> adeLoginIntegratorAsync(string user_name, string user_password, string integrator);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLoginByLocali" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLoginByLocali" +
             "zationCode", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cSession> adeLoginByLocalizationCodeAsync(string user_name, string user_password, string localization_code);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLogout", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLogout", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cSession> adeLogoutAsync(string session);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "Insert", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cID> adePreparingBox_InsertAsync(string session, KontrolaPakowania.API.Services.Shipment.GLS.cConsign consign_prep_data);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "InsertExt", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cID> adePreparingBox_InsertExtAsync(string session, KontrolaPakowania.API.Services.Shipment.GLS.cConsignExt consign_prep_data);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "GetConsignIDs", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adePreparingBox_GetConsignIDsResponse> adePreparingBox_GetConsignIDsAsync(KontrolaPakowania.API.Services.Shipment.GLS.adePreparingBox_GetConsignIDsRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "DeleteConsign", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cID> adePreparingBox_DeleteConsignAsync(string session, int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "DeleteParcel", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cID> adePreparingBox_DeleteParcelAsync(string session, string number);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "GetConsign", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cConsign> adePreparingBox_GetConsignAsync(string session, int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "GetConsignLabels", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cLabels> adePreparingBox_GetConsignLabelsAsync(string session, int id, string mode);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "GetConsignLabelsExt", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adePreparingBox_GetConsignLabelsExtResponse> adePreparingBox_GetConsignLabelsExtAsync(KontrolaPakowania.API.Services.Shipment.GLS.adePreparingBox_GetConsignLabelsExtRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "GetConsignDocs", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cLabelsIdent> adePreparingBox_GetConsignDocsAsync(string session, int id, string mode);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "GetConsignsLabels", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adePreparingBox_GetConsignsLabelsResponse> adePreparingBox_GetConsignsLabelsAsync(KontrolaPakowania.API.Services.Shipment.GLS.adePreparingBox_GetConsignsLabelsRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "GetParcelLabel", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cLabels> adePreparingBox_GetParcelLabelAsync(string session, string number, string mode);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_Create" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_Create" +
             "", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adePickup_CreateResponse> adePickup_CreateAsync(KontrolaPakowania.API.Services.Shipment.GLS.adePickup_CreateRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetIDs" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetIDs" +
             "", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetIDsResponse> adePickup_GetIDsAsync(KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetIDsRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_Get", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_Get", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cPickup> adePickup_GetAsync(string session, int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
             "signBinds", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetConsignBindsResponse> adePickup_GetConsignBindsAsync(KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetConsignBindsRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
             "signIDs", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetConsignIDsResponse> adePickup_GetConsignIDsAsync(KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetConsignIDsRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
             "sign", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cConsign> adePickup_GetConsignAsync(string session, int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetRec" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetRec" +
             "eipt", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cReceipt> adePickup_GetReceiptAsync(string session, int id, string mode);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetLab" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetLab" +
             "els", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cLabels> adePickup_GetLabelsAsync(string session, int id, string mode);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetIde" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetIde" +
             "nt", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cIdent> adePickup_GetIdentAsync(string session, int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
             "signLabels", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cLabels> adePickup_GetConsignLabelsAsync(string session, int id, string mode);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
             "signLabelsExt", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetConsignLabelsExtResponse> adePickup_GetConsignLabelsExtAsync(KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetConsignLabelsExtRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetPar" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetPar" +
             "celLabel", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cLabels> adePickup_GetParcelLabelAsync(string session, string number, string mode);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetPar" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetPar" +
             "celsLabels", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetParcelsLabelsResponse> adePickup_GetParcelsLabelsAsync(KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetParcelsLabelsRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_Parcel" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_Parcel" +
             "NumberSearch", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cConsign> adePickup_ParcelNumberSearchAsync(string session, string number);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePartner_GetPa" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePartner_GetPa" +
             "rcelNumber", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cPartnerParcelNumber> adePartner_GetParcelNumberAsync(string session, string number);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeTrackID_Get", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeTrackID_Get", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cTrackID> adeTrackID_GetAsync(string session, string number);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeProfile_GetID" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeProfile_GetID" +
             "s", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeProfile_GetIDsResponse> adeProfile_GetIDsAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeProfile_GetIDsRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeProfile_GetAc" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeProfile_GetAc" +
             "tive", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cProfile> adeProfile_GetActiveAsync(string session);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeProfile_Chang" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeProfile_Chang" +
             "e", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cProfile> adeProfile_ChangeAsync(string session, int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLang_GetActiv" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLang_GetActiv" +
             "e", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cLang> adeLang_GetActiveAsync(string session);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLang_Change", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeLang_Change", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cLang> adeLang_ChangeAsync(string session, string lang);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePfc_GetStatus" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePfc_GetStatus" +
             "", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cStatus> adePfc_GetStatusAsync(string session);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePfc_GetDictio" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePfc_GetDictio" +
             "nary", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adePfc_GetDictionaryResponse> adePfc_GetDictionaryAsync(KontrolaPakowania.API.Services.Shipment.GLS.adePfc_GetDictionaryRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeSendAddr_GetS" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeSendAddr_GetS" +
             "tatus", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cStatus> adeSendAddr_GetStatusAsync(string session);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeSendAddr_GetD" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeSendAddr_GetD" +
             "ictionary", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeSendAddr_GetDictionaryResponse> adeSendAddr_GetDictionaryAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeSendAddr_GetDictionaryRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetA" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetA" +
             "llowed", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cServices> adeServices_GetAllowedAsync(string session);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetM" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetM" +
             "axCOD", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cCODMax> adeServices_GetMaxCODAsync(string session);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetM" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetM" +
             "axParcelWeights", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cParcelWeightsMax> adeServices_GetMaxParcelWeightsAsync(string session);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetG" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetG" +
             "uaranteed", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cServices> adeServices_GetGuaranteedAsync(string session, string zipcode);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetC" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetC" +
             "ountriesSDS", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeServices_GetCountriesSDSResponse> adeServices_GetCountriesSDSAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeServices_GetCountriesSDSRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetC" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetC" +
             "ountriesSRS", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeServices_GetCountriesSRSResponse> adeServices_GetCountriesSRSAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeServices_GetCountriesSRSRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetC" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeServices_GetC" +
             "ountriesCDX", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeServices_GetCountriesCDXResponse> adeServices_GetCountriesCDXAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeServices_GetCountriesCDXRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeZip_GetCity", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeZip_GetCity", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cCity> adeZip_GetCityAsync(string session, string country, string zipcode);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeZip_CustomsRe" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeZip_CustomsRe" +
             "quired", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cBooleanValue> adeZip_CustomsRequiredAsync(string session, string country, string zipcode);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeOption_Get", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeOption_Get", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cValue> adeOption_GetAsync(string session, string option);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeOption_Set", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeOption_Set", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cValue> adeOption_SetAsync(string session, string option, string value);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop_Se" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop_Se" +
             "archByZip", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop_SearchByZipResponse> adeParcelShop_SearchByZipAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop_SearchByZipRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop_Se" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop_Se" +
             "archByID", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cParcelShop> adeParcelShop_SearchByIDAsync(string session, string id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop_Ge" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop_Ge" +
             "tByCountry", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop_GetByCountryResponse> adeParcelShop_GetByCountryAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop_GetByCountryRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop2_G" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop2_G" +
             "etByCountry", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop2_GetByCountryResponse> adeParcelShop2_GetByCountryAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop2_GetByCountryRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop2_S" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop2_S" +
             "earchByZip", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop2_SearchByZipResponse> adeParcelShop2_SearchByZipAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop2_SearchByZipRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop3_G" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop3_G" +
             "etByCountry", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop3_GetByCountryResponse> adeParcelShop3_GetByCountryAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop3_GetByCountryRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop3_S" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeParcelShop3_S" +
             "earchByZip", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop3_SearchByZipResponse> adeParcelShop3_SearchByZipAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeParcelShop3_SearchByZipRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePreparingBox_" +
             "GetConsignCustomsDec", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cCustomsDecPdf> adePreparingBox_GetConsignCustomsDecAsync(string session, int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
             "signCustomsDec", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cCustomsDecPdf> adePickup_GetConsignCustomsDecAsync(string session, int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePickup_GetCon" +
             "signPODs", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetConsignPODsResponse> adePickup_GetConsignPODsAsync(KontrolaPakowania.API.Services.Shipment.GLS.adePickup_GetConsignPODsRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePOD_Get", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adePOD_Get", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cPodPdf> adePOD_GetAsync(string session, string number);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeCourier_Order" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeCourier_Order" +
             "", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.adeCourier_OrderResponse> adeCourier_OrderAsync(KontrolaPakowania.API.Services.Shipment.GLS.adeCourier_OrderRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeBulkCustomsCl" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeBulkCustomsCl" +
             "earance_Create", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         System.Threading.Tasks.Task<KontrolaPakowania.API.Services.Shipment.GLS.cID> adeBulkCustomsClearance_CreateAsync(string session, KontrolaPakowania.API.Services.Shipment.GLS.cBulkCustomsClearance customs);
         
-        [System.ServiceModel.OperationContractAttribute(Action="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeBulkCustomsCl" +
+        [System.ServiceModel.OperationContractAttribute(Action="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl#adeBulkCustomsCl" +
             "earance_UploadDocument", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
@@ -378,7 +378,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cSession
     {
         
@@ -401,7 +401,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceAttachedFile
     {
         
@@ -469,7 +469,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceLineItemNationalCustomsFieldsBE
     {
         
@@ -492,7 +492,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceLineItemNationalCustomsFieldsDE
     {
         
@@ -515,7 +515,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceLineItemNationalCustomsFields
     {
         
@@ -553,7 +553,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceLineItemPreferentialTrade
     {
         
@@ -622,7 +622,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cQuantityExt
     {
         
@@ -660,7 +660,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceLineItem
     {
         
@@ -849,7 +849,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cAmountOfMoney
     {
         
@@ -887,7 +887,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cWeightExt
     {
         
@@ -925,7 +925,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceInvoice
     {
         
@@ -978,7 +978,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceConsignee
     {
         
@@ -1016,7 +1016,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceAddress
     {
         
@@ -1159,7 +1159,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceContactPerson
     {
         
@@ -1257,7 +1257,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceImporter
     {
         
@@ -1340,7 +1340,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearanceExporter
     {
         
@@ -1483,7 +1483,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBulkCustomsClearance
     {
         
@@ -1722,7 +1722,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cPodPdf
     {
         
@@ -1745,7 +1745,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cPOD
     {
         
@@ -1783,7 +1783,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cCustomsDecPdf
     {
         
@@ -1806,7 +1806,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelShop3
     {
         
@@ -2169,7 +2169,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelShop2OpeningHours
     {
         
@@ -2222,7 +2222,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelShop2Holidays
     {
         
@@ -2262,7 +2262,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelShop2Payment
     {
         
@@ -2285,7 +2285,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelShop2Group
     {
         
@@ -2308,7 +2308,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelShop2Service
     {
         
@@ -2331,7 +2331,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelShop2Valid
     {
         
@@ -2371,7 +2371,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelShop2Desc
     {
         
@@ -2409,7 +2409,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelShop2Info
     {
         
@@ -2432,7 +2432,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelShop2
     {
         
@@ -2780,7 +2780,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelShop
     {
         
@@ -3241,7 +3241,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cValue
     {
         
@@ -3264,7 +3264,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cBooleanValue
     {
         
@@ -3287,7 +3287,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cCity
     {
         
@@ -3310,7 +3310,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cCountryCDXMax
     {
         
@@ -3363,7 +3363,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcelWeightsMax
     {
         
@@ -3401,7 +3401,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cCODMax
     {
         
@@ -3424,7 +3424,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cServices
     {
         
@@ -3462,7 +3462,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cServicesBool
     {
         
@@ -4074,7 +4074,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cStatus
     {
         
@@ -4097,7 +4097,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cLang
     {
         
@@ -4120,7 +4120,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cProfile
     {
         
@@ -4158,7 +4158,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cTrackID
     {
         
@@ -4181,7 +4181,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cPartnerParcelNumber
     {
         
@@ -4204,7 +4204,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cIdent
     {
         
@@ -4227,7 +4227,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cReceipt
     {
         
@@ -4250,7 +4250,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cConsignBindIDs
     {
         
@@ -4288,7 +4288,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cPickup
     {
         
@@ -4356,7 +4356,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cLabelsIdent
     {
         
@@ -4394,7 +4394,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cLabel
     {
         
@@ -4432,7 +4432,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cLabels
     {
         
@@ -4455,7 +4455,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cCustomsArticle
     {
         
@@ -4568,7 +4568,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cCustomsAttachedFile
     {
         
@@ -4606,7 +4606,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cCustomsDeclaration
     {
         
@@ -5144,7 +5144,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cConsignExt
     {
         
@@ -5562,7 +5562,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cSenderAddress
     {
         
@@ -5675,7 +5675,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cServiceDAW
     {
         
@@ -5773,7 +5773,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cServiceIDENT
     {
         
@@ -6088,7 +6088,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cServicePPE
     {
         
@@ -6412,7 +6412,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cServiceSDS
     {
         
@@ -6842,7 +6842,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cParcel
     {
         
@@ -6941,7 +6941,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cID
     {
         
@@ -6964,7 +6964,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl")]
     public partial class cConsign
     {
         
@@ -7367,14 +7367,14 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignIDs", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignIDs", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePreparingBox_GetConsignIDsRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public int id_start;
         
         public adePreparingBox_GetConsignIDsRequest()
@@ -7391,11 +7391,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignIDsResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignIDsResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePreparingBox_GetConsignIDsResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public int[] @return;
         
@@ -7412,17 +7412,17 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignLabelsExt", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignLabelsExt", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePreparingBox_GetConsignLabelsExtRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public int id;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
         public string mode;
         
         public adePreparingBox_GetConsignLabelsExtRequest()
@@ -7440,11 +7440,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignLabelsExtResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignLabelsExtResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePreparingBox_GetConsignLabelsExtResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cLabel[] @return;
         
@@ -7461,18 +7461,18 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignsLabels", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignsLabels", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePreparingBox_GetConsignsLabelsRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public int[] consigns_ids;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
         public string mode;
         
         public adePreparingBox_GetConsignsLabelsRequest()
@@ -7490,11 +7490,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignsLabelsResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePreparingBox_GetConsignsLabelsResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePreparingBox_GetConsignsLabelsResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cLabels @return;
         
         public adePreparingBox_GetConsignsLabelsResponse()
@@ -7510,18 +7510,18 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_Create", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_Create", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_CreateRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public int[] consigns_ids;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
         public string desc;
         
         public adePickup_CreateRequest()
@@ -7539,11 +7539,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_CreateResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_CreateResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_CreateResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cID @return;
         
         public adePickup_CreateResponse()
@@ -7559,14 +7559,14 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetIDs", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetIDs", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetIDsRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public int id_start;
         
         public adePickup_GetIDsRequest()
@@ -7583,11 +7583,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetIDsResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetIDsResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetIDsResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public int[] @return;
         
@@ -7604,14 +7604,14 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignBinds", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignBinds", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetConsignBindsRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public int id;
         
         public adePickup_GetConsignBindsRequest()
@@ -7628,11 +7628,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignBindsResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignBindsResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetConsignBindsResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cConsignBindIDs[] @return;
         
@@ -7649,17 +7649,17 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignIDs", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignIDs", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetConsignIDsRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public int id;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
         public int id_start;
         
         public adePickup_GetConsignIDsRequest()
@@ -7677,11 +7677,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignIDsResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignIDsResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetConsignIDsResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public int[] @return;
         
@@ -7698,17 +7698,17 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignLabelsExt", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignLabelsExt", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetConsignLabelsExtRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public int id;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
         public string mode;
         
         public adePickup_GetConsignLabelsExtRequest()
@@ -7726,11 +7726,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignLabelsExtResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignLabelsExtResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetConsignLabelsExtResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cLabel[] @return;
         
@@ -7747,18 +7747,18 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetParcelsLabels", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetParcelsLabels", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetParcelsLabelsRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public string[] numbers;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
         public string mode;
         
         public adePickup_GetParcelsLabelsRequest()
@@ -7776,11 +7776,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetParcelsLabelsResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetParcelsLabelsResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetParcelsLabelsResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cLabels @return;
         
         public adePickup_GetParcelsLabelsResponse()
@@ -7796,11 +7796,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeProfile_GetIDs", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeProfile_GetIDs", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeProfile_GetIDsRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
         public adeProfile_GetIDsRequest()
@@ -7816,11 +7816,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeProfile_GetIDsResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeProfile_GetIDsResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeProfile_GetIDsResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cProfile[] @return;
         
@@ -7837,11 +7837,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePfc_GetDictionary", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePfc_GetDictionary", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePfc_GetDictionaryRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
         public adePfc_GetDictionaryRequest()
@@ -7857,11 +7857,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePfc_GetDictionaryResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePfc_GetDictionaryResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePfc_GetDictionaryResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public string[] @return;
         
@@ -7878,11 +7878,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeSendAddr_GetDictionary", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeSendAddr_GetDictionary", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeSendAddr_GetDictionaryRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
         public adeSendAddr_GetDictionaryRequest()
@@ -7898,11 +7898,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeSendAddr_GetDictionaryResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeSendAddr_GetDictionaryResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeSendAddr_GetDictionaryResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cSenderAddress[] @return;
         
@@ -7919,11 +7919,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesSDS", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesSDS", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeServices_GetCountriesSDSRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
         public adeServices_GetCountriesSDSRequest()
@@ -7939,11 +7939,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesSDSResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesSDSResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeServices_GetCountriesSDSResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public string[] @return;
         
@@ -7960,11 +7960,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesSRS", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesSRS", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeServices_GetCountriesSRSRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
         public adeServices_GetCountriesSRSRequest()
@@ -7980,11 +7980,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesSRSResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesSRSResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeServices_GetCountriesSRSResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public string[] @return;
         
@@ -8001,11 +8001,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesCDX", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesCDX", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeServices_GetCountriesCDXRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
         public adeServices_GetCountriesCDXRequest()
@@ -8021,11 +8021,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesCDXResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeServices_GetCountriesCDXResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeServices_GetCountriesCDXResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cCountryCDXMax[] @return;
         
@@ -8042,20 +8042,20 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop_SearchByZip", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop_SearchByZip", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop_SearchByZipRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public string country;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
         public string zipcode;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=3)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=3)]
         public string street;
         
         public adeParcelShop_SearchByZipRequest()
@@ -8074,11 +8074,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop_SearchByZipResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop_SearchByZipResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop_SearchByZipResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cParcelShop[] @return;
         
@@ -8095,14 +8095,14 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop_GetByCountry", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop_GetByCountry", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop_GetByCountryRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public string country;
         
         public adeParcelShop_GetByCountryRequest()
@@ -8119,11 +8119,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop_GetByCountryResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop_GetByCountryResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop_GetByCountryResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cParcelShop[] @return;
         
@@ -8140,14 +8140,14 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop2_GetByCountry", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop2_GetByCountry", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop2_GetByCountryRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public string country;
         
         public adeParcelShop2_GetByCountryRequest()
@@ -8164,11 +8164,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop2_GetByCountryResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop2_GetByCountryResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop2_GetByCountryResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cParcelShop2[] @return;
         
@@ -8185,20 +8185,20 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop2_SearchByZip", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop2_SearchByZip", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop2_SearchByZipRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public string country;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
         public string zipcode;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=3)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=3)]
         public string street;
         
         public adeParcelShop2_SearchByZipRequest()
@@ -8217,11 +8217,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop2_SearchByZipResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop2_SearchByZipResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop2_SearchByZipResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cParcelShop2[] @return;
         
@@ -8238,14 +8238,14 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop3_GetByCountry", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop3_GetByCountry", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop3_GetByCountryRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public string country;
         
         public adeParcelShop3_GetByCountryRequest()
@@ -8262,11 +8262,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop3_GetByCountryResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop3_GetByCountryResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop3_GetByCountryResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cParcelShop3[] @return;
         
@@ -8283,20 +8283,20 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop3_SearchByZip", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop3_SearchByZip", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop3_SearchByZipRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public string country;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
         public string zipcode;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=3)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=3)]
         public string street;
         
         public adeParcelShop3_SearchByZipRequest()
@@ -8315,11 +8315,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop3_SearchByZipResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeParcelShop3_SearchByZipResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeParcelShop3_SearchByZipResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cParcelShop3[] @return;
         
@@ -8336,14 +8336,14 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignPODs", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignPODs", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetConsignPODsRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public int id;
         
         public adePickup_GetConsignPODsRequest()
@@ -8360,11 +8360,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignPODsResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adePickup_GetConsignPODsResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adePickup_GetConsignPODsResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         [System.Xml.Serialization.XmlArrayItemAttribute("items", IsNullable=false)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cPOD[] @return;
         
@@ -8381,21 +8381,21 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeCourier_Order", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeCourier_Order", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeCourier_OrderRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public string session;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=1)]
         public int parcelamount;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=2)]
         [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
         public System.DateTime date;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=3)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=3)]
         public bool emailnotification;
         
         public adeCourier_OrderRequest()
@@ -8414,11 +8414,11 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="adeCourier_OrderResponse", WrapperNamespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="adeCourier_OrderResponse", WrapperNamespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", IsWrapped=true)]
     public partial class adeCourier_OrderResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl", Order=0)]
         public KontrolaPakowania.API.Services.Shipment.GLS.cBooleanValue @return;
         
         public adeCourier_OrderResponse()
@@ -9052,7 +9052,7 @@ namespace KontrolaPakowania.API.Services.Shipment.GLS
         {
             if ((endpointConfiguration == EndpointConfiguration.Ade2Port))
             {
-                return new System.ServiceModel.EndpointAddress("https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl");
+                return new System.ServiceModel.EndpointAddress("https://adeplus.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl");
             }
             throw new System.InvalidOperationException(string.Format("Nie można znaleźć punktu końcowego o nazwie „{0}”.", endpointConfiguration));
         }

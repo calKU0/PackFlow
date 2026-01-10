@@ -15,11 +15,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="wwwroot\downloads\KontrolaPakowania.rar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\downloads\PrintingAgent.rar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\downloads\Wydruki.rar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\images\couriers\hellmann.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

@@ -6520,7 +6520,7 @@ namespace FedexServiceReference
         {
             if ((endpointConfiguration == EndpointConfiguration.IklServicePort))
             {
-                return new System.ServiceModel.EndpointAddress("https://test.poland.fedex.com/fdsWs/IklServicePort");
+                return new System.ServiceModel.EndpointAddress("https://poland.fedex.com/fdsWs/IklServicePort");
             }
             throw new System.InvalidOperationException(string.Format("Nie można znaleźć punktu końcowego o nazwie „{0}”.", endpointConfiguration));
         }

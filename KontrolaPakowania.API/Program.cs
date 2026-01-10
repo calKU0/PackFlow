@@ -82,6 +82,7 @@ builder.Services.AddHttpClient<DpdService>((sp, client) =>
     client.DefaultRequestHeaders.Authorization =
         new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
     client.DefaultRequestHeaders.Add("x-dpd-fid", settings.MasterFID);
+    client.Timeout = TimeSpan.FromSeconds(15);
 });
 
 // DPD-Romania REST client

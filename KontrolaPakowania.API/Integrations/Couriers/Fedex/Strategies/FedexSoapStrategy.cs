@@ -40,15 +40,17 @@ namespace KontrolaPakowania.API.Integrations.Couriers.Fedex.Strategies
 
             try
             {
+                var accessCode = package.ShipmentServices.Dropshipping ? _soapSettings.DropshippingAccessCode : _soapSettings.AccessCode;
+
                 // Insert shipment
-                var result = await _client.zapiszListV2Async(_soapSettings.AccessCode, fedexRequest);
+                var result = await _client.zapiszListV2Async(accessCode, fedexRequest);
                 if (result == null || string.IsNullOrWhiteSpace(result.waybill))
                 {
                     return ShipmentResponse.CreateFailure("FedEx API nie zwrócił numeru przesyłki.");
                 }
 
                 // Download label
-                var labelBytes = await _client.wydrukujEtykieteAsync(_soapSettings.AccessCode, result.waybill, "ZPL200");
+                var labelBytes = await _client.wydrukujEtykieteAsync(accessCode, result.waybill, "ZPL200");
                 if (labelBytes == null || labelBytes.Length == 0)
                 {
                     return ShipmentResponse.CreateFailure("FedEx API nie zwrócił etykiety.");

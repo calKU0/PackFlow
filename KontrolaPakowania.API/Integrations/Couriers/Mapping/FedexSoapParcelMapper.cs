@@ -27,7 +27,7 @@ namespace KontrolaPakowania.API.Integrations.Couriers.Mapping
                 receiver = MapReceiver(package),
                 parcels = MapParcels(package),
                 proofOfDispatch = MapProofOfDispatch(),
-                remarks = package.Description,
+                remarks = package.References + (package.ShipmentServices.Dropshipping ? "!!! Dropshipping !!!" : ""),
                 shipmentType = "K",
                 paymentForm = "P",
                 payerType = "1"
@@ -112,27 +112,28 @@ namespace KontrolaPakowania.API.Integrations.Couriers.Mapping
             return new potwierdzenieNadaniaV2
             {
                 sendDate = FedexHelper.ToDateString(DateTime.Now),
-                senderSignature = "System",
+                senderSignature = "Gaska",
                 courierId = _settings.CourierId.ToString()
             };
         }
 
         private void MapCodAndInsurance(PackageData package, listV2 list)
         {
-            //if (package.ShipmentServices.COD && package.ShipmentServices.CODAmount > 0)
-            //{
-            list.cod = new pobranieV2
+            list.cod = new pobranieV2();
+            if (package.ShipmentServices.COD && package.ShipmentServices.CODAmount > 0)
             {
-                codValue = FedexHelper.ToNumberString(100),
-                bankAccountNumber = package.SenderBankAccount,
-                codType = "B"
-            };
+                list.cod = new pobranieV2
+                {
+                    codValue = FedexHelper.ToNumberString(package.ShipmentServices.CODAmount),
+                    bankAccountNumber = package.SenderBankAccount,
+                    codType = "B"
+                };
 
-            if (package.Insurance == 0)
-            {
-                package.Insurance = Math.Max(package.ShipmentServices.CODAmount, 5000);
+                if (package.Insurance == 0 || package.Insurance < package.ShipmentServices.CODAmount)
+                {
+                    package.Insurance = Math.Max(package.ShipmentServices.CODAmount, 5000);
+                }
             }
-            //}
 
             if (package.Insurance > 0)
             {

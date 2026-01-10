@@ -297,6 +297,22 @@ namespace KontrolaPakowania.API.Controllers
             }
         }
 
+        [HttpPost("open-package")]
+        public async Task<IActionResult> OpenPackage([FromBody] int packgeId)
+        {
+            _logger.Information("Request: OpenPackage for package Id {PackageId}", packgeId);
+            try
+            {
+                bool success = await _packingService.OpenPackage(packgeId);
+                return Ok(success);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error while opening package {PackageCode}", packgeId);
+                return HandleException(ex);
+            }
+        }
+
         [HttpPost("close-package")]
         public async Task<IActionResult> ClosePackage([FromBody] ClosePackageRequest request)
         {
@@ -401,34 +417,34 @@ namespace KontrolaPakowania.API.Controllers
         }
 
         [HttpPost("pack-wms-stock")]
-        public async Task<IActionResult> PackWmsStock([FromBody] WmsPackStockRequest request)
+        public async Task<IActionResult> PackWmsStock([FromBody] List<WmsPackStockRequest> request)
         {
-            _logger.Information("Request: PackWmsStock for package {PackageCode} courier {Courier}", request.PackageCode, request.Courier);
+            _logger.Information("Request: PackWmsStock for package {PackageCode} courier {Courier}", request.FirstOrDefault().PackageCode, request.FirstOrDefault().Courier);
             try
             {
                 var packResult = await _packingService.PackWmsStock(request);
                 if (packResult.Status != "1")
                 {
-                    _logger.Warning("PackWmsStock failed for package {PackageCode}: {Desc}", request.PackageCode, packResult.Desc);
+                    _logger.Warning("PackWmsStock failed for package {PackageCode}: {Desc}", request.FirstOrDefault().PackageCode, packResult.Desc);
                     return BadRequest(packResult.Desc);
                 }
 
-                if (request.Status == DocumentStatus.Ready)
+                if (request.FirstOrDefault().Status == DocumentStatus.Ready)
                 {
-                    var closeResult = await _packingService.CloseWmsPackage(request.PackageCode, request.Courier, request.PackingLevel, request.PackingWarehouse);
+                    var closeResult = await _packingService.CloseWmsPackage(request.FirstOrDefault().PackageCode, request.FirstOrDefault().Courier, request.FirstOrDefault().PackingLevel, request.FirstOrDefault().PackingWarehouse);
                     if (closeResult.Status != "1")
                     {
-                        _logger.Warning("CloseWmsPackage failed for package {PackageCode}: {Desc}", request.PackageCode, closeResult.Desc);
+                        _logger.Warning("CloseWmsPackage failed for package {PackageCode}: {Desc}", request.FirstOrDefault().PackageCode, closeResult.Desc);
                         return BadRequest(closeResult.Desc);
                     }
                 }
 
-                _logger.Information("PackWmsStock succeeded for package {PackageCode}", request.PackageCode);
+                _logger.Information("PackWmsStock succeeded for package {PackageCode}", request.FirstOrDefault().PackageCode);
                 return Ok();
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error in PackWmsStock for package {PackageCode}", request.PackageCode);
+                _logger.Error(ex, "Error in PackWmsStock for package {PackageCode}", request.FirstOrDefault().PackageCode);
                 return HandleException(ex);
             }
         }

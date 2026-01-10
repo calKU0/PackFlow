@@ -113,7 +113,7 @@ namespace KontrolaPakowania.API.Integrations.Couriers.GLS
             return ShipmentResponse.CreateSuccess(
                 courier: Courier.GLS,
                 packageId: package.Id,
-                trackingLink: $"https://gls-group.eu/PL/pl/sledzenie-paczek/?match=={label.number}",
+                trackingLink: $"https://gls-group.eu/PL/pl/sledzenie-paczek/?match={label.number}",
                 trackingNumber: label.number,
                 labelBase64: label.file,
                 labelType: PrintDataType.ZPL,

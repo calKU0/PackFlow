@@ -39,6 +39,7 @@ namespace KontrolaPakowania.API.Services.Packing
         Task<bool> RemovePackedPosition(RemovePackedPositionRequest request);
 
         Task<int> ClosePackage(ClosePackageRequest request);
+        Task<bool> OpenPackage(int packageId);
 
         Task<bool> UpdatePackageCourier(UpdatePackageCourierRequest request);
 
@@ -48,7 +49,7 @@ namespace KontrolaPakowania.API.Services.Packing
 
         Task<bool> UpdatePackageWarehouse(string barcode, PackingWarehouse warehouse);
 
-        Task<PackWMSResponse> PackWmsStock(WmsPackStockRequest request);
+        Task<PackWMSResponse> PackWmsStock(List<WmsPackStockRequest> request);
 
         Task<PackWMSResponse> CloseWmsPackage(string packageCode, string courier, PackingLevel level, PackingWarehouse warehouse);
 

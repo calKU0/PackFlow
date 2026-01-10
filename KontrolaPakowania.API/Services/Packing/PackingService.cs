@@ -35,10 +35,10 @@ public class PackingService : IPackingService
         var jlToPack = jlList.Where(x =>
             x.Status == 12 &&
             (
-                (location == PackingLevel.Góra && (x.LocationCode == "Rolotok" || x.LocationCode == "A-PAK. GÓRA")) ||
-                (location != PackingLevel.Góra && x.LocationCode != "Rolotok" && x.LocationCode != "A-PAK. GÓRA")
+                (location == PackingLevel.Góra && x.DestZone == "A-Pak. góra") ||
+                (location != PackingLevel.Góra && x.DestZone != "A-Pak. góra")
             )
-        );
+        ).ToList();
 
         // Map string courier to enum
         foreach (var jl in jlToPack)
@@ -57,9 +57,10 @@ public class PackingService : IPackingService
                     Dropshipping = courierLower.Contains("dropshipping")
                 };
             }
+            jl.Status = await IsJlInProgress(jl.JlCode) ? 3 : 1;
         }
         // Map to flattened JlData
-        return jlToPack.ToJlData();
+        return jlToPack.ToJlData().OrderBy(jl => jl.Status).ThenBy(c => c.CourierName).ThenBy(c => c.ClientSymbol);
     }
 
     public async Task<JlData?> GetJlInfoByCodeAsync(string jlCode, PackingLevel location)
@@ -193,6 +194,13 @@ public class PackingService : IPackingService
         return result > 0;
     }
 
+    public async Task<bool> OpenPackage(int packageId)
+    {
+        const string procedure = "kp.OpenPackageDocument";
+        var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { packageId }, CommandType.StoredProcedure, Connection.ERPConnection);
+        return result > 0;
+    }
+
     public async Task<int> ClosePackage(ClosePackageRequest request)
     {
         int status = (int)request.Status;
@@ -254,26 +262,29 @@ public class PackingService : IPackingService
         return await _db.QuerySingleOrDefaultAsync<ClientDetails>(procedure, new { documentId, documentType }, CommandType.StoredProcedure, Connection.ERPConnection);
     }
 
-    public async Task<PackWMSResponse> PackWmsStock(WmsPackStockRequest request)
+    public async Task<PackWMSResponse> PackWmsStock(List<WmsPackStockRequest> request)
     {
-        if (request == null || !request.Items.Any())
+        if (request == null || !request.Any())
             return new PackWMSResponse { Status = "-1", Desc = "No items to process." };
 
         var allPackItems = new List<PackStockItems>();
-        var luDestType = request.Weight > 120 ? "PALETA" : "PACZKA";
+        var luDestType = request.Sum(i =>i.Weight) > 120 ? "PALETA" : "PACZKA";
 
-        foreach (var item in request.Items)
+        foreach (var jl in request)
         {
-            allPackItems.Add(new PackStockItems
+            foreach (var item in jl.Items)
             {
-                LocSourceNr = request.LocationCode,
-                LocDestNr = MapStationNumber(request.StationNumber),
-                LuSourceNr = request.JlCode,
-                LuDestNr = request.PackageCode,
-                LuDestTypeSymbol = luDestType,
-                ItemNr = item.ItemCode,
-                ItemQty = item.Quantity.ToString().Replace(",", "."),
-            });
+                allPackItems.Add(new PackStockItems
+                {
+                    LocSourceNr = jl.LocationCode,
+                    LocDestNr = MapStationNumber(jl.StationNumber),
+                    LuSourceNr = jl.JlCode,
+                    LuDestNr = jl.PackageCode,
+                    LuDestTypeSymbol = luDestType,
+                    ItemNr = item.ItemCode,
+                    ItemQty = item.Quantity.ToString().Replace(",", "."),
+                });
+            }
         }
 
         var requestWms = new PackStockRequest

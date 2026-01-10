@@ -51,8 +51,8 @@
                             var rowClass = item.Status switch
                             {
                                 1 => index % 2 == 0 ? "table-success" : "table-light",
-                                2 => "table-warning",
-                                3 => "table-danger",
+                                2 => "table-danger",
+                                3 => "table-warning",
                                 _ => ""
                             };
 
@@ -110,7 +110,7 @@
 </div>
 
 
-<PasswordModal @ref="PasswordModal" OnConfirm="HandlePasswordConfirm" />
+<PasswordModal @ref="PasswordModal" />
 <LoggedOperatorsModal @ref="LoggedOperatorsModal" />
 <JlInProgressModal @ref="JlInProgressModal" />
 <ChangePackingWarehouseModal @ref="ChangePackingWarehouseModal" />
@@ -143,7 +143,7 @@
 
     private int JlReadyToPackCount { get; set; } = 0;
     private int AddressesCount { get; set; } = 0;
-    private PasswordPurpose CurrentPasswordPurpose = PasswordPurpose.None;
+    private bool CanPackNotReady = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -233,7 +233,7 @@
 
         if (jl == null)
         {
-            Toast.Show("Nie znaleziono", $"Nie znaleziono kuwet o kodzie lub nazwie '{Kuweta}'");
+            Toast.Show("Nie znaleziono", $"Nie znaleziono kuwet o kodzie '{Kuweta}'");
             Kuweta = string.Empty;
             await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
             return;
@@ -248,6 +248,26 @@
 
     private async Task OnRowDoubleClick(JlData jl)
     {
+        if (jl.Status == 2)
+        {
+            var password = await PasswordModal.ShowAsync("Wprowadź hasło do kuwety czerwonej");
+            if (password == null)
+                return;
+
+            bool valid = await AuthService.ValidatePasswordAsync(password);
+            if (!valid)
+            {
+                Toast.Show("Błąd!", "Błędne hasło");
+                return;
+            }
+        }
+
+        if (jl.Status == 3)
+        {
+            Toast.Show("Pakowana", "Kuweta jest pakowana na innym stanowisku", ToastType.Error);
+            return;
+        }
+
         if (Settings.PackingLevel != PackingLevel.Dół)
         {
             // upper level logic
@@ -260,7 +280,7 @@
         }
 
         PackageSelectionResult? selectedPackage = null;
-        List<string> selectedMergeJls = new();
+        List<(string jlCode, string location)> selectedMergeJls = new();
 
         //
         // 1️ BUFOR CHECK
@@ -272,7 +292,7 @@
             jl.AddressStreet,
             jl.AddressPostalCode,
             jl.AddressCountry,
-            DocumentStatus.InProgress);
+            DocumentStatus.Bufor);
 
         if (packagesInBufor?.Any() == true)
         {
@@ -313,7 +333,12 @@
         }
 
         if (selectedMergeJls.Any())
-            queryParts.Add($"mergeNames={string.Join(",", selectedMergeJls)}");
+        {
+            var encoded = selectedMergeJls
+                .Select(x => $"{Uri.EscapeDataString(x.jlCode)}|{Uri.EscapeDataString(x.location)}");
+
+            queryParts.Add($"mergeJls={string.Join(",", encoded)}");
+        }
 
         if (queryParts.Any())
             url += "?" + string.Join("&", queryParts);
@@ -322,30 +347,19 @@
     }
 
 
-    // Single password confirm handler
-    private async Task HandlePasswordConfirm(string password)
+    private async Task OnManagerButtonClick()
     {
+        var password = await PasswordModal.ShowAsync();
+        if (password == null)
+            return;
+
         bool valid = await AuthService.ValidatePasswordAsync(password);
         if (!valid)
         {
             Toast.Show("Błąd!", "Błędne hasło");
             return;
         }
-        await PasswordModal.Hide();
-        switch (CurrentPasswordPurpose)
-        {
-            case PasswordPurpose.ManagerAction:
-                ManagerModal.OpenModal();
-                break;
-        }
-
-        CurrentPasswordPurpose = PasswordPurpose.None;
-    }
-
-    private async Task OnManagerButtonClick()
-    {
-        CurrentPasswordPurpose = PasswordPurpose.ManagerAction;
-        await PasswordModal.Show();
+        ManagerModal.OpenModal();
         StateHasChanged();
     }
 

@@ -33,8 +33,7 @@
                     Settings="Settings" />
 
     <ProductSelectModal @ref=ProductSelectModal FocusOnClose="ScanInputComponent" OnConfirm="PackItem" />
-    <PasswordModal @ref=PackingRequirementsModal OnConfirm="HandlePasswordConfirm" OnCancel="HandlePasswordCancel" />
-    <PasswordModal @ref=ManagerPasswordModal OnConfirm="HandlePasswordConfirm" />
+    <PasswordModal @ref=PasswordModal />
     <ConfirmDialog @ref="ConfirmDialog" />
     <CourierModal @ref="CourierModal" />
     <LoggedOperatorsModal @ref="LoggedOperatorsModal" />
@@ -58,13 +57,23 @@
 @code {
     private bool MovedProduct { get; set; } = false;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            Toast.Show("Pakowanie pojedyńcze", "Kuweta zawiera towary dla wielu klientów.\nKAŻDY TOWAR NALEŻY SPAKOWAĆ DO OSOBNEJ PACZKI!", ToastType.Info);
+        }
+    }
+
     public void FillJlData(JlItemDto item)
     {
         CurrentJl.Courier = item.Courier;
         CurrentJl.CourierName = item.CourierName;
-        CurrentJl.LogoCourier = item.LogoCourier;
+        //CurrentJl.LogoCourier = item.LogoCourier;
         CurrentJl.ShipmentServices = item.ShipmentServices;
-
+        CurrentJl.ClientSymbol = item.ClientSymbol;
         CurrentJl.Country = item.DestinationCountry;
 
         CurrentJl.AddressName = item.AddressName;
@@ -83,7 +92,7 @@
         CurrentJl.CourierName = "MIX";
         CurrentJl.LogoCourier = string.Empty;
         CurrentJl.ShipmentServices = new();
-
+        CurrentJl.ClientSymbol = "MIX";
         CurrentJl.Country = string.Empty;
 
         CurrentJl.AddressCity = string.Empty;
@@ -181,22 +190,35 @@
         await ScanInputComponent.FocusAsync();
     }
 
-    protected override async Task HandleShipmentOkClick(string trackingNumber)
+    protected override async Task HandleShipmentOkClick(string scannedCode)
     {
-        switch (_currentPackingFlow)
+        try
         {
-            case PackingFlow.FinishPacking:
-                await CloseJlInWMS(CurrentJl.CourierName, trackingNumber, DocumentStatus.Ready);
-                PackedItems.Clear();
-                MovedProduct = false;
-                ClearJlData();
-                CourierConfiguration = new();
-                break;
-        }
+            switch (_currentPackingFlow)
+            {
+                case PackingFlow.FinishPacking:
+                    await CloseJlInWMS(CurrentJl.CourierName, scannedCode, DocumentStatus.Ready);
+                    PackedItems.Clear();
+                    MovedProduct = false;
+                    ClearJlData();
+                    CourierConfiguration = new();
+                    CurrentJl.InternalBarcode = string.Empty;
+                    break;
+            }
 
-        if (!JlItems.Any())
+            if (!JlItems.Any())
+            {
+                Navigation.NavigateTo("/kontrola-pakowania");
+            }
+            else
+            {
+                await ScanInputComponent.FocusAsync();
+            }
+        }
+        catch (Exception ex)
         {
-            Navigation.NavigateTo("/kontrola-pakowania");
+            Toast.Show("Błąd!", $"Błąd przy próbie finalizacji pakowania: {ex.Message}");
+            await ScanInputComponent.FocusAsync();
         }
     }
 
@@ -226,17 +248,19 @@
                     MovedProduct = false;
                     ClearJlData();
                     CourierConfiguration = new();
+                    CurrentJl.InternalBarcode = string.Empty;
                     break;
             }
 
             if (!JlItems.Any())
-            {
                 Navigation.NavigateTo("/kontrola-pakowania");
-            }
+            else
+                await ScanInputComponent.FocusAsync();
         }
         catch (Exception ex)
         {
             Toast.Show("Błąd!", $"Błąd przy próbie finalizacji pakowania: {ex.Message}");
+            await ScanInputComponent.FocusAsync();
         }
     }
 }

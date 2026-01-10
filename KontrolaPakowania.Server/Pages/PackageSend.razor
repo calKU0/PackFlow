@@ -8,6 +8,7 @@
 @inject ShipmentService ShipmentService
 @inject WorkstationService WorkstationService
 @inject ClientPrinterService ClientPrinterService
+@inject AuthService AuthService
 @inject IOptions<AppSettings> AppOptions
 @inject IJSRuntime JSRuntime
 @implements IDisposable
@@ -199,6 +200,7 @@
 <ConfirmDialog @ref="ConfirmDialog"/>
 <AddressInvoiceModal @ref="AddressInvoiceModal" OnConfirmed="OnAddressModalConfirmed" />
 <PackingListModal @ref="PackingListModal" OnSaveNumber="HandlePackingListSave" OnPrintLabel="HandlePackingListPrint" />
+<PasswordModal @ref="PasswordModal" />
 
 @code {
     private string Barcode { get; set; } = string.Empty;
@@ -217,6 +219,7 @@
     private EmailModal EmailModal = new();
     private AddressInvoiceModal AddressInvoiceModal = new();
     private PackingListModal PackingListModal = new();
+    private PasswordModal PasswordModal = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -330,13 +333,12 @@
 
                 var labelContent = response.LabelBase64;
                 await ClientPrinterService.PrintAsync(WorkstationSettings.PrinterLabel, response.LabelType.ToString(), labelContent);
-                ShipmentModal.Show(response.TrackingNumber, response.LabelBase64, response.LabelType, WorkstationSettings.PrinterLabel, Package.HasInvoice);
+                ShipmentModal.Show(Barcode, response.TrackingNumber, response.LabelBase64, response.LabelType, WorkstationSettings.PrinterLabel, Package.HasInvoice);
                 if (Package.HasInvoice)
                 {
                     await ClientPrinterService.PrintCrystalAsync(WorkstationSettings.PrinterInvoice, Package.Recipient.Country != "PL" ? "InvoiceEN" : "InvoicePL", new Dictionary<string, string> { { "DocumentId", Package.InvoiceId.ToString() } });
                 }
                 await ClearData();
-                await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
             }
             else
             {
@@ -347,7 +349,6 @@
         {
             Toast.Show("Błąd!", $"Błąd przy próbie wysłania paczki: {ex.Message}", ToastType.Error, 10000);
             await ClearData();
-            await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
         }
     }
 
@@ -430,6 +431,17 @@
     {
         try
         {
+            var password = await PasswordModal.ShowAsync("Wprowadź hasło do zamknięcia trasy");
+            if (password == null)
+                return;
+
+            bool valid = await AuthService.ValidatePasswordAsync(password);
+            if (!valid)
+            {
+                Toast.Show("Błąd!", "Błędne hasło");
+                return;
+            }
+
             var shipmentsToClose = await ShipmentService.GetRoutePackages(courier);
             if (shipmentsToClose.Count == 0)
             {

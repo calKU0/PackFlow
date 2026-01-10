@@ -12,7 +12,8 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Nazwa</th>
+                            <th>Jl</th>
+                            <th>Lokalizacja</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -20,10 +21,11 @@
                         {
                             <tr>
                                 <td>
-                                    <input type="checkbox" checked="@SelectedJlsNames.Contains(jl.Name)"
-                                           @onchange="e => OnCheckboxChanged(e.Value!, jl.Name)" />
+                                    <input type="checkbox" checked="@SelectedJlsNames.Contains((jl.Name, jl.LocationCode))"
+                                           @onchange="e => OnCheckboxChanged(e.Value!, jl.Name, jl.LocationCode)" />
                                 </td>
                                 <td>@jl.Name</td>
+                                <td>@jl.LocationCode</td>
                             </tr>
                         }
 
@@ -39,41 +41,41 @@
 }
 
 @code {
-    private TaskCompletionSource<List<string>>? _tcs;
+    private TaskCompletionSource<List<(string jlName, string locationCode)>>? _tcs;
 
     private bool IsVisible = false;
     private List<JlData> AvailableJls = new();
-    private List<string> SelectedJlsNames = new();
+    private List<(string jlName, string locationCode)> SelectedJlsNames = new();
 
-    public Task<List<string>> Show(List<JlData> availableJls)
+    public Task<List<(string jlName, string locationCode)>> Show(List<JlData> availableJls)
     {
         AvailableJls = availableJls;
-        SelectedJlsNames = new List<string>();
+        SelectedJlsNames = new List<(string jlName, string locationCode)>();
         IsVisible = true;
         StateHasChanged();
 
-        _tcs = new TaskCompletionSource<List<string>>();
+        _tcs = new TaskCompletionSource<List<(string jlName, string locationCode)>>();
         return _tcs.Task;
     }
 
-    private void OnCheckboxChanged(object value, string jlName)
+    private void OnCheckboxChanged(object value, string jlName, string location)
     {
         bool isChecked = (bool)value;
         if (isChecked)
         {
-            if (!SelectedJlsNames.Contains(jlName))
-                SelectedJlsNames.Add(jlName);
+            if (!SelectedJlsNames.Contains((jlName, location)))
+                SelectedJlsNames.Add((jlName, location));
         }
         else
         {
-            SelectedJlsNames.Remove(jlName);
+            SelectedJlsNames.Remove((jlName, location));
         }
     }
 
     private void Close()
     {
         IsVisible = false;
-        _tcs?.TrySetResult(new List<string>());
+        _tcs?.TrySetResult(new List<(string jlName, string locationCode)>());
         StateHasChanged();
     }
 
