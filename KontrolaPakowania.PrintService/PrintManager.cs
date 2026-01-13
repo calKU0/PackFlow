@@ -9,6 +9,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Drawing.Printing;
 using System.Threading.Tasks;
+using KontrolaPakowania.PrintService.Logging;
+using BusinessObjects.ThirdParty.OOC.FSSL;
+using Logger = KontrolaPakowania.PrintService.Logging.Logger;
 
 namespace KontrolaPakowania.PrintService
 {
@@ -85,6 +88,7 @@ namespace KontrolaPakowania.PrintService
             {
                 doc = PdfiumViewer.PdfDocument.Load(tempFile);
                 var printDoc = new System.Drawing.Printing.PrintDocument();
+                printDoc.DefaultPageSettings.PaperSize = new PaperSize("A4", 827, 1169);
                 printDoc.PrinterSettings.PrinterName = printerName;
 
                 int pageIndex = 0;
@@ -100,11 +104,11 @@ namespace KontrolaPakowania.PrintService
                 };
 
                 printDoc.Print();
-                Console.WriteLine($"[INFO] Printed PDF to {printerName}");
+                Logger.Info($"[INFO] Printed PDF to {printerName}");
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"[ERROR] PDF printing failed: {ex.Message}");
+                Logger.Error($"[ERROR] PDF printing failed: {ex.Message}");
             }
             finally
             {
@@ -113,6 +117,7 @@ namespace KontrolaPakowania.PrintService
                     File.Delete(tempFile);
             }
         }
+
         private static void PrintCrystalReport(PrintJob job)
         {
             if (job == null) throw new ArgumentNullException(nameof(job));
@@ -154,7 +159,7 @@ namespace KontrolaPakowania.PrintService
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error printing report: " + ex);
+                Logger.Error("Error printing report: " + ex);
             }
             finally
             {
@@ -163,17 +168,18 @@ namespace KontrolaPakowania.PrintService
                 try { report.Dispose(); } catch { }
             }
         }
+
         private static void LoadPdfiumNative()
         {
             string architecture = Environment.Is64BitProcess ? "x64" : "x86";
-            string resourceName = $"KontrolaPakowania.PrintAgent.native.win_{architecture}.pdfium.dll";
+            string resourceName = $"KontrolaPakowania.PrintService.native.win_{architecture}.pdfium.dll";
 
             // Temporary path to extract the DLL
             string tempPath = Path.Combine(Path.GetTempPath(), "pdfium.dll");
 
             foreach (var res in Assembly.GetExecutingAssembly().GetManifestResourceNames())
             {
-                Console.WriteLine(res);
+                Logger.Info(res);
             }
 
             if (!File.Exists(tempPath))
@@ -202,5 +208,4 @@ namespace KontrolaPakowania.PrintService
             public static extern IntPtr LoadLibrary(string lpFileName);
         }
     }
-
 }

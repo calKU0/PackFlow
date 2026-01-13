@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KontrolaPakowania.PrintService.Logging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,10 +16,9 @@ namespace KontrolaPakowania.PrintService
     {
         private Thread listenerThread;
         private bool running;
+
         public PrintingService()
         {
-            InitializeComponent();
-            ServiceName = "KontrolaPakowaniaPrintingService";
             CanStop = true;
             CanPauseAndContinue = false;
             AutoLog = true;
@@ -50,10 +50,7 @@ namespace KontrolaPakowania.PrintService
             catch (Exception ex)
             {
                 // Log to Event Log or file
-                EventLog.WriteEntry(
-                    "PrintingAgentService",
-                    ex.ToString(),
-                    EventLogEntryType.Error);
+                Logger.Error(ex.ToString());
             }
         }
     }

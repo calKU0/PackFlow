@@ -37,448 +37,369 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BusinessObjects.Enterprise.Admin.DocProcessingServer, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Admin.DocProcessingServer">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Admin.DocProcessingServer.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Admin.DocProcessingServer.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Admin.FullClientServer, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Admin.FullClientServer">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Admin.FullClientServer.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Admin.FullClientServer.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Admin.WebiServerAdmin, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Admin.WebiServerAdmin">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Admin.WebiServerAdmin.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Admin.WebiServerAdmin.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.AppFoundation, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.AppFoundation">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.AppFoundation.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.AppFoundation.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.Category, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.Category">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Category.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Category.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.Designer, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.Designer">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Designer.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Designer.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.Encyclopedia, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.Encyclopedia">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Encyclopedia.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Encyclopedia.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.FullClient, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.FullClient">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.FullClient.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.FullClient.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.FullClientAddin, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.FullClientAddin">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.FullClientAddin.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.FullClientAddin.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.FullClientTemplate, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.FullClientTemplate">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.FullClientTemplate.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.FullClientTemplate.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.Inbox, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.Inbox">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Inbox.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Inbox.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.InfoView, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.InfoView">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.InfoView.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.InfoView.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.MyInfoView, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.MyInfoView">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.MyInfoView.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.MyInfoView.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.Overload, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.Overload">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Overload.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Overload.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.PersonalCategory, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.PersonalCategory">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.PersonalCategory.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.PersonalCategory.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.Profile, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.Profile">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Profile.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Profile.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.Publication, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.Publication">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Publication.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Publication.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.ReportConvTool, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.ReportConvTool">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.ReportConvTool.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.ReportConvTool.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.StrategyBuilder, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.StrategyBuilder">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.StrategyBuilder.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.StrategyBuilder.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.Universe, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.Universe">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Universe.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Universe.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.Webi, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.Webi">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Webi.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.Webi.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Desktop.WebIntelligence, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Desktop.WebIntelligence">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.WebIntelligence.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Desktop.WebIntelligence.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Dest.Managed, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Dest.Managed">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Dest.Managed.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Dest.Managed.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.LanguageTools, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.LanguageTools.dll</HintPath>
+    <Reference Include="BusinessObjects.Enterprise.LanguageTools">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.LanguageTools.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Sdk, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Sdk.dll</HintPath>
+    <Reference Include="BusinessObjects.Enterprise.Sdk">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="BusinessObjects.Enterprise.Web.AppPlugin.Mgr, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BusinessObjects.Enterprise.Web.AppPlugin.Mgr">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Web.AppPlugin.Mgr.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\BusinessObjects.Enterprise.Web.AppPlugin.Mgr.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.CrystalReports.Design, Version=11.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.CrystalReports.Design.dll</HintPath>
+    <Reference Include="BusinessObjects.Licensing.KeycodeDecoder">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\BusinessObjects.Licensing.KeycodeDecoder.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=11.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
-    <Reference Include="CrystalDecisions.CrystalReports.TemplateEngine, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CRVsPackageLib">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CRVsPackageLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.CrystalReports.TemplateEngine.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Data.AdoDotNetInterop, Version=11.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.Data.AdoDotNetInterop.dll</HintPath>
+    <Reference Include="CrystalDecisions.CrystalReports.Design">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.CrystalReports.Design.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.dll</HintPath>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Admin.Audit, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.CrystalReports.TemplateEngine">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.CrystalReports.TemplateEngine.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.Audit.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Admin.CachePageServer, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Data.AdoDotNetInterop">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.Data.AdoDotNetInterop.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Enterprise">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Enterprise.Admin.Audit">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.Audit.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.CachePageServer.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Admin.Cms, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Admin.CachePageServer">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.CachePageServer.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.Cms.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Admin.EventServer, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Admin.Cms">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.Cms.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.EventServer.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Admin.FileServer, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Admin.EventServer">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.EventServer.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.FileServer.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Admin.JobServer, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Admin.FileServer">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.FileServer.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.JobServer.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Admin.ReportAppServer, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Admin.JobServer">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.JobServer.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.ReportAppServer.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Admin.SingleSignOn, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Admin.ReportAppServer">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.ReportAppServer.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.SingleSignOn.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Admin.Wcs, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Admin.SingleSignOn">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.SingleSignOn.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.Wcs.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Auth.secEnterprise, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Admin.Wcs">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Admin.Wcs.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Auth.secEnterprise.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Auth.secLdap, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Auth.secEnterprise">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Auth.secEnterprise.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Auth.secLdap.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Auth.secWinAD, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Auth.secLdap">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Auth.secLdap.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Auth.secWinAD.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Auth.secWindowsNT, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Auth.secWinAD">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Auth.secWinAD.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Auth.secWindowsNT.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Calendar, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Auth.secWindowsNT">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Auth.secWindowsNT.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Calendar.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Connection, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Calendar">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Calendar.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Connection.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Event, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Connection">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Connection.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Event.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Excel, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Event">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Event.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Excel.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.FavoritesFolder, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Excel">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Excel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.FavoritesFolder.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Folder, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.FavoritesFolder">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.FavoritesFolder.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Folder.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Hyperlink, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Folder">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Folder.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Hyperlink.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.LicenseKey, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Hyperlink">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Hyperlink.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.LicenseKey.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.ObjectPackage, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.LicenseKey">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.LicenseKey.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.ObjectPackage.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Pdf, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.ObjectPackage">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.ObjectPackage.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Pdf.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Powerpoint, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Pdf">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Pdf.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Powerpoint.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Program, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Powerpoint">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Powerpoint.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Program.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Report, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Program">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Program.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Report.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Rtf, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Report">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Report.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Rtf.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Server, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Rtf">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Rtf.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Server.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.ServerGroup, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Server">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Server.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.ServerGroup.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Shortcut, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.ServerGroup">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.ServerGroup.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Shortcut.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Txt, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Shortcut">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Shortcut.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Txt.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.User, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Txt">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Txt.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.User.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.UserGroup, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.User">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.User.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.UserGroup.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Desktop.Word, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.UserGroup">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.UserGroup.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Word.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Dest.DiskUnmanaged, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Desktop.Word">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Desktop.Word.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Dest.DiskUnmanaged.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Dest.Ftp, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Dest.DiskUnmanaged">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Dest.DiskUnmanaged.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Dest.Ftp.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Dest.Smtp, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Dest.Ftp">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Dest.Ftp.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Dest.Smtp.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Framework, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Dest.Smtp">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Dest.Smtp.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.InfoStore, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Framework">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Framework.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.InfoStore.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Integration, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Integration.dll</HintPath>
+    <Reference Include="CrystalDecisions.Enterprise.InfoStore">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.InfoStore.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.PluginManager, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Integration">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Integration.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Enterprise.PluginManager">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.PluginManager.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.PluginManager.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Shared, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Shared.dll</HintPath>
+    <Reference Include="CrystalDecisions.Enterprise.Shared">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Strings, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Strings.dll</HintPath>
+    <Reference Include="CrystalDecisions.Enterprise.Strings">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Strings.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Utils.UtcConverter, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Utils.UtcConverter">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Utils.UtcConverter.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Utils.UtcConverter.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Viewing.ReportSource, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.Enterprise.Viewing.ReportSource">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Viewing.ReportSource.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Viewing.ReportSource.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Web, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Web.dll</HintPath>
+    <Reference Include="CrystalDecisions.Enterprise.Web">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.Enterprise.Web.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.ClientDoc.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.ClientDoc.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.CommLayer, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommLayer">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.CommLayer.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.CommLayer.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.CommonControls, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommonControls">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.CommonControls.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.CommonControls.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.CommonObjectModel, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommonObjectModel">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.CommonObjectModel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.CommonObjectModel.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.Controllers, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.ReportAppServer.Controllers">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.Controllers.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.Controllers.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.CubeDefModel, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.ReportAppServer.CubeDefModel">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.CubeDefModel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.CubeDefModel.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.DataDefModel, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.ReportAppServer.DataDefModel">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.DataDefModel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.DataDefModel.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.DataSetConversion, Version=11.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.DataSetConversion.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportAppServer.DataSetConversion">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.DataSetConversion.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.ObjectFactory, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.ReportAppServer.ObjectFactory">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.ObjectFactory.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.ObjectFactory.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.Prompting, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.ReportAppServer.Prompting">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.ReportAppServer.Prompting.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\CrystalDecisions.ReportAppServer.Prompting.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.ReportDefModel, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.ReportAppServer.ReportDefModel">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.ReportDefModel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.ReportDefModel.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportAppServer.XmlSerialize, Version=11.5.3300.0, Culture=neutral, PublicKeyToken=692fbea5521e1304">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CrystalDecisions.ReportAppServer.XmlSerialize">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.XmlSerialize.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportAppServer.XmlSerialize.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportSource.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportSource, Version=11.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.ReportSource.dll</HintPath>
+    <Reference Include="CrystalDecisions.Shared">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Shared, Version=11.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.Shared.dll</HintPath>
+    <Reference Include="CrystalDecisions.Web">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\dotnet2\CrystalDecisions.Web.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\log4net.dll</HintPath>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Business Objects\Common\3.5\managed\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.10.0.1\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -486,24 +407,26 @@
     <Reference Include="PdfiumViewer, Version=2.13.0.0, Culture=neutral, PublicKeyToken=91e4789cfb0609e0, processorArchitecture=MSIL">
       <HintPath>..\packages\PdfiumViewer.2.13.0.0\lib\net20\PdfiumViewer.dll</HintPath>
     </Reference>
-    <Reference Include="SharpZebraStandard, Version=1.1.5.0, Culture=neutral, PublicKeyToken=5c0fae8068e4aa15, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpZebraStandard.1.1.5\lib\netstandard2.0\SharpZebraStandard.dll</HintPath>
+    <Reference Include="SharpZebraStandard, Version=1.0.4.0, Culture=neutral, PublicKeyToken=5c0fae8068e4aa15, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZebraStandard.1.0.4\lib\netstandard2.0\SharpZebraStandard.dll</HintPath>
     </Reference>
     <Reference Include="SharpZebraStandard.DesktopPrinting, Version=1.0.4.0, Culture=neutral, PublicKeyToken=5c0fae8068e4aa15, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZebraStandard.DesktopPrinting.1.0.4\lib\net472\SharpZebraStandard.DesktopPrinting.dll</HintPath>
     </Reference>
-    <Reference Include="SkiaSharp, Version=2.88.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\SkiaSharp.2.88.9\lib\net462\SkiaSharp.dll</HintPath>
+    <Reference Include="SkiaSharp, Version=3.119.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkiaSharp.3.119.1\lib\net462\SkiaSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Pipelines, Version=10.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Pipelines.10.0.1\lib\net462\System.IO.Pipelines.dll</HintPath>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
     </Reference>
@@ -532,15 +455,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logging\Logger.cs" />
     <Compile Include="PrintingListener.cs" />
     <Compile Include="Models\PrintJobs.cs" />
+    <Compile Include="PrintingService.Designer.cs">
+      <DependentUpon>PrintingService.cs</DependentUpon>
+    </Compile>
     <Compile Include="PrintManager.cs" />
+    <Compile Include="ProjectInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProjectInstaller.Designer.cs">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </Compile>
     <Compile Include="RawPrintHelper.cs" />
     <Compile Include="PrintingService.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="PrintingService.Designer.cs">
-      <DependentUpon>PrintingService.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -549,6 +479,15 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ProjectInstaller.resx">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="native\win-x64\pdfium.dll" />
+    <EmbeddedResource Include="native\win-x86\pdfium.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -556,11 +495,11 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\PdfiumViewer.Native.x86_64.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86_64.v8-xfa.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PdfiumViewer.Native.x86_64.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86_64.v8-xfa.props'))" />
     <Error Condition="!Exists('..\packages\PdfiumViewer.Native.x86.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86.v8-xfa.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PdfiumViewer.Native.x86.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86.v8-xfa.props'))" />
-    <Error Condition="!Exists('..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets'))" />
-    <Error Condition="!Exists('..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets'))" />
     <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
+    <Error Condition="!Exists('..\packages\SkiaSharp.NativeAssets.macOS.3.119.1\build\net462\SkiaSharp.NativeAssets.macOS.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.NativeAssets.macOS.3.119.1\build\net462\SkiaSharp.NativeAssets.macOS.targets'))" />
+    <Error Condition="!Exists('..\packages\SkiaSharp.NativeAssets.Win32.3.119.1\build\net462\SkiaSharp.NativeAssets.Win32.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.NativeAssets.Win32.3.119.1\build\net462\SkiaSharp.NativeAssets.Win32.targets'))" />
   </Target>
-  <Import Project="..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets')" />
-  <Import Project="..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets')" />
   <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
+  <Import Project="..\packages\SkiaSharp.NativeAssets.macOS.3.119.1\build\net462\SkiaSharp.NativeAssets.macOS.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.macOS.3.119.1\build\net462\SkiaSharp.NativeAssets.macOS.targets')" />
+  <Import Project="..\packages\SkiaSharp.NativeAssets.Win32.3.119.1\build\net462\SkiaSharp.NativeAssets.Win32.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.Win32.3.119.1\build\net462\SkiaSharp.NativeAssets.Win32.targets')" />
 </Project>
