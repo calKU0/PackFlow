@@ -117,7 +117,8 @@ namespace KontrolaPakowania.API.Integrations.Couriers.GLS
                 trackingNumber: label.number,
                 labelBase64: label.file,
                 labelType: PrintDataType.ZPL,
-                packageInfo: package
+                packageInfo: package,
+                externalId: parcelId.ToString()
             );
         }
 
@@ -142,6 +143,48 @@ namespace KontrolaPakowania.API.Integrations.Couriers.GLS
                 await EnsureLoggedInAsync();
 
             await _client.LogoutAsync(_sessionId);
+        }
+
+        public async Task<CourierProtocolResponse> GenerateProtocol(IEnumerable<RoutePackages> shipments)
+        {
+            CourierProtocolResponse response = new();
+
+            try
+            {
+                await EnsureLoggedInAsync();
+
+                int[] trackingNumbers = shipments
+                    .Select(s => int.Parse(s.TrackingNumber))
+                    .ToArray();
+
+                var pickupResponse = await _client.PickupCreateAsync(_sessionId, trackingNumbers);
+                if (pickupResponse == null || pickupResponse.@return.id != 0)
+                {
+                    response.Success = false;
+                    response.ErrorMessage = $"Błąd przy generowaniu protokołu GLS. Nie udało się wygenerować potwierdzeń nadania.";
+                }
+
+                var protocolResponse = await _client.GenerateProtocol(_sessionId, pickupResponse.@return.id);
+
+                if (string.IsNullOrEmpty(protocolResponse.receipt))
+                {
+                    response.Success = false;
+                    response.ErrorMessage = $"Błąd przy generowaniu protokołu GLS. API zwróciło pusty PDF";
+                }
+
+                response.Courier = Courier.GLS;
+                response.DataType = PrintDataType.PDF;
+                response.DataBase64 = new List<string> { protocolResponse.receipt };
+                response.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.ErrorMessage = $"Błąd przy generowaniu protokołu GLS {ex.Message}";
+            }
+
+            return response;
         }
     }
 }

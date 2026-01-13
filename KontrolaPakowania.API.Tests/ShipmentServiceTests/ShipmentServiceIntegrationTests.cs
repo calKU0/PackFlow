@@ -68,7 +68,7 @@ namespace KontrolaPakowania.API.Tests.ShipmentServiceTests
             Assert.True(createResult > 0);
 
             // Act
-            var addResult = await _service.AddErpAttributes(createResult, shipmentResponse.PackageInfo);
+            var addResult = await _service.AddErpAttributes(createResult, shipmentResponse);
 
             // Assert
             Assert.True(addResult);

@@ -183,13 +183,13 @@ namespace KontrolaPakowania.Server.Services
             throw new Exception(generic);
         }
 
-        public async Task<int> CloseRoute(Courier courier)
+        public async Task<CourierProtocolResponse> CloseRoute(Courier courier)
         {
             var response = await _dbClient.PostAsJsonAsync($"api/shipments/close-route", courier);
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<int>();
+                return await response.Content.ReadFromJsonAsync<CourierProtocolResponse>();
             }
 
             if (response.StatusCode == HttpStatusCode.NotFound)

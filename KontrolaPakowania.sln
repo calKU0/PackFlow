@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KontrolaPakowania.API.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KontrolaPakowania.PrintAgent", "KontrolaPakowania.PrintAgent\KontrolaPakowania.PrintAgent.csproj", "{C13D25C0-8BEA-4A64-AB70-F35E430E304B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KontrolaPakowania.PrintService", "KontrolaPakowania.PrintService\KontrolaPakowania.PrintService.csproj", "{70A546DD-411A-4DDD-847D-2AA28843E340}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{C13D25C0-8BEA-4A64-AB70-F35E430E304B}.Release|x64.Build.0 = Release|Any CPU
 		{C13D25C0-8BEA-4A64-AB70-F35E430E304B}.Release|x86.ActiveCfg = Release|Any CPU
 		{C13D25C0-8BEA-4A64-AB70-F35E430E304B}.Release|x86.Build.0 = Release|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Debug|x64.Build.0 = Debug|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Debug|x86.Build.0 = Debug|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Release|x64.ActiveCfg = Release|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Release|x64.Build.0 = Release|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Release|x86.ActiveCfg = Release|Any CPU
+		{70A546DD-411A-4DDD-847D-2AA28843E340}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

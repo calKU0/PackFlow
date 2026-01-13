@@ -32,13 +32,15 @@ public class PackingService : IPackingService
     public async Task<IEnumerable<JlData>> GetJlListAsync(PackingLevel location)
     {
         var jlList = await _wmsApi.GetJlListAsync();
-        var jlToPack = jlList.Where(x =>
-            x.Status == 12 &&
-            (
-                (location == PackingLevel.Góra && x.DestZone == "A-Pak. góra") ||
-                (location != PackingLevel.Góra && x.DestZone != "A-Pak. góra")
+        var jlToPack = jlList
+            .Where(x =>
+                x.Status == 12 &&
+                (
+                    (location == PackingLevel.Góra && x.DestZone == "A-Pak. góra") ||
+                    (location == PackingLevel.Dół && x.DestZone != "A-Pak. góra")
+                )
             )
-        ).ToList();
+            .ToList();
 
         // Map string courier to enum
         foreach (var jl in jlToPack)
@@ -152,7 +154,7 @@ public class PackingService : IPackingService
         return result > 0;
     }
 
-    public async Task<IEnumerable<PackageData>> GetPackagesForClient(int clientId, string addressName, string addressCity, string addressStreet, string addressPostalCode, string addressCountry, DocumentStatus status)
+    public async Task<IEnumerable<PackageData>> GetPackagesForClient(int clientId, string? addressName, string? addressCity, string? addressStreet, string? addressPostalCode, string? addressCountry, DocumentStatus status)
     {
         const string procedure = "kp.GetPackagesForClient";
         return await _db.QueryAsync<PackageData>(procedure, new { clientId, addressName, addressCity, addressStreet, addressPostalCode, addressCountry, status }, CommandType.StoredProcedure, Connection.ERPConnection);

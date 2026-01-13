@@ -48,7 +48,8 @@
 <TextBoxModal @ref="TextBoxModal" />
 
 <FinishPackingModal @ref="FinishPackingModal"
-            Courier="CurrentJl.Courier"
+            Courier="@CurrentJl.Courier"
+            Country="@CurrentJl.Country"
             CourierSrc="@CurrentJl.LogoCourier"
             PackingLevel="Settings.PackingLevel"
             OnCourierLabel="HandleCourierLabel"

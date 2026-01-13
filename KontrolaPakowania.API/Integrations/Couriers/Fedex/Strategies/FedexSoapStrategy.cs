@@ -15,12 +15,21 @@ namespace KontrolaPakowania.API.Integrations.Couriers.Fedex.Strategies
         private readonly IFedexClientWrapper _client;
         private readonly IParcelMapper<listV2> _mapper;
         private readonly FedexSoapSettings _soapSettings;
+        private static long CourierID => 6700;
 
         public FedexSoapStrategy(IFedexClientWrapper client, IParcelMapper<listV2> mapper, IOptions<CourierSettings> courierSettings)
         {
             _client = client;
             _mapper = mapper;
             _soapSettings = courierSettings.Value.Fedex.Soap;
+        }
+
+        public async Task<string> GenerateProtocol(IEnumerable<RoutePackages> shipments)
+        {
+            var accessCode = shipments.FirstOrDefault().Dropshipping ? _soapSettings.DropshippingAccessCode : _soapSettings.AccessCode;
+            byte[] result = await _client.zapiszDokumentWydaniaAsync(accessCode, string.Join(";", shipments.Select(x => x.TrackingNumber)), ",", CourierID);
+
+            return Convert.ToBase64String(result);
         }
 
         public async Task<ShipmentResponse> SendPackageAsync(PackageData package)
@@ -63,7 +72,8 @@ namespace KontrolaPakowania.API.Integrations.Couriers.Fedex.Strategies
                     trackingNumber: result.waybill,
                     labelBase64: Convert.ToBase64String(labelBytes),
                     labelType: PrintDataType.ZPL,
-                    packageInfo: package
+                    packageInfo: package,
+                    externalId: "0"
                 );
             }
             catch (FaultException faultEx)

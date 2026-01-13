@@ -454,21 +454,42 @@
                 message: $"Zostanie zamkniętych {shipmentsToClose.Count} wysyłek. Czy na pewno chcesz zamknąć trasę dla kuriera {courier.GetDescription()}?",
                 onConfirm: async () =>
                 {
-                    int shipmentsClosed = await ShipmentService.CloseRoute(courier);
-                    switch (courier)
+                    try
                     {
-                        case Courier.DPD:
-                            RoutesStatus.DPDClosed = true;
-                            break;
-                        case Courier.GLS:
-                            RoutesStatus.GLSClosed = true;
-                            break;
-                        case Courier.Fedex:
-                            RoutesStatus.FedexClosed = true;
-                            break;
+                        var protocol = await ShipmentService.CloseRoute(courier);
+                        if (!string.IsNullOrEmpty(protocol.ErrorMessage))
+                        {
+                            Toast.Show("Błąd", $"Nie udało się zamknąć trasy. Bład: {protocol.ErrorMessage}", ToastType.Error);
+                            return;
+                        }
+
+                        if (protocol.DataBase64.Any())
+                        {
+                            foreach (var data in protocol.DataBase64)
+                            {
+                                await ClientPrinterService.PrintAsync(WorkstationSettings.PrinterLabel, protocol.DataType.ToString(), data);
+                            }
+                        }
+
+                        switch (courier)
+                        {
+                            case Courier.DPD:
+                                RoutesStatus.DPDClosed = true;
+                                break;
+                            case Courier.GLS:
+                                RoutesStatus.GLSClosed = true;
+                                break;
+                            case Courier.Fedex:
+                                RoutesStatus.FedexClosed = true;
+                                break;
+                        }
+                        await InvokeAsync(StateHasChanged);
+                        Toast.Show("Sukces!", $"Trasa dla kuriera {courier.GetDescription()} została zamknięta.", ToastType.Success);
                     }
-                    await InvokeAsync(StateHasChanged);
-                    Toast.Show("Sukces!", $"Trasa dla kuriera {courier.GetDescription()} została zamknięta pomyślnie. Zamknięto {shipmentsClosed} wysyłek.", ToastType.Success);
+                    catch (Exception ex)
+                    {
+                        Toast.Show("Błąd!", $"Błąd przy próbie zamknięcia trasy: {ex.Message}");
+                    }
        
                 },
                 onCancel: async () =>

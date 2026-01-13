@@ -75,7 +75,8 @@ namespace KontrolaPakowania.API.Integrations.Couriers.DPD_Romania
                     trackingLink: $"https://tracking.dpd.ro/?shipmentNumber={shipmentResponse.Id}&language=en",
                     labelBase64: label,
                     labelType: PrintDataType.ZPL,
-                    packageInfo: package
+                    packageInfo: package,
+                    externalId: "0"
                 );
             }
             catch (Exception ex)
@@ -186,6 +187,11 @@ namespace KontrolaPakowania.API.Integrations.Couriers.DPD_Romania
                 parts.Add($"Id błędu: {error.Id}");
 
             return "DPD Romania API zwróciło błąd: " + string.Join("; ", parts);
+        }
+
+        public Task<CourierProtocolResponse> GenerateProtocol(IEnumerable<RoutePackages> shipments)
+        {
+            throw new NotImplementedException();
         }
     }
 }

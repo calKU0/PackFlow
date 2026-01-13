@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -72,6 +73,8 @@ builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"
 // =====================
 // HttpClients
 // =====================
+
+System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
 
 // DPD REST client
 builder.Services.AddHttpClient<DpdService>((sp, client) =>

@@ -151,7 +151,7 @@ namespace KontrolaPakowania.API.Controllers
 
                 if (result.ErpShipmentId > 0 && result.Success)
                 {
-                    await _shipmentService.AddErpAttributes(result.ErpShipmentId, result.PackageInfo);
+                    await _shipmentService.AddErpAttributes(result.ErpShipmentId, result);
                     _logger.Information("ERP attributes added for shipment {ErpShipmentId}, package {PackageCode}", result.ErpShipmentId, package.PackageName);
                 }
 
@@ -203,6 +203,7 @@ namespace KontrolaPakowania.API.Controllers
                 return HandleException(ex);
             }
         }
+
 
         [HttpGet("routes-status")]
         public async Task<IActionResult> GetRoutesStatus()
@@ -263,7 +264,42 @@ namespace KontrolaPakowania.API.Controllers
                     return NotFound($"Brak paczek do zamnięcia trasy dla kuriera {courier.GetDescription()}");
                 }
 
-                var result = await _shipmentService.CloseRoute(courier);
+                CourierProtocolResponse result = new();
+                if (CourierHelper.AllowedCouriersForLabel.Contains(courier))
+                {
+                    var courierFactory = _courierFactory.GetCourier(courier);
+                    result = await courierFactory.GenerateProtocol(shipments);
+
+                    if (result.Success && result.DataBase64.Any())
+                    {
+                        foreach (var data in result.DataBase64)
+                        {
+                            // Save file to disk
+                            var fileBytes = Convert.FromBase64String(data);
+                            var filePath = Path.Combine(AppContext.BaseDirectory, "Protocols", courier.ToString(), $"{Guid.NewGuid()}.pdf");
+
+                            // Ensure directory exists
+                            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+
+                            await System.IO.File.WriteAllBytesAsync(filePath, fileBytes);
+
+                            _logger.Information("Protocol saved to {FilePath}", filePath);
+                        }
+                    }
+                }
+                else
+                {
+                    result.Success = true;
+                    result.Courier = courier;
+                }
+
+                if (!result.Success)
+                {
+                    _logger.Error("Closed route failure for courier {Courier}. {Error}", courier.GetDescription(), result.ErrorMessage);
+                    return BadRequest($"{result.ErrorMessage}");
+                }
+
+                var closeResult = await _shipmentService.CloseRoute(courier);
 
                 _logger.Information("Closed route successfully for courier {Courier}", courier.GetDescription());
                 return Ok(result);

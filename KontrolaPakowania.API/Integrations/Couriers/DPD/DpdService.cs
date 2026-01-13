@@ -7,7 +7,10 @@ using KontrolaPakowania.API.Settings;
 using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
 using KontrolaPakowania.Shared.Enums;
+using Microsoft.Extensions.Options;
 using System.Data;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -19,11 +22,19 @@ namespace KontrolaPakowania.API.Integrations.Couriers.DPD
     {
         private readonly HttpClient _httpClient;
         private readonly IParcelMapper<DpdCreatePackageRequest> _mapper;
+        private readonly DpdSettings _settings;
+        private readonly SenderSettings _senderSettings;
+        private readonly ILogger<DpdService> _logger;
 
-        public DpdService(HttpClient httpClient, IParcelMapper<DpdCreatePackageRequest> mapper)
+        public DpdService(HttpClient httpClient, IParcelMapper<DpdCreatePackageRequest> mapper, IOptions<CourierSettings> options, ILogger<DpdService> logger)
         {
+            _settings = options?.Value?.DPD ?? throw new ArgumentNullException(nameof(options));
+            _senderSettings = options?.Value?.Sender ?? throw new ArgumentNullException(nameof(options));
+
             _httpClient = httpClient;
             _mapper = mapper;
+
+            _logger = logger;
         }
 
         public async Task<ShipmentResponse> SendPackageAsync(PackageData package)
@@ -76,7 +87,8 @@ namespace KontrolaPakowania.API.Integrations.Couriers.DPD
                 trackingLink: $"https://tracktrace.dpd.com.pl/parcelDetails?typ=1&p1={waybill}",
                 labelBase64: labelResponse.DocumentData,
                 labelType: PrintDataType.ZPL,
-                packageInfo: package
+                packageInfo: package,
+                externalId: "0"
             );
         }
 
@@ -292,6 +304,139 @@ namespace KontrolaPakowania.API.Integrations.Couriers.DPD
         {
             // No need to delete package in DPD
             return Task.FromResult(1);
+        }
+
+        public async Task<CourierProtocolResponse> GenerateProtocol(IEnumerable<RoutePackages> packages)
+        {
+            if (packages == null || !packages.Any())
+            {
+                return new CourierProtocolResponse
+                {
+                    Success = false,
+                    ErrorMessage = "Brak paczek do wygenerowania protokołu.",
+                    Courier = Courier.DPD
+                };
+            }
+
+            var response = new CourierProtocolResponse
+            {
+                Success = true,
+                Courier = Courier.DPD,
+                DataType = PrintDataType.PDF
+            };
+
+            try
+            {
+                var domestic = packages.Where(p => p.Country == "PL").ToList();
+                var international = packages.Where(p => p.Country != "PL").ToList();
+
+                if (domestic.Any())
+                {
+                    var docs = await GenerateProtocolInternalAsync(domestic, "DOMESTIC");
+                    response.DataBase64.Add(docs);
+                }
+
+                if (international.Any())
+                {
+                    var docs = await GenerateProtocolInternalAsync(international, "INTERNATIONAL");
+                    response.DataBase64.Add(docs);
+                }
+
+                if (!response.DataBase64.Any())
+                {
+                    return new CourierProtocolResponse
+                    {
+                        Success = false,
+                        ErrorMessage = "Nie wygenerowano żadnego protokołu DPD.",
+                        Courier = Courier.DPD
+                    };
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return new CourierProtocolResponse
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message,
+                    Courier = Courier.DPD
+                };
+            }
+        }
+        private async Task<string> GenerateProtocolInternalAsync( IEnumerable<RoutePackages> packages, string sessionType)
+        {
+            var dpdPackages = packages.Select(p => new DpdGenerateProtocolRequest.Package { 
+                Parcels = new List<DpdGenerateProtocolRequest.Parcel> { 
+                    new DpdGenerateProtocolRequest.Parcel { 
+                        Waybill = p.TrackingNumber } 
+                } }).ToList();
+
+            var dpdRequest = new DpdGenerateProtocolRequest
+            {
+                OutputDocFormat = "PDF",
+                SearchParams = new DpdGenerateProtocolRequest.ProtocolSearchParams
+                {
+                    Policy = "STOP_ON_FIRST_ERROR",
+                    Session = new DpdGenerateProtocolRequest.Session
+                    {
+                        Type = sessionType,
+                        Packages = dpdPackages
+                    },
+                    PickupAddress = new DpdGenerateProtocolRequest.PickupAddress
+                    {
+                        Fid = Convert.ToInt32(_settings.MasterFID),
+                        Company = _senderSettings.Company,
+                        Name = _senderSettings.PersonName,
+                        Address = _senderSettings.Street,
+                        City = _senderSettings.City,
+                        CountryCode = _senderSettings.Country,
+                        PostalCode = _senderSettings.PostalCode,
+                        Phone = _senderSettings.Phone,
+                        Email = _senderSettings.Email
+                    }
+                }
+            };
+
+            var json = JsonSerializer.Serialize(dpdRequest, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            _logger.LogInformation(json.ToString());
+            try
+            {
+                _httpClient.DefaultRequestHeaders.ExpectContinue = false;
+                // Zastosuj to rozwiązanie kompleksowo:
+                var request = new HttpRequestMessage(HttpMethod.Post, "/public/shipment/v1/generateProtocol")
+                {
+                    Content = content,
+                    Version = HttpVersion.Version11 // Ważne dla Windows Server 2019
+                };
+
+                // Kluczowa zmiana: ResponseHeadersRead
+                using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+                if (!response.IsSuccessStatusCode) { /* obsługa błędu */ }
+
+                using var stream = await response.Content.ReadAsStreamAsync();
+                var dpdResponse = await JsonSerializer.DeserializeAsync<DpdGenerateProtocolResponse>(stream, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
+
+                if (string.IsNullOrEmpty(dpdResponse?.DocumentData))
+                        throw new Exception($"DPD returned empty documentData for {sessionType}");
+
+                return dpdResponse.DocumentData;
+                
+            }
+            catch (HttpRequestException httpEx)
+            {
+                _logger.LogError(httpEx, "Szczegóły błędu HTTP: {Inner}", httpEx.InnerException?.Message);
+                throw;
+            }
         }
     }
 }

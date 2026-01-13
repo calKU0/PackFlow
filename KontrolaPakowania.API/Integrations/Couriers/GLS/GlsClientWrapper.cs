@@ -23,7 +23,9 @@ namespace KontrolaPakowania.API.Integrations.Couriers.GLS
         public Task<cID> DeleteParcelAsync(string sessionId, int parcelId) =>
             _client.adePreparingBox_DeleteConsignAsync(sessionId, parcelId);
 
-        public Task LogoutAsync(string sessionId) =>
-            _client.adeLogoutAsync(sessionId);
+        public Task LogoutAsync(string sessionId) => _client.adeLogoutAsync(sessionId);
+
+        public Task<adePickup_CreateResponse> PickupCreateAsync(string sessionId, int[] packageIds) => _client.adePickup_CreateAsync(sessionId, packageIds, $"Zamknięcie trasy GLS {DateTime.Now}");
+        public Task<cReceipt> GenerateProtocol(string sessionId, int id) => _client.adePickup_GetReceiptAsync(sessionId, id, "with_barcodes");
     }
 }

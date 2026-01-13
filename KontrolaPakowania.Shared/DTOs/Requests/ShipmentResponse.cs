@@ -10,6 +10,7 @@ namespace KontrolaPakowania.Shared.DTOs.Requests
     public class ShipmentResponse
     {
         public bool Success { get; set; }
+        public string ExternalId { get; set; } = string.Empty;
         public string ErrorMessage { get; set; } = string.Empty;
         public string TrackingNumber { get; set; } = string.Empty;
         public string TrackingLink { get; set; } = string.Empty;
@@ -33,7 +34,8 @@ namespace KontrolaPakowania.Shared.DTOs.Requests
             string trackingLink,
             string labelBase64,
             PackageData packageInfo,
-            PrintDataType labelType) => new()
+            PrintDataType labelType,
+            string externalId) => new()
             {
                 Success = true,
                 Courier = courier,
@@ -42,7 +44,8 @@ namespace KontrolaPakowania.Shared.DTOs.Requests
                 TrackingLink = trackingLink,
                 LabelBase64 = labelBase64,
                 LabelType = labelType,
-                PackageInfo = packageInfo
+                PackageInfo = packageInfo,
+                ExternalId = externalId
             };
     }
 }

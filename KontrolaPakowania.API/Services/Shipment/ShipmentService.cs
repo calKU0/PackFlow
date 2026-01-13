@@ -34,8 +34,9 @@ namespace KontrolaPakowania.API.Services.Shipment
             return result >= 1;
         }
 
-        public async Task<bool> AddErpAttributes(int documentId, PackageData packageInfo)
+        public async Task<bool> AddErpAttributes(int documentId, ShipmentResponse shipmentInfo)
         {
+            var packageInfo = shipmentInfo.PackageInfo;
             const string procedure = "kp.AddShipmentAttributes";
 
             string ROD = packageInfo.ShipmentServices.ROD ? "TAK" : "NIE";
@@ -49,7 +50,7 @@ namespace KontrolaPakowania.API.Services.Shipment
             string ManualEdit = packageInfo.ManualEdit ? "TAK" : "NIE";
             string ManualSend = packageInfo.ManualSend ? "TAK" : "NIE";
 
-            var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { POD, ROD, EXW, S10, S12, Saturday, COD, HasInvoice, ManualEdit, ManualSend, documentId }, CommandType.StoredProcedure, Connection.ERPConnection);
+            var result = await _db.QuerySingleOrDefaultAsync<int>(procedure, new { POD, ROD, EXW, S10, S12, Saturday, COD, HasInvoice, ManualEdit, ManualSend, shipmentInfo.ExternalId, documentId }, CommandType.StoredProcedure, Connection.ERPConnection);
             return result == 8;
         }
 

@@ -135,7 +135,7 @@ namespace KontrolaPakowania.API.Integrations.Couriers.Mapping
                     Phone = _senderSettings.Phone,
                     Email = _senderSettings.Email
                 },
-                PayerFID = 58134,
+                PayerFID = Convert.ToInt32(_settings.MasterFID),
                 Ref1 = packageInfo.References ?? null,
                 Ref2 = packageInfo.Description ?? null,
                 Parcels = parcels,

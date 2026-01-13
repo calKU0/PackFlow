@@ -24,7 +24,7 @@ namespace KontrolaPakowania.API.Services.Packing
 
         Task<bool> UpdateJlRealization(JlInProgressDto jl);
 
-        Task<IEnumerable<PackageData>> GetPackagesForClient(int clientId, string addressName, string addressCity, string addressStreet, string addressPostalCode, string addressCountry, DocumentStatus status);
+        Task<IEnumerable<PackageData>> GetPackagesForClient(int clientId, string? addressName, string? addressCity, string? addressStreet, string? addressPostalCode, string? addressCountry, DocumentStatus status);
 
         Task<bool> ReleaseJl(string jl);
 

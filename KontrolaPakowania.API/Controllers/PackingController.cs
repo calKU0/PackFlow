@@ -1,4 +1,5 @@
-﻿using KontrolaPakowania.API.Services.Packing;
+﻿using KontrolaPakowania.API.Infrastructure.Resilience;
+using KontrolaPakowania.API.Services.Packing;
 using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
 using KontrolaPakowania.Shared.Enums;
@@ -186,7 +187,7 @@ namespace KontrolaPakowania.API.Controllers
         }
 
         [HttpGet("get-packages-for-client")]
-        public async Task<IActionResult> GetPackagesInBuforForClient([FromQuery] int clientId, [FromQuery] string addressName, [FromQuery] string addressCity, [FromQuery] string addressStreet, [FromQuery] string addressPostalCode, [FromQuery] string addressCountry, [FromQuery] DocumentStatus status)
+        public async Task<IActionResult> GetPackagesInBuforForClient([FromQuery] int clientId, [FromQuery] string? addressName, [FromQuery] string? addressCity, [FromQuery] string? addressStreet, [FromQuery] string? addressPostalCode, [FromQuery] string? addressCountry, [FromQuery] DocumentStatus status)
         {
             _logger.Information("Request: GetPackagesInBuforForClient for ClientId {ClientId}", clientId);
             try
@@ -419,32 +420,105 @@ namespace KontrolaPakowania.API.Controllers
         [HttpPost("pack-wms-stock")]
         public async Task<IActionResult> PackWmsStock([FromBody] List<WmsPackStockRequest> request)
         {
-            _logger.Information("Request: PackWmsStock for package {PackageCode} courier {Courier}", request.FirstOrDefault().PackageCode, request.FirstOrDefault().Courier);
+            var first = request.FirstOrDefault();
+
+            _logger.Information(
+                "Request: PackWmsStock for package {PackageCode} courier {Courier}",
+                first?.PackageCode,
+                first?.Courier);
+
             try
             {
                 var packResult = await _packingService.PackWmsStock(request);
                 if (packResult.Status != "1")
                 {
-                    _logger.Warning("PackWmsStock failed for package {PackageCode}: {Desc}", request.FirstOrDefault().PackageCode, packResult.Desc);
+                    _logger.Warning(
+                        "PackWmsStock failed for package {PackageCode}: {Desc}",
+                        first?.PackageCode,
+                        packResult.Desc);
+
                     return BadRequest(packResult.Desc);
                 }
 
-                if (request.FirstOrDefault().Status == DocumentStatus.Ready)
+                if (first?.Status == DocumentStatus.Ready)
                 {
-                    var closeResult = await _packingService.CloseWmsPackage(request.FirstOrDefault().PackageCode, request.FirstOrDefault().Courier, request.FirstOrDefault().PackingLevel, request.FirstOrDefault().PackingWarehouse);
-                    if (closeResult.Status != "1")
+                    const int maxRetries = 3;
+
+                    for (int attempt = 1; attempt <= maxRetries; attempt++)
                     {
-                        _logger.Warning("CloseWmsPackage failed for package {PackageCode}: {Desc}", request.FirstOrDefault().PackageCode, closeResult.Desc);
-                        return BadRequest(closeResult.Desc);
+                        try
+                        {
+                            var closeResult = await _packingService.CloseWmsPackage(
+                                first.PackageCode,
+                                first.Courier,
+                                first.PackingLevel,
+                                first.PackingWarehouse);
+
+                            if (closeResult.Status != "1")
+                            {
+                                _logger.Warning(
+                                    "CloseWmsPackage business failure for package {PackageCode}: {Desc}",
+                                    first.PackageCode,
+                                    closeResult.Desc);
+
+                                return BadRequest(closeResult.Desc);
+                            }
+
+                            // success → exit retry loop
+                            break;
+                        }
+                        catch (HttpRequestException ex) when (attempt < maxRetries)
+                        {
+                            var delay = TimeSpan.FromSeconds(Math.Pow(2, attempt));
+
+                            _logger.Warning(
+                                ex,
+                                "Retry {Attempt}/{MaxRetries} for CloseWmsPackage after {Delay}s",
+                                attempt,
+                                maxRetries,
+                                delay.TotalSeconds);
+
+                            await Task.Delay(delay);
+                        }
+                        catch (IOException ex) when (attempt < maxRetries)
+                        {
+                            var delay = TimeSpan.FromSeconds(Math.Pow(2, attempt));
+
+                            _logger.Warning(
+                                ex,
+                                "Retry {Attempt}/{MaxRetries} for CloseWmsPackage after {Delay}s",
+                                attempt,
+                                maxRetries,
+                                delay.TotalSeconds);
+
+                            await Task.Delay(delay);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error(
+                                ex,
+                                "CloseWmsPackage failed after {Attempts} attempts for package {PackageCode}",
+                                attempt,
+                                first.PackageCode);
+
+                            return StatusCode(502, "WMS communication error");
+                        }
                     }
                 }
 
-                _logger.Information("PackWmsStock succeeded for package {PackageCode}", request.FirstOrDefault().PackageCode);
+                _logger.Information(
+                    "PackWmsStock succeeded for package {PackageCode}",
+                    first?.PackageCode);
+
                 return Ok();
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error in PackWmsStock for package {PackageCode}", request.FirstOrDefault().PackageCode);
+                _logger.Error(
+                    ex,
+                    "Error in PackWmsStock for package {PackageCode}",
+                    first?.PackageCode);
+
                 return HandleException(ex);
             }
         }

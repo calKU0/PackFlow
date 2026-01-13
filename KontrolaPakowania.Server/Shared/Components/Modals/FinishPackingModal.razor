@@ -10,6 +10,15 @@
             <div class="modal-content rounded-3 shadow-lg">
                 <div class="modal-header border-0 d-flex flex-column align-items-center">
                     <img src="@Utils.GetCourierSrc(CourierSrc)" alt="Courier" class="img-fluid mb-3" style="max-height:120px;" />
+                    @if (!string.IsNullOrEmpty(Country) && Country != "PL")
+                    {
+                        <div class="header-image-placeholder mt-1">
+                            <img src="images/exp.jpg"
+                                 alt="Export"
+                                 class="img-fluid"
+                                 style="max-height:40px;" />
+                        </div>
+                    }
                 </div>
                 <div class="modal-body text-center">Wybierz jedną z opcji:</div>
                 <div class="modal-footer d-flex justify-content-around border-0">
@@ -41,6 +50,7 @@
 @code {
     [Parameter] public Courier Courier { get; set; }
     [Parameter] public string CourierSrc { get; set; } = string.Empty;
+    [Parameter] public string Country { get; set; } = string.Empty;
     [Parameter] public PackingLevel PackingLevel { get; set; }
     [Parameter] public EventCallback OnCourierLabel { get; set; }
     [Parameter] public EventCallback OnInternalBarcode { get; set; }

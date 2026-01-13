@@ -39,5 +39,44 @@ namespace KontrolaPakowania.API.Integrations.Couriers.Fedex
             // No need to delete Fedex package
             return Task.FromResult(1);
         }
+
+        public async Task<CourierProtocolResponse> GenerateProtocol(IEnumerable<RoutePackages> shipments)
+        {
+            var courierProtocolResponse = new CourierProtocolResponse()
+            {
+                Courier = Courier.Fedex,
+                DataType = PrintDataType.PDF,
+
+            };
+
+            try
+            {
+                var countryShipments = shipments.Where(s => s.Country == "PL" && !s.Dropshipping);
+                var countryDropshippingShipments = shipments.Where(s => s.Country == "PL" && s.Dropshipping);
+                var internationalShipments = shipments.Where(s => s.Country != "PL");
+
+                if (countryShipments.Any())
+                {
+                    var countryProtocol = await _soapStrategy.GenerateProtocol(countryShipments);
+                    courierProtocolResponse.DataBase64.Add(countryProtocol);
+                }
+                if (countryDropshippingShipments.Any())
+                {
+                    var countryDropshippingProtocol = await _soapStrategy.GenerateProtocol(countryDropshippingShipments);
+                    courierProtocolResponse.DataBase64.Add(countryDropshippingProtocol);
+                }
+
+                //var internationalProtocol = _restStrategy.GenerateProtocol(internationalShipments);
+
+                courierProtocolResponse.Success = true;
+            }
+            catch (Exception ex)
+            {
+                courierProtocolResponse.Success = false;
+                courierProtocolResponse.ErrorMessage = $"Nie udało się wygenerować protokołu dla Fedex. {ex}";
+            }
+
+            return courierProtocolResponse;
+        }
     }
 }

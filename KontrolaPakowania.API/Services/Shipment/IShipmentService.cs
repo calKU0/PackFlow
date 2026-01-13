@@ -16,7 +16,7 @@ namespace KontrolaPakowania.API.Services.Shipment
 
         Task<int> CreateErpShipmentDocument(ShipmentResponse shipment);
 
-        Task<bool> AddErpAttributes(int documentId, PackageData packageInfo);
+        Task<bool> AddErpAttributes(int documentId, ShipmentResponse shipmentInfo);
 
         Task<RoutesStatus> GetRoutesStatus();
 

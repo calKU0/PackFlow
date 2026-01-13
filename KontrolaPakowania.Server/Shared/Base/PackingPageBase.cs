@@ -206,7 +206,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                 {
                     Name = jl.jlName,
                     Courier = CurrentJl.CourierName,
-                    ClientName = CurrentJl.ClientName,
+                    ClientName = CurrentJl.ClientSymbol,
                     StationNumber = Settings.StationNumber,
                     Date = DateTime.Now,
                     User = UserSession.Username,

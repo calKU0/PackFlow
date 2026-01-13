@@ -70,7 +70,8 @@ namespace KontrolaPakowania.API.Integrations.Couriers.Fedex.Strategies
                     trackingNumber: shipment.MasterTrackingNumber,
                     labelBase64: document.EncodedLabel,
                     labelType: PrintDataType.ZPL,
-                    packageInfo: package
+                    packageInfo: package,
+                    externalId: "0"
                 );
             }
             catch (Exception ex)
@@ -147,6 +148,11 @@ namespace KontrolaPakowania.API.Integrations.Couriers.Fedex.Strategies
             var shipment = root?.Output?.TransactionShipments?.FirstOrDefault();
             var document = shipment?.PieceResponses?.FirstOrDefault()?.PackageDocuments?.FirstOrDefault();
             return (shipment, document);
+        }
+
+        public Task<string> GenerateProtocol(IEnumerable<RoutePackages> shipments)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion Helpers

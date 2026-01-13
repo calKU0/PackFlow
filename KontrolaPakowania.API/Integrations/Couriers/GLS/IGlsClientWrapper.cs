@@ -13,5 +13,7 @@ namespace KontrolaPakowania.API.Integrations.Couriers.GLS
         Task<cID> DeleteParcelAsync(string sessionId, int parcelId);
 
         Task LogoutAsync(string sessionId);
+        Task<adePickup_CreateResponse> PickupCreateAsync(string sessionId, int[] packageIds);
+        Task<cReceipt> GenerateProtocol(string sessionId, int id);
     }
 }
