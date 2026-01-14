@@ -196,7 +196,7 @@
 
 <Toast FocusAfterCloseInput="InputRef" @ref="Toast" />
 <EmailModal @ref="EmailModal" />
-<ShipmentModal @ref="ShipmentModal" />
+<ShipmentModal @ref="ShipmentModal" OnOk="OnShipmentOkClicked" />
 <ConfirmDialog @ref="ConfirmDialog"/>
 <AddressInvoiceModal @ref="AddressInvoiceModal" OnConfirmed="OnAddressModalConfirmed" />
 <PackingListModal @ref="PackingListModal" OnSaveNumber="HandlePackingListSave" OnPrintLabel="HandlePackingListPrint" />
@@ -249,7 +249,7 @@
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter" && string.IsNullOrEmpty(Barcode))
+        if (e.Key == "Enter" && !string.IsNullOrEmpty(Barcode))
         {
             await LoadData();
         }
@@ -271,7 +271,7 @@
             {
                 ConfirmDialog.Show(
                     title: "Usuń przesyłkę",
-                    message: "Przesyłka do tej paczki została wygenerowana. Czy chcesz ją usunąć?",
+                    message: $"Przesyłka do tej paczki została wygenerowana dnia {Package.DateShipped} przez {Package.PackingUser}. Czy chcesz ją usunąć?",
                     onConfirm: async () =>
                     {
                         try
@@ -333,7 +333,7 @@
 
                 var labelContent = response.LabelBase64;
                 await ClientPrinterService.PrintAsync(WorkstationSettings.PrinterLabel, response.LabelType.ToString(), labelContent);
-                ShipmentModal.Show(Barcode, response.TrackingNumber, response.LabelBase64, response.LabelType, WorkstationSettings.PrinterLabel, Package.HasInvoice);
+                ShipmentModal.Show(Barcode, response.TrackingNumber, response.LabelBase64, response.LabelType, WorkstationSettings.PrinterLabel, Package.HasInvoice, false);
                 if (Package.HasInvoice)
                 {
                     await ClientPrinterService.PrintCrystalAsync(WorkstationSettings.PrinterInvoice, Package.Recipient.Country != "PL" ? "InvoiceEN" : "InvoicePL", new Dictionary<string, string> { { "DocumentId", Package.InvoiceId.ToString() } });
@@ -467,7 +467,7 @@
                         {
                             foreach (var data in protocol.DataBase64)
                             {
-                                await ClientPrinterService.PrintAsync(WorkstationSettings.PrinterLabel, protocol.DataType.ToString(), data);
+                                await ClientPrinterService.PrintAsync(WorkstationSettings.PrinterInvoice, protocol.DataType.ToString(), data);
                             }
                         }
 
@@ -502,6 +502,11 @@
         {
             Toast.Show("Błąd!", $"Błąd przy próbie zamknięcia trasy: {ex.Message}");
         }
+    }
+
+    private async Task OnShipmentOkClicked((string ScannedCode, string TrackingNumber) data)
+    {
+        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
     }
 
     public void Dispose()

@@ -1,39 +1,34 @@
 ﻿using KontrolaPakowania.Shared.DTOs;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+using Microsoft.JSInterop;
 
 namespace KontrolaPakowania.Server.Services
 {
-
     public class PrintServiceClient
     {
-        private readonly HttpClient _http;
+        private readonly IJSRuntime _js;
 
-        public PrintServiceClient(HttpClient http)
+        public PrintServiceClient(IJSRuntime js)
         {
-            _http = http;
+            _js = js;
         }
 
         public async Task<bool> SendPrintJobAsync(PrintJob job)
         {
             try
             {
-                var json = JsonSerializer.Serialize(job);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                // send POST to local print service
-                var response = await _http.PostAsync("http://localhost:54321/print/", content);
-
-                return response.IsSuccessStatusCode; // true if 200 OK
+                return await _js.InvokeAsync<bool>(
+                    "sendZplToAgent",
+                    job.PrinterName,
+                    job.DataType,
+                    job.Content,
+                    job.Parameters
+                );
             }
-            catch (Exception ex)
+            catch (JSException ex)
             {
-                Console.WriteLine($"Failed to send print job: {ex}");
+                Console.WriteLine($"JS error while sending print job: {ex.Message}");
                 return false;
             }
         }
     }
-
 }

@@ -47,6 +47,8 @@ namespace KontrolaPakowania.Shared.DTOs
         public decimal Height { get; set; }
         public int WysNumber { get; set; }
         public int WysType { get; set; }
+        public string PackingUser { get; set; } = string.Empty;
+        public DateTime DateShipped { get; set; }
         public bool HasInvoice { get; set; }
         public bool TaxFree { get; set; }
         public bool ManualSend { get; set; }

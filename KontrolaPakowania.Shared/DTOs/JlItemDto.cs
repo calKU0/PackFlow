@@ -24,6 +24,7 @@ namespace KontrolaPakowania.Shared.DTOs
         public string ItemImage { get; set; } = string.Empty;
         public decimal ItemWeight { get; set; }
         public decimal ItemVolume { get; set; }
+        public bool PackedWMS { get; set; }
         public List<string> SupplierCode { get; set; } = new List<string>();
         public string ClientErpId { get; set; } = string.Empty;
         public string AddressName { get; set; } = string.Empty;
@@ -35,6 +36,7 @@ namespace KontrolaPakowania.Shared.DTOs
         public string ClientName { get; set; } = string.Empty;
         public string ClientSymbol { get; set; } = string.Empty;
         public string DestinationCountry { get; set; } = string.Empty;
+        public string PackingRequirements { get; set; } = string.Empty;
 
         [JsonPropertyName("courier")]
         public string CourierName { get; set; } = string.Empty;

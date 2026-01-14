@@ -4,6 +4,7 @@ using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
 using KontrolaPakowania.Shared.Enums;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -422,104 +423,49 @@ namespace KontrolaPakowania.API.Controllers
         {
             var first = request.FirstOrDefault();
 
-            _logger.Information(
-                "Request: PackWmsStock for package {PackageCode} courier {Courier}",
-                first?.ScannedCode,
-                first?.Courier);
+            _logger.Information("Request: PackWmsStock for package {PackageCode} courier {Courier}", first?.ScannedCode, first?.Courier);
 
             try
             {
                 var packResult = await _packingService.PackWmsStock(request);
                 if (packResult.Status != "1")
                 {
-                    _logger.Warning(
-                        "PackWmsStock failed for package {PackageCode}: {Desc}",
-                        first?.ScannedCode,
-                        packResult.Desc);
-
+                    _logger.Warning("PackWmsStock failed for package {PackageCode}: {Desc}", first?.ScannedCode, packResult.Desc);
                     return BadRequest(packResult.Desc);
                 }
 
-                if (first?.Status == DocumentStatus.Ready)
-                {
-                    const int maxRetries = 3;
-
-                    for (int attempt = 1; attempt <= maxRetries; attempt++)
-                    {
-                        try
-                        {
-                            var closeResult = await _packingService.CloseWmsPackage(
-                                first.ScannedCode,
-                                first.Courier,
-                                first.PackingLevel,
-                                first.PackingWarehouse);
-
-                            if (closeResult.Status != "1")
-                            {
-                                _logger.Warning(
-                                    "CloseWmsPackage business failure for package {PackageCode}: {Desc}",
-                                    first.ScannedCode,
-                                    closeResult.Desc);
-
-                                return BadRequest(closeResult.Desc);
-                            }
-
-                            // success → exit retry loop
-                            break;
-                        }
-                        catch (HttpRequestException ex) when (attempt < maxRetries)
-                        {
-                            var delay = TimeSpan.FromSeconds(Math.Pow(2, attempt));
-
-                            _logger.Warning(
-                                ex,
-                                "Retry {Attempt}/{MaxRetries} for CloseWmsPackage after {Delay}s",
-                                attempt,
-                                maxRetries,
-                                delay.TotalSeconds);
-
-                            await Task.Delay(delay);
-                        }
-                        catch (IOException ex) when (attempt < maxRetries)
-                        {
-                            var delay = TimeSpan.FromSeconds(Math.Pow(2, attempt));
-
-                            _logger.Warning(
-                                ex,
-                                "Retry {Attempt}/{MaxRetries} for CloseWmsPackage after {Delay}s",
-                                attempt,
-                                maxRetries,
-                                delay.TotalSeconds);
-
-                            await Task.Delay(delay);
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.Error(
-                                ex,
-                                "CloseWmsPackage failed after {Attempts} attempts for package {PackageCode}",
-                                attempt,
-                                first.ScannedCode);
-
-                            return StatusCode(502, "WMS communication error");
-                        }
-                    }
-                }
-
-                _logger.Information(
-                    "PackWmsStock succeeded for package {PackageCode}",
-                    first?.ScannedCode);
-
-                return Ok();
+                _logger.Information("PackWmsStock succeeded for package {PackageCode}", first?.ScannedCode);
+                return Ok(true);
             }
             catch (Exception ex)
             {
-                _logger.Error(
-                    ex,
-                    "Error in PackWmsStock for package {PackageCode}",
-                    first?.ScannedCode);
-
+                _logger.Error(ex, "Error in PackWmsStock for package {PackageCode}", first?.ScannedCode);
                 return HandleException(ex);
+            }
+        }
+
+        [HttpPost("close-wms-jl")]
+        public async Task<IActionResult> CloseWmsJl([FromBody] WmsCloseJlRequest request)
+        {
+            _logger.Information("Request: CloseWmsJl for package {PackageCode} courier {Courier}", request.PackageNumber, request.Courier);
+
+            try
+            {
+                var closeResult = await _packingService.CloseWmsPackage(request);
+
+                if (closeResult.Status != "1")
+                {
+                    _logger.Warning("CloseWmsPackage business failure for package {PackageCode}: {Desc}", request.PackageNumber, closeResult.Desc);
+
+                    return BadRequest(closeResult.Desc);
+                }
+                _logger.Information("PackWmsStock succeeded for package {PackageCode}", request.PackageNumber);
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "CloseWmsPackage failed for package {PackageCode}", request.PackageNumber);
+                return StatusCode(500, "WMS communication error");
             }
         }
 

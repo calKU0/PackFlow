@@ -34,14 +34,14 @@ builder.Services.AddHttpClient("Database", (serviceProvider, client) =>
 });
 
 // Scopes
-builder.Services.AddSingleton<PrintAgentStatusService>();
-builder.Services.AddHttpClient<PrintServiceClient>();
+builder.Services.AddScoped<PrintAgentStatusService>();
+builder.Services.AddScoped<PrintServiceClient>();
+builder.Services.AddScoped<ClientPrinterService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<WorkstationService>();
 builder.Services.AddScoped<PackingService>();
 builder.Services.AddScoped<UserSessionService>();
 builder.Services.AddScoped<ShipmentService>();
-builder.Services.AddScoped<ClientPrinterService>();
 builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();

@@ -276,6 +276,9 @@ public class PackingService : IPackingService
         {
             foreach (var item in jl.Items)
             {
+                if (item.Packed)
+                    continue;
+
                 allPackItems.Add(new PackStockItems
                 {
                     LocSourceNr = jl.LocationCode,
@@ -302,10 +305,10 @@ public class PackingService : IPackingService
         return response;
     }
 
-    public async Task<PackWMSResponse> CloseWmsPackage(string packageCode, string courier, PackingLevel level, PackingWarehouse warehouse)
+    public async Task<PackWMSResponse> CloseWmsPackage(WmsCloseJlRequest request)
     {
-        var packageDestination = await GetPackageDestination(courier, level, warehouse);
-        var request = new CloseLuRequest
+        var packageDestination = await GetPackageDestination(request.Courier.GetDescription(), request.PackingLevel, request.PackingWarehouse);
+        var wmsRequest = new CloseLuRequest
         {
             WhsSource = "6",
             Proces = "PCK",
@@ -314,13 +317,13 @@ public class PackingService : IPackingService
             {
                 new CloseLuItems
                 {
-                    LuNr = packageCode,
+                    LuNr = request.PackageNumber,
                     LocDestNr = packageDestination
                 }
             }
         };
 
-        var response = await _wmsApi.CloseJl(request);
+        var response = await _wmsApi.CloseJl(wmsRequest);
         return response;
     }
 

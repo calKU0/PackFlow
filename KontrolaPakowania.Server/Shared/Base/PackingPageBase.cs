@@ -251,9 +251,9 @@ namespace KontrolaPakowania.Server.Shared.Base
 
         protected virtual async Task ShowPackingRequirements()
         {
-            if (!string.IsNullOrEmpty(CurrentJl.PackingRequirements))
+            if (JlItems.Any(x => !string.IsNullOrEmpty(x.PackingRequirements)))
             {
-                var password = await PasswordModal.ShowAsync("Wytyczne do pakowania", CurrentJl.PackingRequirements);
+                var password = await PasswordModal.ShowAsync("Wytyczne do pakowania", string.Join(". ", JlItems.Where(x => !string.IsNullOrEmpty(x.PackingRequirements)).Select(x => x.PackingRequirements)));
                 if (password == null)
                     return;
 
@@ -572,10 +572,11 @@ namespace KontrolaPakowania.Server.Shared.Base
             var request = new List<WmsPackStockRequest>();
             foreach (var jl in MergeJls)
             {
-                var additionalPackedWmsItems = PackedItems.Where(i => i.JlCode == jl.jlName).Select(i => new WMSPackStockItemsRequest
+                var additionalPackedWmsItems = PackedItems.Where(i => i.JlCode == jl.jlName && !i.PackedWMS).Select(i => new WMSPackStockItemsRequest
                 {
                     ItemCode = i.ItemCode,
                     Quantity = i.JlQuantity,
+                    Packed = i.PackedWMS
                 }).ToList();
 
                 var additionalPackStockRequest = new WmsPackStockRequest
@@ -596,10 +597,11 @@ namespace KontrolaPakowania.Server.Shared.Base
                 request.Add(additionalPackStockRequest);
             }
 
-            var PackedWmsItems = PackedItems.Where(i => i.JlCode == CurrentJl.Name).Select(i => new WMSPackStockItemsRequest
+            var PackedWmsItems = PackedItems.Where(i => i.JlCode == CurrentJl.Name && !i.PackedWMS).Select(i => new WMSPackStockItemsRequest
             {
                 ItemCode = i.ItemCode,
                 Quantity = i.JlQuantity,
+                Packed = i.PackedWMS
             }).ToList();
 
             var packStockRequest = new WmsPackStockRequest
@@ -618,7 +620,28 @@ namespace KontrolaPakowania.Server.Shared.Base
             };
 
             request.Add(packStockRequest);
-            await PackingService.PackWmsStock(request);
+            request = request.Where(r => r.Items.Any()).ToList();
+
+            if (request.Any())
+            {
+                bool isPacked = await PackingService.PackWmsStock(request);
+                foreach (var item in PackedItems)
+                {
+                    item.PackedWMS = isPacked;
+                }
+            }
+
+            if (status == DocumentStatus.Ready)
+            {
+                var closeJlRequest = new WmsCloseJlRequest
+                {
+                    PackageNumber = packageCode,
+                    Courier = CurrentJl.Courier,
+                    PackingLevel = Settings.PackingLevel,
+                    PackingWarehouse = Settings.PackingWarehouse
+                };
+                await PackingService.CloseWmsJl(closeJlRequest);
+            }
         }
 
         protected virtual async Task HandleManagerClick(int returnClick)
@@ -930,7 +953,10 @@ namespace KontrolaPakowania.Server.Shared.Base
 
                 await CloseJlInWMS(CurrentJl.CourierName, internalBarcode, internalBarcode, DocumentStatus.Ready);
                 await ClosePackage(internalBarcode, dimensions);
-                await ClientPrinterService.PrintCrystalAsync(Settings.PrinterLabel, "Label", new Dictionary<string, string> { { "Kod Kreskowy", internalBarcode } });
+                if (Settings.PackingLevel == PackingLevel.Dół && !CourierHelper.AllowedCouriersForLabel.Contains(CurrentJl.Courier))
+                {
+                    await ClientPrinterService.PrintCrystalAsync(Settings.PrinterLabel, "Label", new Dictionary<string, string> { { "Kod Kreskowy", internalBarcode } });
+                }
 
                 switch (_currentPackingFlow)
                 {
@@ -971,7 +997,10 @@ namespace KontrolaPakowania.Server.Shared.Base
 
                 await CloseJlInWMS(CurrentJl.CourierName, internalBarcode, internalBarcode, DocumentStatus.Bufor);
                 await ClosePackage(internalBarcode, dimensions, DocumentStatus.Bufor);
-                await ClientPrinterService.PrintCrystalAsync(Settings.PrinterLabel, "Label", new Dictionary<string, string> { { "Kod Kreskowy", internalBarcode } });
+                if (Settings.PackingLevel == PackingLevel.Dół && !CourierHelper.AllowedCouriersForLabel.Contains(CurrentJl.Courier))
+                {
+                    await ClientPrinterService.PrintCrystalAsync(Settings.PrinterLabel, "Label", new Dictionary<string, string> { { "Kod Kreskowy", internalBarcode } });
+                }
 
                 switch (_currentPackingFlow)
                 {
@@ -981,6 +1010,7 @@ namespace KontrolaPakowania.Server.Shared.Base
 
                     case PackingFlow.NextPackage:
                         await HandleNextPackage();
+                        await ScanInputComponent.FocusAsync();
                         break;
                 }
             }

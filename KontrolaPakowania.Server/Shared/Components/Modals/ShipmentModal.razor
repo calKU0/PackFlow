@@ -39,7 +39,7 @@
                 <div class="modal-footer container-fluid border-0">
                     <div class="row w-100">
                         <div class="col-8">
-                            <button class="btn btn-primary shipment-btn w-100 tall-btn" @onclick="OnOkClicked" disabled="@string.IsNullOrWhiteSpace(ScannedCode)">
+                            <button class="btn btn-primary shipment-btn w-100 tall-btn" @onclick="OnOkClicked" disabled="@(string.IsNullOrWhiteSpace(ScannedCode) && ShowScan)">
                                 OK
                             </button>
                         </div>

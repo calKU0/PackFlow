@@ -161,20 +161,37 @@ namespace KontrolaPakowania.Server.Services
 
         public async Task<bool> PackWmsStock(List<WmsPackStockRequest> request)
         {
-            var response = await _dbClient.PostAsJsonAsync($"api/packing/pack-wms-stock", request);
+            var response = await _dbClient.PostAsJsonAsync("api/packing/pack-wms-stock", request);
 
             if (response.IsSuccessStatusCode)
             {
+                var result = await response.Content.ReadFromJsonAsync<int>();
                 return true;
             }
 
-            if (response.StatusCode == HttpStatusCode.Conflict)
+            if (response.StatusCode == HttpStatusCode.Conflict ||
+                response.StatusCode == HttpStatusCode.BadRequest)
             {
                 var message = await response.Content.ReadAsStringAsync();
                 throw new ArgumentException(message);
             }
 
-            if (response.StatusCode == HttpStatusCode.BadRequest)
+            var generic = await response.Content.ReadAsStringAsync();
+            throw new Exception(generic);
+        }
+
+        public async Task<bool> CloseWmsJl(WmsCloseJlRequest request)
+        {
+            var response = await _dbClient.PostAsJsonAsync("api/packing/close-wms-jl", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<bool>();
+                return true;
+            }
+
+            if (response.StatusCode == HttpStatusCode.Conflict ||
+                response.StatusCode == HttpStatusCode.BadRequest)
             {
                 var message = await response.Content.ReadAsStringAsync();
                 throw new ArgumentException(message);
@@ -341,7 +358,6 @@ namespace KontrolaPakowania.Server.Services
             var generic = await response.Content.ReadAsStringAsync();
             throw new Exception(generic);
         }
-
 
         public async Task<bool> UpdatePackageCourier(UpdatePackageCourierRequest request)
         {

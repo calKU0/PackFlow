@@ -26,5 +26,6 @@ namespace KontrolaPakowania.Shared.DTOs.Requests
     {
         public string ItemCode { get; set; } = string.Empty;
         public decimal Quantity { get; set; }
+        public bool Packed { get; set; } = false;
     }
 }

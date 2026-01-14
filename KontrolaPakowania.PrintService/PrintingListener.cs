@@ -25,44 +25,71 @@ namespace KontrolaPakowania.PrintService
                 var request = context.Request;
                 var response = context.Response;
 
-                response.AddHeader("Access-Control-Allow-Origin", "*");
-
-                if (request.HttpMethod == "POST")
+                try
                 {
-                    try
+                    // ---- CORS HEADERS ----
+                    response.AddHeader("Access-Control-Allow-Origin", "*");
+                    response.AddHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+                    response.AddHeader("Access-Control-Allow-Headers", "Content-Type");
+
+                    // ---- PREFLIGHT ----
+                    if (request.HttpMethod == "OPTIONS")
+                    {
+                        response.StatusCode = 200;
+                        var buffer = Encoding.UTF8.GetBytes("OK");
+                        response.OutputStream.Write(buffer, 0, buffer.Length);
+                        continue;
+                    }
+
+                    // ---- POST REQUEST ----
+                    if (request.HttpMethod == "POST")
                     {
                         using (var reader = new StreamReader(request.InputStream))
                         {
                             var body = reader.ReadToEnd();
 
-                            // Log that a request came in
-                            Logger.Info($"[INFO] Received print request: {body}");
-
-                            var job = JsonSerializer.Deserialize<PrintJob>(body,
+                            var job = JsonSerializer.Deserialize<PrintJob>(
+                                body,
                                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-                            // Log the target printer and data type
-                            Logger.Info($"[INFO] Printing to '{job.PrinterName}', type '{job.DataType}'");
+                            // ---- HEALTH CHECK ----
+                            if (job?.DataType == "PING")
+                            {
+                                response.StatusCode = 200;
+                                var buffer = Encoding.UTF8.GetBytes("PONG");
+                                response.OutputStream.Write(buffer, 0, buffer.Length);
+                                continue;
+                            }
 
-                            PrintManager.Print(job); // might throw
+                            // ---- REAL PRINTING ----
+                            PrintManager.Print(job);
 
-                            // If successful
-                            Logger.Info("[INFO] Print job completed successfully.");
                             response.StatusCode = 200;
-                            var buffer = Encoding.UTF8.GetBytes("OK");
-                            response.OutputStream.Write(buffer, 0, buffer.Length);
+                            var okBuffer = Encoding.UTF8.GetBytes("OK");
+                            response.OutputStream.Write(okBuffer, 0, okBuffer.Length);
                         }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Logger.Error($"[ERROR] Printing failed: {ex}");
-                        response.StatusCode = 500; // Internal Server Error
-                        var buffer = Encoding.UTF8.GetBytes($"Printing failed: {ex.Message}");
+                        // Method not allowed
+                        response.StatusCode = 405;
+                        var buffer = Encoding.UTF8.GetBytes("Method Not Allowed");
                         response.OutputStream.Write(buffer, 0, buffer.Length);
                     }
                 }
-
-                response.Close();
+                catch (Exception ex)
+                {
+                    Logger.Error($"[ERROR] Printing failed: {ex}");
+                    response.StatusCode = 500;
+                    var buffer = Encoding.UTF8.GetBytes(ex.Message);
+                    response.OutputStream.Write(buffer, 0, buffer.Length);
+                }
+                finally
+                {
+                    // Close the response always
+                    response.OutputStream.Close();
+                    response.Close();
+                }
             }
 
             listener.Stop();

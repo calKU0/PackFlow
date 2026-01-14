@@ -82,11 +82,33 @@ namespace KontrolaPakowania.Shared.DTOs
             // List of EU countries (simplified example, you can add all EU countries)
             var euCountries = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
-                "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus",
-                "Czech Republic", "Denmark", "Estonia", "Finland", "France",
-                "Germany", "Greece", "Hungary", "Ireland", "Italy",
-                "Latvia", "Lithuania", "Luxembourg", "Malta", "Netherlands",
-                "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden"
+                "AT", // Austria
+                "BE", // Belgium
+                "BG", // Bulgaria
+                "HR", // Croatia
+                "CY", // Cyprus
+                "CZ", // Czech Republic
+                "DK", // Denmark
+                "EE", // Estonia
+                "FI", // Finland
+                "FR", // France
+                "DE", // Germany
+                "GR", // Greece
+                "HU", // Hungary
+                "IE", // Ireland
+                "IT", // Italy
+                "LV", // Latvia
+                "LT", // Lithuania
+                "LU", // Luxembourg
+                "MT", // Malta
+                "NL", // Netherlands
+                "PL", // Poland (Polska)
+                "PT", // Portugal
+                "RO", // Romania
+                "SK", // Slovakia
+                "SI", // Slovenia
+                "ES", // Spain
+                "SE"  // Sweden
             };
 
             OutsideEU = !euCountries.Contains(country);
