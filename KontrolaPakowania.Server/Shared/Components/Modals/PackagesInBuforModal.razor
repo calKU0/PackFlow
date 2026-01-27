@@ -13,6 +13,7 @@
 
                 <input class="form-control mb-3"
                        @bind="ScanInput"
+                       @bind:event="oninput"
                        @onkeydown="OnScanKeyDown"
                        @ref="InputRef"
                        placeholder="Zeskanuj kod kreskowy..." />
@@ -67,7 +68,7 @@
         // wait until DOM is ready
         await Task.Yield();
 
-        await JSRuntime.InvokeVoidAsync("blazorFocus.focusElement", InputRef);
+        await InputRef.FocusAsync();
 
         return await _tcs.Task;
     }
@@ -77,11 +78,12 @@
         if (e.Key != "Enter")
             return;
 
-        if (string.IsNullOrWhiteSpace(ScanInput))
+        var input = ScanInput?.Trim();
+        if (string.IsNullOrEmpty(input))
             return;
 
         var pkg = AvaliablePackages.FirstOrDefault(p =>
-            p.InternalBarcode.Equals(ScanInput, StringComparison.OrdinalIgnoreCase));
+            string.Equals(p.InternalBarcode?.Trim(), input, StringComparison.OrdinalIgnoreCase));
 
         if (pkg is null)
             return;

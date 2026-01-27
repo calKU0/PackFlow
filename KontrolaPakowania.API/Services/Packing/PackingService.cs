@@ -1,22 +1,15 @@
-﻿using Azure.Core;
-using Dapper;
+﻿using Dapper;
 using KontrolaPakowania.API.Data;
 using KontrolaPakowania.API.Data.Enums;
-using KontrolaPakowania.API.Integrations.Couriers.Fedex.DTOs;
 using KontrolaPakowania.API.Integrations.Wms;
-using KontrolaPakowania.API.Services;
 using KontrolaPakowania.API.Services.Packing;
 using KontrolaPakowania.API.Services.Packing.Mapping;
-using KontrolaPakowania.Shared;
 using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
 using KontrolaPakowania.Shared.Enums;
 using KontrolaPakowania.Shared.Helpers;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 using System.Data;
-using System.Diagnostics.Metrics;
-using System.Reflection.Emit;
 
 public class PackingService : IPackingService
 {
@@ -65,12 +58,11 @@ public class PackingService : IPackingService
         return jlToPack.ToJlData().OrderBy(jl => jl.Status).ThenBy(c => c.CourierName).ThenBy(c => c.ClientSymbol);
     }
 
-    public async Task<IEnumerable<string>> GetNotClosedPackagesAsync()
+    public async Task<IEnumerable<JlDto>> GetNotClosedPackagesAsync()
     {
         var jlList = await _wmsApi.GetJlListAsync();
         var jlToPack = jlList
-            .Where(x => x.Status == 13)
-            .Select(x => x.JlCode);
+            .Where(x => x.Status == 13);
 
         return jlToPack;
     }
@@ -273,7 +265,15 @@ public class PackingService : IPackingService
             return new PackWMSResponse { Status = "-1", Desc = "No items to process." };
 
         var allPackItems = new List<PackStockItems>();
-        var luDestType = request.Sum(i => i.Weight) > 120 ? "PALETA" : "PACZKA";
+
+        string luDestType = string.Empty;
+        if (request.First().Status == DocumentStatus.Bufor)
+            luDestType = "PALETA";
+        else
+        {
+            string type = request.First().Type.ToUpper();
+            luDestType = type == string.Empty ? (request.Sum(i => i.Weight) > 120 ? "PALETA" : "PACZKA") : type;
+        }
 
         foreach (var jl in request)
         {

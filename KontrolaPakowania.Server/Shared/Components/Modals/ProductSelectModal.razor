@@ -53,7 +53,7 @@
                             }
                         </div>
 
-                        <button class="btn btn-success ok-btn d-flex align-items-center justify-content-center" @onclick="Confirm">
+                        <button class="btn btn-success ok-btn d-flex align-items-center justify-content-center" @onclick="Confirm" disabled="@IsSubmitting">
                             Enter
                         </button>
                     </div>
@@ -77,12 +77,14 @@
     private string InputQuantity = string.Empty;
     private Toast Toast = new();
     private bool IsVisible = false;
+    private bool IsSubmitting;
 
     public async Task Show(JlItemDto product)
     {
         Product = product;
         InputQuantity = Product.JlQuantity == 1 ? Product.JlQuantity.ToString() : string.Empty;
         IsVisible = true;
+        IsSubmitting = false;
         await InvokeAsync(StateHasChanged);
     }
 
@@ -96,6 +98,9 @@
 
     private async Task Confirm()
     {
+        if (IsSubmitting)
+            return;
+
         if (decimal.TryParse(InputQuantity.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal qty))
         {
             if (qty > Product.JlQuantity)
@@ -104,11 +109,19 @@
             }
             else
             {
-                await OnConfirm.InvokeAsync(qty);
-                IsVisible = false;
+                IsSubmitting = true;
+                try
+                {
+                    await OnConfirm.InvokeAsync(qty);
+                    IsVisible = false;
 
-                if (FocusOnClose != null)
-                    await FocusOnClose.FocusAsync();
+                    if (FocusOnClose != null)
+                        await FocusOnClose.FocusAsync();
+                }
+                finally
+                {
+                    IsSubmitting = false;
+                }
             }
         }
         else

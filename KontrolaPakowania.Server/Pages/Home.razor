@@ -9,22 +9,5 @@
 <h4>Tu nic nie będzie</h4>
 
 @code {
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await EnsureAgentInstalled();          
-        }
-    }
 
-    private async Task EnsureAgentInstalled()
-    {
-        bool agentAlive = await JSRuntime.InvokeAsync<bool>("isAgentRunning");
-
-        if (!agentAlive)
-        {
-            // Trigger download
-            //await JSRuntime.InvokeVoidAsync("downloadAgent", "/downloads/PrintingAgent.exe", "PrintingAgent.exe");
-        }
-    }
 }

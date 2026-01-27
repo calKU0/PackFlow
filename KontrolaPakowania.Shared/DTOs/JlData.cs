@@ -1,10 +1,5 @@
 ﻿using KontrolaPakowania.Shared.Enums;
 using KontrolaPakowania.Shared.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KontrolaPakowania.Shared.DTOs
 {
@@ -16,6 +11,7 @@ namespace KontrolaPakowania.Shared.DTOs
         public int Status { get; set; }
         public decimal Weight { get; set; }
         public string CourierName { get; set; } = string.Empty;
+        public string AllCourierAcronyms { get; set; } = string.Empty;
         public string Destination { get; set; } = string.Empty;
         private Courier courier;
 
@@ -108,7 +104,8 @@ namespace KontrolaPakowania.Shared.DTOs
                 "SK", // Slovakia
                 "SI", // Slovenia
                 "ES", // Spain
-                "SE"  // Sweden
+                "SE",  // Sweden
+                "MIX",
             };
 
             OutsideEU = !euCountries.Contains(country);

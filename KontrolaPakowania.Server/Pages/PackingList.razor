@@ -61,7 +61,11 @@
                                 <td>@item.LocationCode</td>
                                 <td>@item.Name</td>
                                 <td>@item.Weight.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)</td>
-                                <td>@item.Courier.GetDescription()</td>
+                                <td>
+                                    @(item.CourierName == "MIX"
+                                        ? item.AllCourierAcronyms
+                                        : item.Courier.GetDescription())
+                                </td>
                                 <td>
                                     @if (item.OutsideEU)
                                     {
@@ -314,7 +318,8 @@
                     x.AddressName == jl.AddressName &&
                     x.AddressCity == jl.AddressCity &&
                     x.AddressCountry == jl.AddressCountry &&
-                    x.AddressStreet == jl.AddressStreet)
+                    x.AddressStreet == jl.AddressStreet &&
+                    x.Courier == jl.Courier)
                 .ToList();
 
             if (matchingJls.Any())
@@ -337,7 +342,7 @@
             if (selectedPackage is not null)
             {
                 if (selectedPackage.PackageId.HasValue)
-                    queryParts.Add($"o={selectedPackage.PackageId}");
+                    queryParts.Add($"packTo={selectedPackage.PackageId}");
 
                 if (!string.IsNullOrWhiteSpace(selectedPackage.InternalBarcode))
                     queryParts.Add($"barcode={selectedPackage.InternalBarcode}");
@@ -406,7 +411,7 @@
                         {
                             Label = "Paczka",
                             Placeholder = "Wybierz paczke",
-                            Items = packages
+                            Items = packages.Select(x => x.JlCode).ToList()
                         },
                         new()
                         {

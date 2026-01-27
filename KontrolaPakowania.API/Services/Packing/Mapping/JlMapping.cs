@@ -16,6 +16,10 @@ namespace KontrolaPakowania.API.Services.Packing.Mapping
                 if (jl.ReadyToPack == "NIE" && status != 3)
                     status = 2;
 
+                var allCourierSymbols = jl.Clients
+                    .Select(c => CourierHelper.GetCourierFromName(c.CourierName).GetDescription())
+                    .Distinct(StringComparer.OrdinalIgnoreCase);
+
                 // If exactly one client, map to flattened JlData
                 if (jl.Clients.Count == 1)
                 {
@@ -72,6 +76,7 @@ namespace KontrolaPakowania.API.Services.Packing.Mapping
                         ClientSymbol = "MIX",
                         ClientName = "MIX",
                         PackingRequirements = string.Empty,
+                        AllCourierAcronyms = string.Join(", ", allCourierSymbols)
                     };
                 }
             }
@@ -103,6 +108,10 @@ namespace KontrolaPakowania.API.Services.Packing.Mapping
                     Dropshipping = courierLower.Contains("dropshipping")
                 };
             }
+
+            var allCourierSymbols = jlDto.Clients
+                .Select(c => CourierHelper.GetCourierFromName(c.CourierName).GetDescription())
+                .Distinct(StringComparer.OrdinalIgnoreCase);
 
             // Single client case
             if (jlDto.Clients.Count == 1)
@@ -160,7 +169,8 @@ namespace KontrolaPakowania.API.Services.Packing.Mapping
                 ClientSymbol = "MIX",
                 ClientName = "MIX",
                 PackageClosed = false,
-                PackingRequirements = string.Empty
+                PackingRequirements = string.Empty,
+                AllCourierAcronyms = string.Join(", ", allCourierSymbols)
             };
         }
     }

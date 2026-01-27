@@ -1,9 +1,4 @@
 ﻿using KontrolaPakowania.Shared.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KontrolaPakowania.Shared.DTOs.Requests
 {
@@ -16,6 +11,7 @@ namespace KontrolaPakowania.Shared.DTOs.Requests
         public string TrackingNumber { get; set; } = string.Empty;
         public string Courier { get; set; } = string.Empty;
         public string JlCode { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
         public string StationNumber { get; set; } = string.Empty;
         public decimal Weight { get; set; }
         public DocumentStatus Status { get; set; }

@@ -2,7 +2,6 @@
 using KontrolaPakowania.Shared.DTOs.Requests;
 using KontrolaPakowania.Shared.Enums;
 using System.Net;
-using System.Net.Http.Json;
 
 namespace KontrolaPakowania.Server.Services
 {
@@ -33,12 +32,12 @@ namespace KontrolaPakowania.Server.Services
             throw new Exception(generic);
         }
 
-        public async Task<List<string>> GetNotClosedPackages()
+        public async Task<List<JlDto>> GetNotClosedPackages()
         {
             var response = await _dbClient.GetAsync($"api/packing/not-closed-packages");
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<List<string>>();
+                return await response.Content.ReadFromJsonAsync<List<JlDto>>();
             }
 
             if (response.StatusCode == HttpStatusCode.BadRequest)

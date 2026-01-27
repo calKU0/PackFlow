@@ -39,12 +39,14 @@
                 <div class="modal-footer container-fluid border-0">
                     <div class="row w-100">
                         <div class="col-8">
-                            <button class="btn btn-primary shipment-btn w-100 tall-btn" @onclick="OnOkClicked" disabled="@(string.IsNullOrWhiteSpace(ScannedCode) && ShowScan)">
+                            <button class="btn btn-primary shipment-btn w-100 tall-btn"
+                                    @onclick="OnOkClicked"
+                                    disabled="@(IsSubmitting || (string.IsNullOrWhiteSpace(ScannedCode) && ShowScan))">
                                 OK
                             </button>
                         </div>
                         <div class="col-4">
-                            <button class="btn btn-success shipment-btn w-100 tall-btn" @onclick="OnPrintClicked">
+                            <button class="btn btn-success shipment-btn w-100 tall-btn" @onclick="OnPrintClicked" enabled="@(!string.IsNullOrEmpty(LabelBase64))">
                                 Wydrukuj ponownie
                             </button>
                         </div>
@@ -68,9 +70,10 @@
     private bool ShowScan { get; set; } = false;
     private ElementReference InputRef;
     private string? ScanErrorMessage;
+    private bool IsSubmitting;
     [Parameter] public EventCallback<(string ScannedCode, string TrackingNumber)> OnOk { get; set; }
 
-    public async void Show(string internalBarcode, string trackingNumber, string labelBase64, PrintDataType labelType, string printer, bool hasInvoice, bool showScan = true)
+    public async void Show(string internalBarcode, string trackingNumber, string labelBase64, PrintDataType labelType, string printer, bool hasInvoice, bool showScan = true, string? scannedCode = null)
     {
         try
         {
@@ -82,7 +85,7 @@
             InternalBarcode = internalBarcode;
             ShowScan = showScan;
 
-            ScannedCode = string.Empty;
+            ScannedCode = scannedCode ?? string.Empty;
             IsVisible = true;
             await InvokeAsync(StateHasChanged);
             await InputRef.FocusAsync();
@@ -95,7 +98,18 @@
 
     private async Task OnOkClicked()
     {
-        await ConfirmAsync();
+        if (IsSubmitting)
+            return;
+
+        IsSubmitting = true;
+        try
+        {
+            await ConfirmAsync();
+        }
+        finally
+        {
+            IsSubmitting = false;
+        }
     }
 
     private async Task OnPrintClicked()
@@ -109,8 +123,11 @@
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
-        if (e.Key != "Enter")
+        if (IsSubmitting)
             return;
+
+        if (e.Key != "Enter")
+             return;
 
         if (string.IsNullOrWhiteSpace(ScannedCode))
             return;
@@ -144,7 +161,16 @@
         }
 
         ScanErrorMessage = null;
-        await ConfirmAsync();
+
+        IsSubmitting = true;
+        try
+        {
+            await ConfirmAsync();
+        }
+        finally
+        {
+            IsSubmitting = false;
+        }
     }
 
     private async Task ConfirmAsync()

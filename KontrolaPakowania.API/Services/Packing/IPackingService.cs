@@ -8,7 +8,7 @@ namespace KontrolaPakowania.API.Services.Packing
     {
         Task<IEnumerable<JlData>> GetJlListAsync(PackingLevel location);
 
-        Task<IEnumerable<string>> GetNotClosedPackagesAsync();
+        Task<IEnumerable<JlDto>> GetNotClosedPackagesAsync();
 
         Task<JlData> GetJlInfoByCodeAsync(string jl, PackingLevel location);
 

@@ -1,18 +1,11 @@
-﻿using BusinessObjects.ThirdParty.OOC.FSSL;
-using CrystalDecisions.CrystalReports.Engine;
-using KontrolaPakowania.PrintService.Logging;
+﻿using CrystalDecisions.CrystalReports.Engine;
 using KontrolaPakowania.PrintService.Models;
 using PdfiumViewer;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Logger = KontrolaPakowania.PrintService.Logging.Logger;
 
 namespace KontrolaPakowania.PrintService
@@ -83,42 +76,34 @@ namespace KontrolaPakowania.PrintService
                 using (var stream = new MemoryStream(pdfBytes))
                 using (var pdfDocument = PdfDocument.Load(stream))
                 {
-                    // Używamy ShrinkToMargin - jeśli PDF jest większy od obszaru druku, zostanie pomniejszony.
-                    // Jeśli jest mniejszy, zostanie wydrukowany w rozmiarze oryginalnym.
-                    using (var printDocument = pdfDocument.CreatePrintDocument(PdfPrintMode.ShrinkToMargin))
+                    // Fit to full paper instead of only shrinking
+                    using (var printDocument = pdfDocument.CreatePrintDocument(PdfPrintMode.CutMargin))
                     {
                         printDocument.PrinterSettings.PrinterName = printerName;
                         printDocument.PrintController = new StandardPrintController();
 
-                        // Pobierz rozmiar pierwszej strony w punktach (1/72 cala)
                         var pdfPageSize = pdfDocument.PageSizes[0];
                         bool isLandscape = pdfPageSize.Width > pdfPageSize.Height;
 
-                        // Ustawienie orientacji
-                        printDocument.DefaultPageSettings.Landscape = isLandscape;
+                        // pick A4 if available, otherwise the largest available size
+                        var paperSizes = printDocument.PrinterSettings.PaperSizes.Cast<PaperSize>();
+                        var selectedPaper = paperSizes.FirstOrDefault(p => p.Kind == PaperKind.A4)
+                                           ?? paperSizes.OrderByDescending(p => p.Width * p.Height).FirstOrDefault();
 
-                        // WYEROWANIE MARGINESÓW - to jest klucz do "dużego" wydruku
-                        printDocument.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
-                        printDocument.OriginAtMargins = false; // (0,0) to fizyczna krawędź kartki
-
-                        // Ręczne ustawienie rozmiaru papieru, aby pasował do PDF (opcjonalne, ale pomaga)
-                        // .NET używa jednostek 1/100 cala, PDF używa 1/72 cala (punktów)
-                        int widthHundredths = (int)(pdfPageSize.Width / 72.0 * 100.0);
-                        int heightHundredths = (int)(pdfPageSize.Height / 72.0 * 100.0);
-
-                        // Próba znalezienia i ustawienia pasującego rozmiaru papieru w drukarce
-                        foreach (PaperSize size in printDocument.PrinterSettings.PaperSizes)
+                        if (selectedPaper != null)
                         {
-                            // Szukamy rozmiaru zbliżonego (np. A4) lub ustawiamy Custom
-                            if (Math.Abs(size.Width - (isLandscape ? heightHundredths : widthHundredths)) < 10)
-                            {
-                                printDocument.DefaultPageSettings.PaperSize = size;
-                                break;
-                            }
+                            printDocument.DefaultPageSettings.PaperSize = selectedPaper;
                         }
+
+                        printDocument.DefaultPageSettings.Landscape = isLandscape;
+                        printDocument.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
+                        printDocument.OriginAtMargins = false;
 
                         printDocument.QueryPageSettings += (sender, e) =>
                         {
+                            if (selectedPaper != null)
+                                e.PageSettings.PaperSize = selectedPaper;
+
                             e.PageSettings.Landscape = isLandscape;
                             e.PageSettings.Margins = new Margins(0, 0, 0, 0);
                         };

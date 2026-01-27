@@ -1,7 +1,7 @@
 ﻿using KontrolaPakowania.Server.Services;
 using KontrolaPakowania.Server.Shared.Components;
-using KontrolaPakowania.Server.Shared.Components.Packing;
 using KontrolaPakowania.Server.Shared.Components.Modals;
+using KontrolaPakowania.Server.Shared.Components.Packing;
 using KontrolaPakowania.Shared.DTOs;
 using KontrolaPakowania.Shared.DTOs.Requests;
 using KontrolaPakowania.Shared.Enums;
@@ -9,7 +9,6 @@ using KontrolaPakowania.Shared.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
 
 namespace KontrolaPakowania.Server.Shared.Base
 {
@@ -589,6 +588,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                     StationNumber = Settings.StationNumber,
                     Courier = courier,
                     JlCode = jl.jlName,
+                    Type = PackingToBufor ? "PALETA" : string.Empty,
                     Weight = PackedItems.Where(i => i.JlCode == jl.jlName).Sum(i => i.ItemWeight * i.JlQuantity),
                     Status = status,
                     Items = additionalPackedWmsItems
@@ -614,6 +614,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                 StationNumber = Settings.StationNumber,
                 Courier = courier,
                 JlCode = CurrentJl.Name,
+                Type = PackingToBufor ? "PALETA" : string.Empty,
                 Weight = PackedItems.Where(i => i.JlCode == CurrentJl.Name).Sum(i => i.ItemWeight * i.JlQuantity),
                 Status = status,
                 Items = PackedWmsItems
@@ -928,7 +929,8 @@ namespace KontrolaPakowania.Server.Shared.Base
             }
             catch (Exception ex)
             {
-                Toast.Show("Błąd!", $"Błąd przy próbie finalizacji pakowania: {ex.Message}");
+                Toast.Show("Błąd!", $"Błąd przy próbie zwalniania jl w WMS. Spróbuj ponowanie: {ex.Message}");
+                ShipmentModal.Show(CurrentJl.InternalBarcode, data.TrackingNumber, string.Empty, PrintDataType.ZPL, Settings.PrinterLabel, false, true, data.ScannedCode);
             }
         }
 
@@ -1033,6 +1035,7 @@ namespace KontrolaPakowania.Server.Shared.Base
                 };
                 await PackingService.UpdateJlRealization(JlInProgressDto);
                 CurrentJl.InternalBarcode = string.Empty;
+                PackingToBufor = false;
                 StateHasChanged();
             }
             catch (Exception ex)
