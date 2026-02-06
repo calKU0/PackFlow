@@ -54,6 +54,7 @@ namespace KontrolaPakowania.Server.Shared.Base
         protected FinishPackingModal FinishPackingModal = new();
         protected ShipmentModal ShipmentModal = new();
         protected ScanInput ScanInputComponent = new();
+        protected JlSelectModal JlSelectModal = new();
 
         protected JlItemDto? SelectedItem;
         protected JlItemDto? SelectedPackedItem;
@@ -461,25 +462,33 @@ namespace KontrolaPakowania.Server.Shared.Base
 
                     if (!string.IsNullOrWhiteSpace(code) && JlItems != null)
                     {
-                        var item = JlItems.FirstOrDefault(x =>
-                            string.Equals(x.ItemCode, code, StringComparison.OrdinalIgnoreCase) ||
-                            string.Equals(x.ItemName, code, StringComparison.OrdinalIgnoreCase) ||
+                        var matches = JlItems.Where(x => MatchesScanCode(x, code)).ToList();
 
-                            // Supplier codes list
-                            (x.SupplierCode != null &&
-                             x.SupplierCode.Any(sc =>
-                                 string.Equals(sc, code, StringComparison.OrdinalIgnoreCase))) ||
+                        if (matches.Any())
+                        {
+                            var distinctJls = matches.Select(x => x.JlCode).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                            JlItemDto? item = null;
 
-                            // EANs list
-                            (x.ItemEan != null &&
-                             x.ItemEan.Any(ean =>
-                                 string.Equals(ean, code, StringComparison.OrdinalIgnoreCase)))
-                        );
+                            if (distinctJls.Count > 1)
+                            {
+                                var selectedJl = await JlSelectModal.ShowAsync(distinctJls, code);
+                                if (string.IsNullOrWhiteSpace(selectedJl))
+                                    return;
 
-                        if (item != null)
-                            OpenProductModal(item);
+                                item = matches.FirstOrDefault(x => string.Equals(x.JlCode, selectedJl, StringComparison.OrdinalIgnoreCase));
+                            }
+                            else
+                            {
+                                item = matches.FirstOrDefault();
+                            }
+
+                            if (item != null)
+                                OpenProductModal(item);
+                        }
                         else
+                        {
                             Toast.Show("Brak towaru", $"Brak towaru o kodzie {code}", ToastType.Info, 3000);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -492,6 +501,14 @@ namespace KontrolaPakowania.Server.Shared.Base
                     await InvokeAsync(StateHasChanged);
                 }
             }
+        }
+
+        protected virtual bool MatchesScanCode(JlItemDto item, string code)
+        {
+            return string.Equals(item.ItemCode, code, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(item.ItemName, code, StringComparison.OrdinalIgnoreCase) ||
+                   (item.SupplierCode != null && item.SupplierCode.Any(sc => string.Equals(sc, code, StringComparison.OrdinalIgnoreCase))) ||
+                   (item.ItemEan != null && item.ItemEan.Any(ean => string.Equals(ean, code, StringComparison.OrdinalIgnoreCase)));
         }
 
         protected virtual async void OpenProductModal(JlItemDto item)
