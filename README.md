@@ -1,4 +1,4 @@
-# PackFlow (KontrolaPakowania)
+# WarehousePacking
 
 Web-based packing control system consisting of a Blazor Server UI and a dedicated ASP.NET Core Web API.
 
@@ -6,11 +6,11 @@ The solution retrieves the contents of logistic units from a WMS, supports wareh
 
 ## Solution structure
 
-- `KontrolaPakowania.Server` (`net8.0`) – Blazor web application (UI)
-- `KontrolaPakowania.API` (`net8.0`) – Web API used by the UI and integrations
-- `KontrolaPakowania.Shared` (`net8.0`) – shared contracts/models used by both UI and API
-- `KontrolaPakowania.API.Tests` (`net9.0`) – automated tests for the API
-- `KontrolaPakowania.PrintService` (`.NET Framework 4.8`) – Windows printing/label related helper service
+- `WarehousePacking.Server` (`net8.0`) – Blazor web application (UI)
+- `WarehousePacking.API` (`net8.0`) – Web API used by the UI and integrations
+- `WarehousePacking.Shared` (`net8.0`) – shared contracts/models used by both UI and API
+- `WarehousePacking.API.Tests` (`net9.0`) – automated tests for the API
+- `WarehousePacking.PrintService` (`.NET Framework 4.8`) – Windows printing/label related helper service
 
 ## Key features (high level)
 
@@ -23,10 +23,10 @@ The solution retrieves the contents of logistic units from a WMS, supports wareh
 
 ## Tech stack
 
-- Blazor (`KontrolaPakowania.Server`)
-- ASP.NET Core Web API (`KontrolaPakowania.API`)
-- .NET 8 shared library (`KontrolaPakowania.Shared`)
-- .NET Framework 4.8 desktop component (`KontrolaPakowania.PrintService`)
+- Blazor (`WarehousePacking.Server`)
+- ASP.NET Core Web API (`WarehousePacking.API`)
+- .NET 8 shared library (`WarehousePacking.Shared`)
+- .NET Framework 4.8 desktop component (`WarehousePacking.PrintService`)
 - Data access: Dapper + `Microsoft.Data.SqlClient`
 - Logging: Serilog
 - API docs: Swagger (Swashbuckle)
@@ -34,10 +34,10 @@ The solution retrieves the contents of logistic units from a WMS, supports wareh
 
 ## Prerequisites
 
-- .NET SDK 8.x (to run `KontrolaPakowania.Server` and `KontrolaPakowania.API`)
-- .NET SDK 9.x (only required to build/run `KontrolaPakowania.API.Tests`)
+- .NET SDK 8.x (to run `WarehousePacking.Server` and `WarehousePacking.API`)
+- .NET SDK 9.x (only required to build/run `WarehousePacking.API.Tests`)
 - Visual Studio 2022 (recommended)
-- Windows + .NET Framework 4.8 Developer Pack (to build `KontrolaPakowania.PrintService`)
+- Windows + .NET Framework 4.8 Developer Pack (to build `WarehousePacking.PrintService`)
 - Access/configuration for:
   - WMS endpoints
   - Comarch ERP XL integration endpoints
@@ -47,17 +47,17 @@ The solution retrieves the contents of logistic units from a WMS, supports wareh
 
 Configuration is stored in `appsettings.json` / `appsettings.*.json` in the API and Server projects.
 
-### UI (`KontrolaPakowania.Server`)
+### UI (`WarehousePacking.Server`)
 
-Configured in `KontrolaPakowania.Server/appsettings.json`:
+Configured in `WarehousePacking.Server/appsettings.json`:
 
 - `Apis:Database:BaseUrl` — base URL of the API/backend called by the UI.
 - `Apis:Database:ApiKey` — API key sent as `X-Api-Key`.
 - `CrystalReports` — report templates and DB access used for printing (labels/invoices).
 
-### API (`KontrolaPakowania.API`)
+### API (`WarehousePacking.API`)
 
-Configured in `KontrolaPakowania.API/appsettings.json`:
+Configured in `WarehousePacking.API/appsettings.json`:
 
 - `ConnectionStrings` — connections to ERP XL.
 - `WMSApi` — WMS base URL and token.
@@ -68,7 +68,7 @@ Typical configuration is done via `appsettings.json` / `appsettings.*.json` in t
 
 ## Repository notes
 
-- `wwwroot/downloads` in `KontrolaPakowania.Server` contains packaged downloads (e.g., helper tools/agents) that are copied to output on build.
+- `wwwroot/downloads` in `WarehousePacking.Server` contains packaged downloads (e.g., helper tools/agents) that are copied to output on build.
 
 ## Screenshots
 
